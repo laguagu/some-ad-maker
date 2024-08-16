@@ -9,35 +9,27 @@ import {
 } from "react-share";
 
 const ShareButton = ({
-  url,
+  productId,
   title,
   description,
   hashtags,
 }: {
-  url: string;
+  productId: string;
   title?: string;
   description?: string;
   hashtags?: string[];
 }) => {
-  if (!url) {
-    console.error("URL vaaditaan jakamista varten");
-    return null;
-  }
+  const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/analysis/${productId}`;
 
   return (
     <div className="flex space-x-2">
-      <FacebookShareButton url={url} hashtag={hashtags?.[0]}>
+      <FacebookShareButton url={shareUrl} hashtag={hashtags?.[0]}>
         <FacebookIcon size={32} round />
       </FacebookShareButton>
-      <TwitterShareButton url={url} title={title} hashtags={hashtags}>
+      <TwitterShareButton url={shareUrl} title={title} hashtags={hashtags}>
         <TwitterIcon size={32} round />
       </TwitterShareButton>
-      <LinkedinShareButton
-        url={url}
-        title={title}
-        summary={description}
-        source="Huonekaluliike"
-      >
+      <LinkedinShareButton url={shareUrl} title={title} summary={description}>
         <LinkedinIcon size={32} round />
       </LinkedinShareButton>
     </div>

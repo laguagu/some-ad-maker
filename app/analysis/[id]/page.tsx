@@ -1,0 +1,21 @@
+import { getAnalysisById } from "@/lib/analysis"; // Tämä funktio pitää toteuttaa
+import ImageAnalysisView from "@/components/upload-file";
+
+export default async function AnalysisPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  console.log(`Yritetään hakea analyysi ID:llä ${params.id}`);
+  const analysis = await getAnalysisById(params.id);
+
+  if (!analysis) {
+    console.log(`Analyysiä ei löytynyt ID:llä ${params.id}`);
+    return <div>Analyysiä ei löytynyt</div>;
+  }
+
+  console.log(`Analyysi löytyi:`, analysis);
+  return (
+    <ImageAnalysisView analysis={analysis} imageUrl={analysis.imageUrl || ""} />
+  );
+}

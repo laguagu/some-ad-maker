@@ -28,10 +28,12 @@ export const imageAnalysisSchema = z.object({
     .strict(),
 });
 
+// Johdetaan tyyppi skeemasta
 export type PartialImageAnalysis = z.infer<
   typeof imageAnalysisSchema
 >["analysis"];
 
+// Määritellään uusi tyyppi, joka poistaa undefined ja null muista kentistä paitsi imageUrl ja price
 export type ImageAnalysis = {
   [K in keyof PartialImageAnalysis]-?: K extends "imageUrl" | "price"
     ? PartialImageAnalysis[K] | null // Salli null- ja undefined-arvot
