@@ -10,7 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@ai-sdk/openai": "^0.0.47",
+    "@ai-sdk/openai": "^0.0.48",
     "@radix-ui/react-slot": "^1.1.0",
     "@tabler/icons-react": "^3.12.0",
     "ai": "^3.3.8",
