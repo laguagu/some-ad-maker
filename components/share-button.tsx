@@ -20,7 +20,7 @@ const ShareButton = ({
   hashtags?: string[];
 }) => {
   const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/analysis/${productId}`;
-
+  // FIXME: Poista HasTag "#" merkit hastags muuttujasta. React-Share generoi ne automaattisesti. Näin ollen ne eivät tule 2x näkyviin postaukseen.
   return (
     <div className="flex space-x-2">
       <FacebookShareButton url={shareUrl} hashtag={hashtags?.[0]}>
