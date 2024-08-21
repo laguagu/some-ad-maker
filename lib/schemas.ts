@@ -26,35 +26,46 @@ export const imageAnalysisSchema = z.object({
       callToAction: z.string().describe("Toimintakehotus suomeksi"),
       colorScheme: z
         .object({
-          primary: z.string().describe("Pääväri"),
-          secondary: z.string().optional().describe("Toissijainen väri"),
-          accent: z.string().optional().describe("Korostusväri"),
+          primary: z.string().describe("Pääväri englanniksi"),
+          secondary: z
+            .string()
+            .optional()
+            .describe("Toissijainen väri englanniksi"),
+          accent: z.string().optional().describe("Korostusväri englanniksi"),
         })
         .optional()
-        .describe("Huonekalun ja kuvan värimaailma"),
+        .describe(
+          "Huonekalun ja kuvan värimaailma, joka on yhteensopiva background-color CSS ominaisuuden kanssa",
+        ),
       visualDesign: z
         .string()
         .describe("Ehdotus myynti-ilmoituksen visuaalisesta ilmeestä"),
     })
     .strict(),
 });
+// `ImageAnalysis` is a TypeScript type that is inferred from the `analysis` property
+// of the `imageAnalysisSchema` using the `z.infer` utility from the Zod library.
+// This means that `ImageAnalysis` will have the same shape as the `analysis` property
+// defined in the `imageAnalysisSchema`.
+export type ImageAnalysis = z.infer<typeof imageAnalysisSchema>["analysis"];
 
-export type PartialImageAnalysis = z.infer<
-  typeof imageAnalysisSchema
->["analysis"];
+// `PartialImageAnalysis` is a TypeScript type that makes all properties of the
+// `ImageAnalysis` type optional. This is achieved using the `Partial` utility type,
+// which constructs a type with all properties of `ImageAnalysis` set to optional.
+export type PartialImageAnalysis = Partial<ImageAnalysis>;
 
-export type ImageAnalysis = {
-  furniture: string;
-  keyFeatures: string[];
-  description: string;
-  hashtags: string[];
-  callToAction: string;
-  visualDesign: string;
-  imageUrl?: string | null;
-  price?: string | null;
-  colorScheme?: {
-    primary: string;
-    secondary?: string;
-    accent?: string;
+export function ensureCompleteAnalysis(
+  partial: PartialImageAnalysis,
+): ImageAnalysis {
+  return {
+    furniture: partial.furniture ?? "",
+    keyFeatures: partial.keyFeatures ?? [],
+    description: partial.description ?? "",
+    hashtags: partial.hashtags ?? [],
+    callToAction: partial.callToAction ?? "",
+    visualDesign: partial.visualDesign ?? "",
+    imageUrl: partial.imageUrl ?? null,
+    price: partial.price ?? null,
+    colorScheme: partial.colorScheme,
   };
-};
+}

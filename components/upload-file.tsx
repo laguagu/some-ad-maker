@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FileUpload } from "@/components/ui/file-upload";
 import { Button } from "@/components/ui/button";
 import { experimental_useObject as useObject } from "ai/react";
@@ -16,12 +16,8 @@ import { DraggableAdLayout } from "./drag-and-drop/layout";
 
 export function UploadFile() {
   const router = useRouter();
-  const analysisRef = useRef<HTMLDivElement>(null);
-  const [adLayout, setAdLayout] = useState(null);
+  const [isAnalysisComplete, setIsAnalysisComplete] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
-  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(
-    null,
-  );
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [analysisId, setAnalysisId] = useState<string | null>(null);
   const [analysisUrl, setAnalysisUrl] = useState<string | null>(null);
@@ -34,6 +30,7 @@ export function UploadFile() {
   }>({
     api: "/api/image-analysis",
     schema: imageAnalysisSchema,
+    onFinish: () => setIsAnalysisComplete(true),
   });
 
   const handleAnalyze = async () => {
@@ -106,15 +103,15 @@ export function UploadFile() {
       {object?.analysis && (
         <div className="mt-8">
           <h3 className="text-xl font-bold mb-4">Muokattava myynti-ilmoitus</h3>
-          <div ref={analysisRef}>
+          {isAnalysisComplete && (
             <DraggableAdLayout
               adData={
                 {
                   ...object.analysis,
                   furniture: object.analysis.furniture,
-                  keyFeatures: object.analysis.keyFeatures,
+                  keyFeatures: object.analysis.keyFeatures || [],
                   description: object.analysis.description,
-                  hashtags: object.analysis.hashtags,
+                  hashtags: object.analysis.hashtags || [],
                   callToAction: object.analysis.callToAction,
                   visualDesign: object.analysis.visualDesign,
                   imageUrl: previewUrl || null,
@@ -122,6 +119,17 @@ export function UploadFile() {
                   colorScheme: object.analysis.colorScheme,
                 } as ImageAnalysis
               }
+            />
+          )}
+          <div>
+            <h2 className="mt-5 text-2xl font-bold text-center border-t-2 ">
+              {" "}
+              Vaihtoehtoinen myynti-ilmoitus{" "}
+            </h2>
+            <ImageAnalysisView
+              analysis={object.analysis}
+              imageUrl={previewUrl || ""}
+              showColorScheme={analysisOptions.includeColorScheme}
             />
           </div>
           <div className="flex gap-4">
@@ -153,12 +161,19 @@ const ImageAnalysisView = ({
   imageUrl,
   showColorScheme,
 }: {
-  analysis: Partial<ImageAnalysis>;
+  analysis: any;
   imageUrl: string;
   showColorScheme: boolean;
 }) => {
+  const analysisRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (analysisRef.current) {
+      analysisRef.current.scrollIntoView({ behavior: "instant" });
+    }
+  }, [analysis]);
   return (
-    <div className="mt-8 space-y-8">
+    <div className="mt-8 space-y-8" ref={analysisRef}>
       {/* Myynti-ilmoitus */}
       <div className="p-6 bg-white dark:bg-gray-800 border rounded-lg shadow-lg max-w-xl mx-auto">
         <div className="flex items-center justify-center mb-6">
@@ -190,7 +205,7 @@ const ImageAnalysisView = ({
           </h3>
           <ul className="list-none space-y-2">
             {analysis.keyFeatures && analysis.keyFeatures.length > 0 ? (
-              analysis.keyFeatures.map((feature, index: number) => (
+              analysis.keyFeatures.map((feature: string, index: number) => (
                 <li
                   key={index}
                   className="text-gray-700 dark:text-gray-200 flex items-center"
@@ -242,13 +257,13 @@ const ImageAnalysisView = ({
                 ></div>
               )}
             </div>
-            <p className="text-gray-700 dark:text-gray-200 mt-2">
+            {/* <p className="text-gray-700 dark:text-gray-200 mt-2">
               Pääväri: {analysis.colorScheme.primary}
               {analysis.colorScheme.secondary &&
                 `, Toissijainen: ${analysis.colorScheme.secondary}`}
               {analysis.colorScheme.accent &&
                 `, Korostus: ${analysis.colorScheme.accent}`}
-            </p>
+            </p> */}
           </div>
         )}
         {analysis.callToAction && (
@@ -282,6 +297,7 @@ const ImageAnalysisView = ({
           </p>
         </div>
       )}
+      <div ref={analysisRef}></div>
     </div>
   );
 };

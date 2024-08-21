@@ -1,4 +1,4 @@
-import { ImageAnalysis } from "@/app/api/image-analysis/schema";
+import { ImageAnalysis } from "./schemas";  
 import { v4 as uuidv4 } from "uuid";
 const analyses: Record<string, ImageAnalysis & { imageUrl: string }> = {};
 
