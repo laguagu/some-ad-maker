@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { HexColorPicker } from 'react-colorful';
+import React, { useState } from "react";
+import { HexColorPicker } from "react-colorful";
 
 export interface StyleProps {
   backgroundColor: string;
@@ -12,8 +12,8 @@ interface StyleCustomizationProps {
 }
 
 export function StyleCustomization({ onStyleChange }: StyleCustomizationProps) {
-  const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
-  const [textColor, setTextColor] = useState('#000000');
+  const [backgroundColor, setBackgroundColor] = useState("#FFFFFF");
+  const [textColor, setTextColor] = useState("#000000");
   const [fontSize, setFontSize] = useState(16);
 
   const handleBackgroundColorChange = (color: string) => {
@@ -38,7 +38,10 @@ export function StyleCustomization({ onStyleChange }: StyleCustomizationProps) {
         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Taustaväri:
         </label>
-        <HexColorPicker color={backgroundColor} onChange={handleBackgroundColorChange} />
+        <HexColorPicker
+          color={backgroundColor}
+          onChange={handleBackgroundColorChange}
+        />
         <div className="mt-2 text-sm text-gray-500">{backgroundColor}</div>
       </div>
       <div>
@@ -52,13 +55,13 @@ export function StyleCustomization({ onStyleChange }: StyleCustomizationProps) {
         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Fonttikoko:
         </label>
-        <input 
-          type="range" 
-          min="12" 
-          max="24" 
-          value={fontSize} 
+        <input
+          type="range"
+          min="12"
+          max="24"
+          value={fontSize}
           onChange={handleFontSizeChange}
-          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" 
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
         />
         <span className="ml-2 text-sm text-gray-500">{fontSize}px</span>
       </div>

@@ -31,7 +31,10 @@ interface TitleComponentProps {
   icon?: React.ReactNode;
 }
 
-export const TitleComponent: React.FC<TitleComponentProps> = ({ text, icon }) => (
+export const TitleComponent: React.FC<TitleComponentProps> = ({
+  text,
+  icon,
+}) => (
   <h2 className="text-2xl font-bold mb-2 flex items-center">
     {icon && <span className="mr-2">{icon}</span>}
     {text}
@@ -45,11 +48,14 @@ interface ImageComponentProps {
 }
 
 export const ImageComponent: React.FC<ImageComponentProps> = ({ src, alt }) => (
-  <div className="relative w-full max-w-md mx-auto mb-4" style={{ aspectRatio: '16/9' }}>
-    <Image 
-      src={src} 
-      alt={alt} 
-      fill 
+  <div
+    className="relative w-full max-w-md mx-auto mb-4"
+    style={{ aspectRatio: "16/9" }}
+  >
+    <Image
+      src={src}
+      alt={alt}
+      fill
       style={{ objectFit: "contain" }}
       sizes="(max-width: 768px) 100vw, 400px"
     />
@@ -62,7 +68,10 @@ interface DescriptionComponentProps {
   icon?: React.ReactNode;
 }
 
-export const DescriptionComponent: React.FC<DescriptionComponentProps> = ({ text, icon }) => (
+export const DescriptionComponent: React.FC<DescriptionComponentProps> = ({
+  text,
+  icon,
+}) => (
   <div className="flex items-start">
     {icon && <span className="mr-2 mt-1">{icon}</span>}
     <p className="text-base">{text}</p>
@@ -74,7 +83,10 @@ interface PriceComponentProps {
   icon?: React.ReactNode;
 }
 
-export const PriceComponent: React.FC<PriceComponentProps> = ({ amount, icon }) => (
+export const PriceComponent: React.FC<PriceComponentProps> = ({
+  amount,
+  icon,
+}) => (
   <p className="text-xl font-semibold flex items-center">
     {icon && <span className="mr-2">{icon}</span>}
     Hinta: {amount}
@@ -87,7 +99,11 @@ interface FeaturesComponentProps {
   isHashtag?: boolean;
 }
 
-export const FeaturesComponent: React.FC<FeaturesComponentProps> = ({ features, icon, isHashtag }) => (
+export const FeaturesComponent: React.FC<FeaturesComponentProps> = ({
+  features,
+  icon,
+  isHashtag,
+}) => (
   <div>
     <h3 className="text-lg font-semibold mb-2 flex items-center">
       {icon && <span className="mr-2">{icon}</span>}
