@@ -4,6 +4,6 @@
 3. Jaa kuva someesi
 4. Simple as that
 
- ## Huom!
- 
- Tarvitaan OpenAI API avain
+## Huom!
+
+Tarvitaan OpenAI API avain

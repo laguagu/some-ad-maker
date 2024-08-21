@@ -14,8 +14,11 @@ export default async function AnalysisPage({
     return <div>Analyysiä ei löytynyt</div>;
   }
 
-  console.log(`Analyysi löytyi:`, analysis);
+  console.log(`Analyysi löytyi ID:llä ${params.id}`);
   return (
-    <ImageAnalysisView analysis={analysis} imageUrl={analysis.imageUrl || "Myyntilmoitus kuva"} />
+    <ImageAnalysisView
+      analysis={analysis}
+      imageUrl={analysis.imageUrl || "Myyntilmoitus kuva"}
+    />
   );
 }

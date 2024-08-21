@@ -226,21 +226,21 @@ const ImageAnalysisView = ({
               Värimaailma:
             </h3>
             <div className="flex items-center space-x-2">
-              <div 
-                className="w-6 h-6 rounded-full" 
+              <div
+                className="w-6 h-6 rounded-full"
                 style={{ backgroundColor: analysis.colorScheme.primary }}
                 title="Pääväri"
               ></div>
               {analysis.colorScheme.secondary && (
-                <div 
-                  className="w-6 h-6 rounded-full" 
+                <div
+                  className="w-6 h-6 rounded-full"
                   style={{ backgroundColor: analysis.colorScheme.secondary }}
                   title="Toissijainen väri"
                 ></div>
               )}
               {analysis.colorScheme.accent && (
-                <div 
-                  className="w-6 h-6 rounded-full" 
+                <div
+                  className="w-6 h-6 rounded-full"
                   style={{ backgroundColor: analysis.colorScheme.accent }}
                   title="Korostusväri"
                 ></div>
@@ -248,8 +248,10 @@ const ImageAnalysisView = ({
             </div>
             <p className="text-gray-700 dark:text-gray-200 mt-2">
               Pääväri: {analysis.colorScheme.primary}
-              {analysis.colorScheme.secondary && `, Toissijainen: ${analysis.colorScheme.secondary}`}
-              {analysis.colorScheme.accent && `, Korostus: ${analysis.colorScheme.accent}`}
+              {analysis.colorScheme.secondary &&
+                `, Toissijainen: ${analysis.colorScheme.secondary}`}
+              {analysis.colorScheme.accent &&
+                `, Korostus: ${analysis.colorScheme.accent}`}
             </p>
           </div>
         )}

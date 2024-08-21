@@ -1,11 +1,11 @@
-import React from 'react';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import React from "react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export type AnalysisOptions = {
   includeColorScheme: boolean;
-  styleTheme: 'modern' | 'classic' | 'scandinavian';
+  styleTheme: "modern" | "classic" | "scandinavian";
 };
 
 type AnalysisOptionsProps = {
@@ -26,13 +26,16 @@ export function AnalysisOptions({ options, onChange }: AnalysisOptionsProps) {
         />
         <Label htmlFor="includeColorScheme">Sisällytä värianalyysi</Label>
       </div>
-      
+
       <div>
         <Label>Tyylisuunta</Label>
         <RadioGroup
           value={options.styleTheme}
           onValueChange={(value) =>
-            onChange({ ...options, styleTheme: value as 'modern' | 'classic' | 'scandinavian' })
+            onChange({
+              ...options,
+              styleTheme: value as "modern" | "classic" | "scandinavian",
+            })
           }
         >
           <div className="flex items-center space-x-2">
