@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FileUpload } from "@/components/ui/file-upload";
 import { Button } from "@/components/ui/button";
 import { experimental_useObject as useObject } from "ai/react";
@@ -7,17 +7,22 @@ import {
   imageAnalysisSchema,
   PartialImageAnalysis,
   ImageAnalysis,
-} from "@/app/api/image-analysis/schema";
+} from "@/lib/schemas";
 import Image from "next/image";
 import ShareButton from "./share-button";
 import Link from "next/link";
 import { Tag, Info, ShoppingCart, Palette, Eye } from "lucide-react";
 import { AnalysisOptions } from "./analysis-options";
 import { useRouter } from "next/navigation";
+import html2canvas from "html2canvas";
 
 export function UploadFile() {
   const router = useRouter();
+  const analysisRef = useRef<HTMLDivElement>(null);
   const [files, setFiles] = useState<File[]>([]);
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(
+    null,
+  );
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [analysisId, setAnalysisId] = useState<string | null>(null);
   const [analysisUrl, setAnalysisUrl] = useState<string | null>(null);
@@ -69,11 +74,35 @@ export function UploadFile() {
     }
   };
 
-  useEffect(() => {
-    if (object?.analysis) {
-      console.log("Analyysi valmis:", object.analysis);
+  const handleSaveAsImage = async () => {
+    if (analysisRef.current) {
+      try {
+        const canvas = await html2canvas(analysisRef.current, {
+          useCORS: true,
+          scale: 2, // Parempi resoluutio
+          logging: true, // Auttaa debuggauksessa
+          onclone: (clonedDoc) => {
+            // Varmistetaan, että klonattu elementti on näkyvissä
+            const clonedElement = clonedDoc.body.querySelector(
+              "[data-html2canvas-ignore]",
+            );
+            if (clonedElement) {
+              clonedElement.removeAttribute("data-html2canvas-ignore");
+            }
+          },
+        });
+        const image = canvas.toDataURL("image/png", 1.0);
+        const link = document.createElement("a");
+        link.href = image;
+        link.download = "analyysi.png";
+        link.click();
+      } catch (error) {
+        console.error("Virhe kuvan tallennuksessa:", error);
+      }
+    } else {
+      console.log("Sisältö ei ole vielä valmis tallennettavaksi");
     }
-  }, [object]);
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg p-4">
@@ -106,14 +135,20 @@ export function UploadFile() {
         </div>
       </div>
       {object?.analysis && (
-        <div className="space-y-4 flex flex-col items-center justify-center">
+        <div
+          ref={analysisRef}
+          className="space-y-4 flex flex-col items-center justify-center"
+        >
           <ImageAnalysisView
             analysis={object.analysis as ImageAnalysis}
             imageUrl={previewUrl || ""}
             showColorScheme={analysisOptions.includeColorScheme}
           />
-          <Button onClick={handleSaveAnalysis} className="mt-4">
+          <Button onClick={handleSaveAnalysis} className=" mt-4">
             Tallenna analyysi
+          </Button>
+          <Button onClick={handleSaveAsImage} className="mt-4">
+            Tallenna analyysi kuvana
           </Button>
           {analysisId && (
             <ShareButton

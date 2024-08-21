@@ -1,5 +1,5 @@
 import { streamObject } from "ai";
-import { imageAnalysisSchema } from "./schema";
+import { imageAnalysisSchema } from "@/lib/schemas";
 import { openai } from "@ai-sdk/openai";
 
 export const maxDuration = 30;
