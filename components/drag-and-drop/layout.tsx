@@ -108,28 +108,59 @@ export function DraggableAdLayout({ adData }: DraggableAdLayoutProps) {
   const handleStyleChange = (newStyles: Partial<StyleProps>) => {
     setStyles((prevStyles: any) => ({ ...prevStyles, ...newStyles }));
   };
-
+  // Two different ways to save the ad layout as an image are shown below.
   const handleSaveAsImage = async () => {
     if (adLayoutRef.current) {
       try {
+        console.log("Aloitetaan kuvan tallennus");
+
+        // Aseta väliaikaiset tyylit
+        const originalStyles = adLayoutRef.current.getAttribute("style");
+        adLayoutRef.current.style.width = "600px";
+        adLayoutRef.current.style.margin = "0";
+        adLayoutRef.current.style.padding = "20px";
+        adLayoutRef.current.style.backgroundColor = "#ffffff";
+
+        console.log("Väliaikaiset tyylit asetettu");
+
         const canvas = await html2canvas(adLayoutRef.current, {
           useCORS: true,
           scale: 2,
           logging: true,
+          backgroundColor: "#ffffff",
           onclone: (clonedDoc) => {
+            console.log("Kloonaus suoritettu");
             const clonedElement = clonedDoc.body.querySelector(
-              "[data-html2canvas-ignore]",
+              "#ad-layout-container",
             );
             if (clonedElement) {
-              clonedElement.removeAttribute("data-html2canvas-ignore");
+              console.log("Kloonattu elementti löydetty");
+            } else {
+              console.log("Kloonattua elementtiä ei löydetty");
             }
           },
         });
+
+        console.log("Canvas luotu");
+
         const image = canvas.toDataURL("image/png", 1.0);
+        console.log("Kuva luotu, pituus:", image.length);
+
         const link = document.createElement("a");
         link.href = image;
         link.download = "myynti-ilmoitus.png";
         link.click();
+
+        console.log("Latauslinkki luotu ja klikattu");
+
+        // Palauta alkuperäiset tyylit
+        if (originalStyles) {
+          adLayoutRef.current.setAttribute("style", originalStyles);
+        } else {
+          adLayoutRef.current.removeAttribute("style");
+        }
+
+        console.log("Alkuperäiset tyylit palautettu");
       } catch (error) {
         console.error("Virhe kuvan tallennuksessa:", error);
       }
@@ -137,6 +168,35 @@ export function DraggableAdLayout({ adData }: DraggableAdLayoutProps) {
       console.log("Myynti-ilmoitus ei ole vielä valmis tallennettavaksi");
     }
   };
+  // const handleSaveAsImage = async () => {
+  //   if (adLayoutRef.current) {
+  //     try {
+  //       const canvas = await html2canvas(adLayoutRef.current, {
+  //         useCORS: true,
+  //         scale: 2,
+  //         logging: true,
+  //         allowTaint: true,
+  //         onclone: (clonedDoc) => {
+  //           const clonedElement = clonedDoc.body.querySelector(
+  //             "[data-html2canvas-ignore]",
+  //           );
+  //           if (clonedElement) {
+  //             clonedElement.removeAttribute("data-html2canvas-ignore");
+  //           }
+  //         },
+  //       });
+  //       const image = canvas.toDataURL("image/png", 1.0);
+  //       const link = document.createElement("a");
+  //       link.href = image;
+  //       link.download = "myynti-ilmoitus.png";
+  //       link.click();
+  //     } catch (error) {
+  //       console.error("Virhe kuvan tallennuksessa:", error);
+  //     }
+  //   } else {
+  //     console.log("Myynti-ilmoitus ei ole vielä valmis tallennettavaksi");
+  //   }
+  // };
   return (
     <div>
       <StyleCustomization onStyleChange={handleStyleChange} />
