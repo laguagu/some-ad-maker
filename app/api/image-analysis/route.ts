@@ -71,7 +71,7 @@ export async function POST(req: Request) {
 
   if (USE_MOCK_DATA) {
     // Simuloi viivettä
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    // await new Promise((resolve) => setTimeout(resolve, 1500));
 
     // Palauta mockattu data streamObject-muodossa
     return new Response(JSON.stringify(mockAnalysis), {

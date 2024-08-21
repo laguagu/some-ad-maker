@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { FileUpload } from "@/components/ui/file-upload";
 import { Button } from "@/components/ui/button";
 import { experimental_useObject as useObject } from "ai/react";
@@ -9,16 +9,15 @@ import {
   ImageAnalysis,
 } from "@/lib/schemas";
 import Image from "next/image";
-import ShareButton from "./share-button";
-import Link from "next/link";
 import { Tag, Info, ShoppingCart, Palette, Eye } from "lucide-react";
 import { AnalysisOptions } from "./analysis-options";
 import { useRouter } from "next/navigation";
-import html2canvas from "html2canvas";
+import { DraggableAdLayout } from "./drag-and-drop/layout";
 
 export function UploadFile() {
   const router = useRouter();
   const analysisRef = useRef<HTMLDivElement>(null);
+  const [adLayout, setAdLayout] = useState(null);
   const [files, setFiles] = useState<File[]>([]);
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(
     null,
@@ -30,7 +29,7 @@ export function UploadFile() {
     includeColorScheme: true,
     styleTheme: "modern",
   });
-  const { object, submit, isLoading } = useObject<{
+  const { object, submit, isLoading, error } = useObject<{
     analysis: PartialImageAnalysis;
   }>({
     api: "/api/image-analysis",
@@ -74,36 +73,6 @@ export function UploadFile() {
     }
   };
 
-  const handleSaveAsImage = async () => {
-    if (analysisRef.current) {
-      try {
-        const canvas = await html2canvas(analysisRef.current, {
-          useCORS: true,
-          scale: 2, // Parempi resoluutio
-          logging: true, // Auttaa debuggauksessa
-          onclone: (clonedDoc) => {
-            // Varmistetaan, että klonattu elementti on näkyvissä
-            const clonedElement = clonedDoc.body.querySelector(
-              "[data-html2canvas-ignore]",
-            );
-            if (clonedElement) {
-              clonedElement.removeAttribute("data-html2canvas-ignore");
-            }
-          },
-        });
-        const image = canvas.toDataURL("image/png", 1.0);
-        const link = document.createElement("a");
-        link.href = image;
-        link.download = "analyysi.png";
-        link.click();
-      } catch (error) {
-        console.error("Virhe kuvan tallennuksessa:", error);
-      }
-    } else {
-      console.log("Sisältö ei ole vielä valmis tallennettavaksi");
-    }
-  };
-
   return (
     <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg p-4">
       <FileUpload onChange={handleFileUpload} />
@@ -135,44 +104,44 @@ export function UploadFile() {
         </div>
       </div>
       {object?.analysis && (
-        <div
-          ref={analysisRef}
-          className="space-y-4 flex flex-col items-center justify-center"
-        >
-          <ImageAnalysisView
-            analysis={object.analysis as ImageAnalysis}
-            imageUrl={previewUrl || ""}
-            showColorScheme={analysisOptions.includeColorScheme}
-          />
-          <Button onClick={handleSaveAnalysis} className=" mt-4">
-            Tallenna analyysi
-          </Button>
-          <Button onClick={handleSaveAsImage} className="mt-4">
-            Tallenna analyysi kuvana
-          </Button>
-          {analysisId && (
-            <ShareButton
-              productId={analysisId}
-              title={object.analysis.furniture}
-              description={object.analysis.description}
-              hashtags={object.analysis.hashtags?.filter(
-                (tag): tag is string => tag !== undefined,
-              )}
+        <div className="mt-8">
+          <h3 className="text-xl font-bold mb-4">Muokattava myynti-ilmoitus</h3>
+          <div ref={analysisRef}>
+            <DraggableAdLayout
+              adData={
+                {
+                  ...object.analysis,
+                  furniture: object.analysis.furniture,
+                  keyFeatures: object.analysis.keyFeatures,
+                  description: object.analysis.description,
+                  hashtags: object.analysis.hashtags,
+                  callToAction: object.analysis.callToAction,
+                  visualDesign: object.analysis.visualDesign,
+                  imageUrl: previewUrl || null,
+                  price: object.analysis.price || null,
+                  colorScheme: object.analysis.colorScheme,
+                } as ImageAnalysis
+              }
             />
-          )}
-          {analysisUrl && (
-            <div className="mt-4 p-2 bg-gray-100 dark:bg-gray-800 rounded">
-              <p>Analyysin URL:</p>
-              <Link
-                href={analysisUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                {analysisUrl}
-              </Link>
-            </div>
-          )}
+          </div>
+          <div className="flex gap-4">
+            <Button onClick={handleSaveAnalysis} className="mt-4">
+              Tallenna myynti-ilmoitus
+            </Button>
+          </div>
+        </div>
+      )}
+      {analysisUrl && (
+        <div className="mt-4 p-2 bg-gray-100 dark:bg-gray-800 rounded">
+          <p>Analyysin URL:</p>
+          <a
+            href={analysisUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:underline"
+          >
+            {analysisUrl}
+          </a>
         </div>
       )}
     </div>
