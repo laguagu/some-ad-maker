@@ -38,7 +38,7 @@ export function AnalysisOptions({ options, onChange }: AnalysisOptionsProps) {
             })
           }
         >
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 space-y-2">
             <RadioGroupItem value="modern" id="modern" />
             <Label htmlFor="modern">Moderni</Label>
           </div>

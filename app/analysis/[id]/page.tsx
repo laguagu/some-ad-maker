@@ -18,7 +18,8 @@ export default async function AnalysisPage({
   return (
     <ImageAnalysisView
       analysis={analysis}
-      imageUrl={analysis.imageUrl || "Myyntilmoitus kuva"}
+      imageUrl={analysis.imageUrl || ""}
+      showColorScheme={true}
     />
   );
 }

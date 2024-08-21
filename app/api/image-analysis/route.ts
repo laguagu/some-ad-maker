@@ -5,28 +5,38 @@ import { openai } from "@ai-sdk/openai";
 export const maxDuration = 30;
 
 // Aseta tämä true:ksi käyttääksesi mockattua dataa
-const USE_MOCK_DATA = false;
+const USE_MOCK_DATA = true;
 
 // Mockattu data-objekti
 const mockAnalysis = {
   analysis: {
-    furniture: "Jakkara",
-    keyFeatures: ["Kestävä", "Tyylikäs", "Monikäyttöinen", "Helppo puhdistaa"],
-    description:
-      "Tämä tyylikäs ja kestävä jakkara tuo ripauksen pohjoismaista muotoilua kotiisi. Jakkara on monikäyttöinen lisä mihin tahansa tilaan.",
-    imageUrl:
-      "https://www.avotakka.fi/wp-content/uploads/2021/06/avotakka-2021-06-07-60be1b1e1b7c5.jpg",
-    hashtags: [
-      "#design",
-      "#jakkara",
-      "#sisustus",
-      "#kestävä",
-      "#tyylikäs",
-      "#monikäyttöinen",
-      "#helppopuhdistaa",
+    furniture: "Moderni jakkara",
+    keyFeatures: [
+      "Kestävä metallirunko",
+      "Ergonominen muotoilu",
+      "Helposti puhdistettava pinta",
+      "Pinottava rakenne",
     ],
-    price: "129 €",
-    callToAction: "Osta nyt ja tuo tyylikkyyttä kotiisi!",
+    description:
+      "Tämä tyylikäs ja monikäyttöinen jakkara tuo ripauksen modernia designia kotiisi tai toimistoosi. Sen kestävä metallirunko ja ergonominen muotoilu takaavat pitkäaikaisen käyttömukavuuden. Helposti puhdistettava pinta tekee jakkarasta käytännöllisen valinnan kiireiseen arkeen. Pinottava rakenne säästää tilaa, kun jakkaraa ei käytetä.",
+    imageUrl: "https://example.com/moderni-jakkara.jpg",
+    hashtags: [
+      "#ModerniJakkara",
+      "#SisustusInspiraatio",
+      "#KotiSisustus",
+      "#ToimistoKaluste",
+      "#DesignHuonekalu",
+      "#ModernDesign",
+    ],
+    price: "89,99 €",
+    callToAction: "Tilaa nyt ja tuo ripaus modernia tyylikkyyttä tiloihisi!",
+    colorScheme: {
+      primary: "Musta",
+      secondary: "Valkoinen",
+      accent: "Kromi",
+    },
+    visualDesign:
+      "Suunnittele myynti-ilmoitus, joka korostaa jakkaran modernia muotoilua. Käytä valkoista taustaa, jotta musta jakkara erottuu selkeästi. Lisää kromiyksityiskohtia korostamaan tuotteen laadukasta viimeistelyä. Käytä selkeää, sans-serif-fonttia tekstissä ja järjestä tuotteen ominaisuudet helposti luettavaan muotoon, esimerkiksi ikonien kanssa. Sisällytä lähikuva jakkaran pinnasta osoittamaan sen helppohoitoisuutta. Lisää visualisointiin myös kuva pinottavista jakkara, joka demonstroi niiden tilaa säästävää ominaisuutta.",
   },
 };
 

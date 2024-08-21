@@ -13,30 +13,10 @@ import ShareButton from "./share-button";
 import Link from "next/link";
 import { Tag, Info, ShoppingCart, Palette, Eye } from "lucide-react";
 import { AnalysisOptions } from "./analysis-options";
-
-const mockAnalysis = {
-  analysis: {
-    furniture: "Jakkara",
-    keyFeatures: ["Kestävä", "Tyylikäs", "Monikäyttöinen", "Helppo puhdistaa"],
-    description:
-      "Tämä tyylikäs ja kestävä jakkara tuo ripauksen pohjoismaista muotoilua kotiisi. Jakkara on monikäyttöinen lisä mihin tahansa tilaan.",
-    imageUrl:
-      "https://www.avotakka.fi/wp-content/uploads/2021/06/avotakka-2021-06-07-60be1b1e1b7c5.jpg",
-    hashtags: [
-      "#design",
-      "#jakkara",
-      "#sisustus",
-      "#kestävä",
-      "#tyylikäs",
-      "#monikäyttöinen",
-      "#helppopuhdistaa",
-    ],
-    price: "129 €",
-    callToAction: "Osta nyt ja tuo tyylikkyyttä kotiisi!",
-  },
-};
+import { useRouter } from "next/navigation";
 
 export function UploadFile() {
+  const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [analysisId, setAnalysisId] = useState<string | null>(null);
@@ -83,39 +63,54 @@ export function UploadFile() {
       const { id } = await response.json();
       console.log(`Analyysi tallennettu, saatu ID: ${id}`);
       setAnalysisId(id);
-      const url = `${process.env.NEXT_PUBLIC_BASE_URL}/analysis/${id}`;
+      const url = `/analysis/${id}`;
       console.log(`Luotu URL: ${url}`);
       setAnalysisUrl(url);
     }
   };
 
+  useEffect(() => {
+    if (object?.analysis) {
+      console.log("Analyysi valmis:", object.analysis);
+    }
+  }, [object]);
+
   return (
     <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg p-4">
       <FileUpload onChange={handleFileUpload} />
-      {previewUrl && (
-        <div className="mt-4 relative w-[200px] h-[200px]">
-          <Image
-            src={previewUrl}
-            alt="Esikatselu"
-            fill
-            style={{ objectFit: "contain" }}
+      <div className="flex gap-2 flex-col items-center space-y-2">
+        {previewUrl && (
+          <div className="mt-4 relative w-[200px] h-[200px]">
+            <Image
+              src={previewUrl}
+              alt="Esikatselu"
+              fill
+              style={{ objectFit: "contain" }}
+            />
+          </div>
+        )}
+        <div className="flex flex-col items-start gap-2">
+          <AnalysisOptions
+            options={analysisOptions}
+            onChange={setAnalysisOptions}
           />
+          {files.length > 0 && (
+            <Button
+              onClick={handleAnalyze}
+              className="mt-4"
+              disabled={isLoading}
+            >
+              {isLoading ? "Analysoidaan..." : "Analysoi kuva"}
+            </Button>
+          )}
         </div>
-      )}
-      <AnalysisOptions
-        options={analysisOptions}
-        onChange={setAnalysisOptions}
-      />
-      {files.length > 0 && (
-        <Button onClick={handleAnalyze} className="mt-4" disabled={isLoading}>
-          {isLoading ? "Analysoidaan..." : "Analysoi kuva"}
-        </Button>
-      )}
+      </div>
       {object?.analysis && (
         <div className="space-y-4 flex flex-col items-center justify-center">
           <ImageAnalysisView
             analysis={object.analysis as ImageAnalysis}
-            imageUrl={previewUrl || "Myynti-ilmoituksen kuva"}
+            imageUrl={previewUrl || ""}
+            showColorScheme={analysisOptions.includeColorScheme}
           />
           <Button onClick={handleSaveAnalysis} className="mt-4">
             Tallenna analyysi
@@ -145,11 +140,6 @@ export function UploadFile() {
           )}
         </div>
       )}
-      <ImageAnalysisView
-        analysis={mockAnalysis.analysis as ImageAnalysis}
-        imageUrl="/sauna.jpg"
-      />
-      {/* MOCKDATA */}
     </div>
   );
 }
@@ -157,9 +147,11 @@ export function UploadFile() {
 const ImageAnalysisView = ({
   analysis,
   imageUrl,
+  showColorScheme,
 }: {
-  analysis: ImageAnalysis;
+  analysis: Partial<ImageAnalysis>;
   imageUrl: string;
+  showColorScheme: boolean;
 }) => {
   return (
     <div className="mt-8 space-y-8">
@@ -194,7 +186,7 @@ const ImageAnalysisView = ({
           </h3>
           <ul className="list-none space-y-2">
             {analysis.keyFeatures && analysis.keyFeatures.length > 0 ? (
-              analysis.keyFeatures.map((feature, index) => (
+              analysis.keyFeatures.map((feature, index: number) => (
                 <li
                   key={index}
                   className="text-gray-700 dark:text-gray-200 flex items-center"
@@ -219,7 +211,7 @@ const ImageAnalysisView = ({
             {analysis.description}
           </p>
         </div>
-        {analysis.colorScheme && (
+        {showColorScheme && analysis.colorScheme && (
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center">
               <Palette className="mr-2" size={24} />
@@ -263,7 +255,7 @@ const ImageAnalysisView = ({
         )}
         <div className="flex flex-wrap gap-2 mt-4">
           {analysis.hashtags &&
-            analysis.hashtags.map((tag, index) => (
+            analysis.hashtags.map((tag: string, index: number) => (
               <span
                 key={index}
                 className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-2 py-1 rounded-full text-sm"

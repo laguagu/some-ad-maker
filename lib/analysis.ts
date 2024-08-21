@@ -21,7 +21,7 @@ export async function getAnalysisById(
   console.log(`Haetaan analyysi ID:llä ${id}`);
   const analysis = analyses[id];
   if (analysis) {
-    console.log(`Analyysi löytyi:`, analysis);
+    console.log(`Analyysi löytyi:`);
   } else {
     console.log(`Analyysiä ei löytynyt ID:llä ${id}`);
   }
