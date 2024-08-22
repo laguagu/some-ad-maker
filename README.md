@@ -16,3 +16,4 @@
 
 - Sovellus vaatii OpenAI API -avaimen toimiakseen.  
 - Aseta OpenAI API -avaimesi ympäristömuuttujaan `OPENAI_API_KEY` ennen sovelluksen käyttöä.
+- Aseta URL-osoite ympäristömuuttujaan `NEXT_PUBLIC_BASE_URL` ennen sovelluksen käyttöä (esimerkiksi `http://localhost:3000`).
