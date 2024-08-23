@@ -31,9 +31,9 @@ export const mockAnalysis = {
     price: "89,99 €",
     callToAction: "Tilaa nyt ja tuo ripaus modernia tyylikkyyttä tiloihisi!",
     colorScheme: {
-      primary: "Musta",
-      secondary: "Valkoinen",
-      accent: "Kromi",
+      primary: "black",
+      secondary: "grey",
+      accent: "beige",
     },
     visualDesign:
       "Suunnittele myynti-ilmoitus, joka korostaa jakkaran modernia muotoilua. Käytä valkoista taustaa, jotta musta jakkara erottuu selkeästi. Lisää kromiyksityiskohtia korostamaan tuotteen laadukasta viimeistelyä. Käytä selkeää, sans-serif-fonttia tekstissä ja järjestä tuotteen ominaisuudet helposti luettavaan muotoon, esimerkiksi ikonien kanssa. Sisällytä lähikuva jakkaran pinnasta osoittamaan sen helppohoitoisuutta. Lisää visualisointiin myös kuva pinottavista jakkara, joka demonstroi niiden tilaa säästävää ominaisuutta.",
