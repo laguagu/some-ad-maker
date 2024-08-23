@@ -13,6 +13,7 @@ import { Tag, Info, ShoppingCart, Palette, Eye } from "lucide-react";
 import { AnalysisOptions } from "./analysis-options";
 import { useRouter } from "next/navigation";
 import { DraggableAdLayout } from "./drag-and-drop/layout";
+import { mockAnalysis } from "@/app/api/image-analysis/route";
 
 export function UploadFile() {
   const router = useRouter();
@@ -100,6 +101,15 @@ export function UploadFile() {
           )}
         </div>
       </div>
+      {/* Testiin komponentti
+      <DraggableAdLayout
+        adData={
+          {
+            ...mockAnalysis.analysis,
+          } as PartialImageAnalysis
+        }
+        imageUrl={"/sauna.jpg"}
+      /> */}
       {object?.analysis && (
         <div className="mt-8">
           <h3 className="text-xl font-bold mb-4">Muokattava myynti-ilmoitus</h3>
@@ -108,17 +118,9 @@ export function UploadFile() {
               adData={
                 {
                   ...object.analysis,
-                  furniture: object.analysis.furniture,
-                  keyFeatures: object.analysis.keyFeatures || [],
-                  description: object.analysis.description,
-                  hashtags: object.analysis.hashtags || [],
-                  callToAction: object.analysis.callToAction,
-                  visualDesign: object.analysis.visualDesign,
-                  imageUrl: previewUrl || null,
-                  price: object.analysis.price || null,
-                  colorScheme: object.analysis.colorScheme,
-                } as ImageAnalysis
+                } as PartialImageAnalysis
               }
+              imageUrl={previewUrl || ""}
             />
           )}
           <div>

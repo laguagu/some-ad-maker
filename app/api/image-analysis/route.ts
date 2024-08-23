@@ -5,10 +5,10 @@ import { openai } from "@ai-sdk/openai";
 export const maxDuration = 30;
 
 // Aseta tämä true:ksi käyttääksesi mockattua dataa
-const USE_MOCK_DATA = false;
+const USE_MOCK_DATA = true;
 
 // Mockattu data-objekti
-const mockAnalysis = {
+export const mockAnalysis = {
   analysis: {
     furniture: "Moderni jakkara",
     keyFeatures: [

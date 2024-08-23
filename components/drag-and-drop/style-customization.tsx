@@ -33,7 +33,7 @@ export function StyleCustomization({ onStyleChange }: StyleCustomizationProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="flex gap-10 justify-center">
       <div>
         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Taustaväri:
@@ -51,7 +51,7 @@ export function StyleCustomization({ onStyleChange }: StyleCustomizationProps) {
         <HexColorPicker color={textColor} onChange={handleTextColorChange} />
         <div className="mt-2 text-sm text-gray-500">{textColor}</div>
       </div>
-      <div>
+      <div className="flex flex-col items-center justify-center flex-1">
         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Fonttikoko:
         </label>

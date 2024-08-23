@@ -7,19 +7,42 @@ import { CSS } from "@dnd-kit/utilities";
 interface DraggableItemProps {
   id: string;
   children: React.ReactNode;
+  isSelected: boolean;
+  onClick: () => void;
+}
+export interface StyleProps extends React.CSSProperties {
+  textColor?: string;
 }
 
-export function DraggableItem({ id, children }: DraggableItemProps) {
+export function DraggableItem({
+  id,
+  children,
+  isSelected,
+  onClick,
+}: DraggableItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    border: isSelected ? "2px solid blue" : "1px solid #ccc",
+    padding: "8px",
+    margin: "4px",
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+      className="cursor-pointer"
+    >
       {children}
     </div>
   );
@@ -29,18 +52,28 @@ export function DraggableItem({ id, children }: DraggableItemProps) {
 interface TitleComponentProps {
   text: string;
   icon?: React.ReactNode;
+  style?: StyleProps;
 }
 
 export const TitleComponent: React.FC<TitleComponentProps> = ({
   text,
   icon,
-}) => (
-  <h2 className="text-2xl font-bold mb-2 flex items-center">
-    {icon && <span className="mr-2">{icon}</span>}
-    {text}
-  </h2>
-);
-
+  style,
+}) => {
+  return (
+    <h2
+      className="text-2xl font-bold mb-2 flex items-center p-2 rounded"
+      style={{
+        ...style,
+        color: style?.textColor || style?.color || "inherit",
+        backgroundColor: style?.backgroundColor || "transparent",
+      }}
+    >
+      {icon && <span className="mr-2">{icon}</span>}
+      {text}
+    </h2>
+  );
+};
 // ImageComponent
 interface ImageComponentProps {
   src: string;
@@ -66,45 +99,72 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({ src, alt }) => (
 interface DescriptionComponentProps {
   text: string;
   icon?: React.ReactNode;
+  style?: StyleProps;
 }
 
 export const DescriptionComponent: React.FC<DescriptionComponentProps> = ({
   text,
   icon,
+  style,
 }) => (
-  <div className="flex items-start">
+  <div
+    className="flex items-start p-2 rounded"
+    style={{
+      ...style,
+      color: style?.textColor || style?.color || "inherit",
+      backgroundColor: style?.backgroundColor || "transparent",
+    }}
+  >
     {icon && <span className="mr-2 mt-1">{icon}</span>}
-    <p className="text-base">{text}</p>
+    <p>{text}</p>
   </div>
 );
 
 interface PriceComponentProps {
   amount: string;
   icon?: React.ReactNode;
+  style?: StyleProps;
 }
 
 export const PriceComponent: React.FC<PriceComponentProps> = ({
   amount,
   icon,
+  style,
 }) => (
-  <p className="text-xl font-semibold flex items-center">
+  <div
+    className="flex items-center p-2 rounded"
+    style={{
+      ...style,
+      color: style?.textColor || style?.color || "inherit",
+      backgroundColor: style?.backgroundColor || "transparent",
+    }}
+  >
     {icon && <span className="mr-2">{icon}</span>}
-    Hinta: {amount}
-  </p>
+    <p>Hinta: {amount}</p>
+  </div>
 );
 
 interface FeaturesComponentProps {
   features: string[];
   icon?: React.ReactNode;
   isHashtag?: boolean;
+  style?: StyleProps;
 }
 
 export const FeaturesComponent: React.FC<FeaturesComponentProps> = ({
   features,
   icon,
   isHashtag,
+  style,
 }) => (
-  <div>
+  <div
+    className="p-2 rounded"
+    style={{
+      ...style,
+      color: style?.textColor || style?.color || "inherit",
+      backgroundColor: style?.backgroundColor || "transparent",
+    }}
+  >
     <h3 className="text-lg font-semibold mb-2 flex items-center">
       {icon && <span className="mr-2">{icon}</span>}
       {isHashtag ? "Hashtagit:" : "Ominaisuudet:"}

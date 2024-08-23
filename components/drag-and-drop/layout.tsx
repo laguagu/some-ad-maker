@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   DndContext,
   closestCenter,
@@ -10,6 +10,7 @@ import {
 } from "@dnd-kit/core";
 import {
   arrayMove,
+  rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
@@ -23,13 +24,14 @@ import {
   FeaturesComponent,
 } from "./draggable-item";
 import { StyleCustomization, StyleProps } from "./style-customization";
-import { ImageAnalysis } from "@/lib/schemas";
-import { Tag, Info, ShoppingCart, List, Hash } from "lucide-react";
+import { ImageAnalysis, PartialImageAnalysis } from "@/lib/schemas";
+import { Tag, Info, ShoppingCart, List, Hash, CheckCircle } from "lucide-react";
 import html2canvas from "html2canvas";
 import { Button } from "../ui/button";
 
 interface DraggableAdLayoutProps {
-  adData: ImageAnalysis;
+  adData: PartialImageAnalysis;
+  imageUrl: string;
 }
 
 interface ItemType {
@@ -38,7 +40,12 @@ interface ItemType {
   props: any;
 }
 
-export function DraggableAdLayout({ adData }: DraggableAdLayoutProps) {
+export function DraggableAdLayout({
+  adData,
+  imageUrl,
+}: DraggableAdLayoutProps) {
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [itemStyles, setItemStyles] = useState<Record<string, StyleProps>>({});
   const [items, setItems] = useState<ItemType[]>([
     {
       id: "furniture",
@@ -48,7 +55,7 @@ export function DraggableAdLayout({ adData }: DraggableAdLayoutProps) {
     {
       id: "image",
       component: ImageComponent,
-      props: { src: adData.imageUrl || "", alt: adData.furniture },
+      props: { src: imageUrl || "", alt: adData.furniture },
     },
     {
       id: "description",
@@ -78,24 +85,22 @@ export function DraggableAdLayout({ adData }: DraggableAdLayoutProps) {
       },
     },
   ]);
-  const [styles, setStyles] = useState<StyleProps>({
-    backgroundColor: "#FFFFFF",
-    textColor: "#000000",
-    fontSize: 16,
-  });
 
   const adLayoutRef = useRef<HTMLDivElement>(null);
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
 
-  function handleDragEnd(event: DragEndEvent) {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
     if (active.id !== over?.id) {
       setItems((items) => {
         const oldIndex = items.findIndex((item) => item.id === active.id);
@@ -103,18 +108,40 @@ export function DraggableAdLayout({ adData }: DraggableAdLayoutProps) {
         return arrayMove(items, oldIndex, newIndex);
       });
     }
-  }
-
-  const handleStyleChange = (newStyles: Partial<StyleProps>) => {
-    setStyles((prevStyles: any) => ({ ...prevStyles, ...newStyles }));
   };
-  // Two different ways to save the ad layout as an image are shown below.
+
+  const handleStyleChange = useCallback(
+    (newStyles: Partial<StyleProps>) => {
+      if (selectedItemId) {
+        console.log("Updating styles for", selectedItemId, "with", newStyles);
+        setItemStyles((prev) => ({
+          ...prev,
+          [selectedItemId]: { ...prev[selectedItemId], ...newStyles },
+        }));
+      }
+    },
+    [selectedItemId],
+  );
+
   const handleSaveAsImage = async () => {
     if (adLayoutRef.current) {
       try {
         console.log("Aloitetaan kuvan tallennus");
 
-        // Aseta väliaikaiset tyylit
+        // Piilota valintaikonit ja poista valitun elementin taustaväri väliaikaisesti
+        const selectionIcons =
+          adLayoutRef.current.querySelectorAll(".selection-icon");
+        const selectedItems =
+          adLayoutRef.current.querySelectorAll(".selected-item");
+
+        selectionIcons.forEach(
+          (icon) => ((icon as HTMLElement).style.display = "none"),
+        );
+        selectedItems.forEach((item) => {
+          (item as HTMLElement).style.backgroundColor = "transparent";
+          (item as HTMLElement).style.border = "none";
+        });
+
         const originalStyles = adLayoutRef.current.getAttribute("style");
         adLayoutRef.current.style.width = "600px";
         adLayoutRef.current.style.margin = "0";
@@ -128,17 +155,6 @@ export function DraggableAdLayout({ adData }: DraggableAdLayoutProps) {
           scale: 2,
           logging: true,
           backgroundColor: "#ffffff",
-          onclone: (clonedDoc) => {
-            console.log("Kloonaus suoritettu");
-            const clonedElement = clonedDoc.body.querySelector(
-              "#ad-layout-container",
-            );
-            if (clonedElement) {
-              console.log("Kloonattu elementti löydetty");
-            } else {
-              console.log("Kloonattua elementtiä ei löydetty");
-            }
-          },
         });
 
         console.log("Canvas luotu");
@@ -153,7 +169,15 @@ export function DraggableAdLayout({ adData }: DraggableAdLayoutProps) {
 
         console.log("Latauslinkki luotu ja klikattu");
 
-        // Palauta alkuperäiset tyylit
+        // Palauta valintaikonit näkyviin ja valitun elementin taustaväri
+        selectionIcons.forEach(
+          (icon) => ((icon as HTMLElement).style.display = ""),
+        );
+        selectedItems.forEach((item) => {
+          (item as HTMLElement).style.backgroundColor = "";
+          (item as HTMLElement).style.border = "";
+        });
+
         if (originalStyles) {
           adLayoutRef.current.setAttribute("style", originalStyles);
         } else {
@@ -168,39 +192,20 @@ export function DraggableAdLayout({ adData }: DraggableAdLayoutProps) {
       console.log("Myynti-ilmoitus ei ole vielä valmis tallennettavaksi");
     }
   };
-  // const handleSaveAsImage = async () => {
-  //   if (adLayoutRef.current) {
-  //     try {
-  //       const canvas = await html2canvas(adLayoutRef.current, {
-  //         useCORS: true,
-  //         scale: 2,
-  //         logging: true,
-  //         allowTaint: true,
-  //         onclone: (clonedDoc) => {
-  //           const clonedElement = clonedDoc.body.querySelector(
-  //             "[data-html2canvas-ignore]",
-  //           );
-  //           if (clonedElement) {
-  //             clonedElement.removeAttribute("data-html2canvas-ignore");
-  //           }
-  //         },
-  //       });
-  //       const image = canvas.toDataURL("image/png", 1.0);
-  //       const link = document.createElement("a");
-  //       link.href = image;
-  //       link.download = "myynti-ilmoitus.png";
-  //       link.click();
-  //     } catch (error) {
-  //       console.error("Virhe kuvan tallennuksessa:", error);
-  //     }
-  //   } else {
-  //     console.log("Myynti-ilmoitus ei ole vielä valmis tallennettavaksi");
-  //   }
-  // };
+
+  const handleItemClick = useCallback((id: string) => {
+    console.log("Item clicked:", id);
+    setSelectedItemId((prevId) => (prevId === id ? null : id));
+  }, []);
+
+  useEffect(() => {
+    console.log("itemstyles", itemStyles);
+  }, [itemStyles]);
+
   return (
     <div>
       <StyleCustomization onStyleChange={handleStyleChange} />
-      <div ref={adLayoutRef}>
+      <div className="grid-layout-container" ref={adLayoutRef}>
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -208,19 +213,36 @@ export function DraggableAdLayout({ adData }: DraggableAdLayoutProps) {
         >
           <SortableContext
             items={items.map((item) => item.id)}
-            strategy={verticalListSortingStrategy}
+            strategy={rectSortingStrategy}
           >
-            <div
-              className="space-y-4 p-4"
-              style={{
-                backgroundColor: styles.backgroundColor,
-                color: styles.textColor,
-                fontSize: `${styles.fontSize}px`,
-              }}
-            >
+            <div className="grid grid-cols-2 gap-4 p-4">
               {items.map((item) => (
-                <DraggableItem key={item.id} id={item.id}>
-                  <item.component {...item.props} />
+                <DraggableItem
+                  key={item.id}
+                  id={item.id}
+                  isSelected={item.id === selectedItemId}
+                  onClick={() => handleItemClick(item.id)}
+                >
+                  <div className="relative">
+                    <div
+                      className="selection-icon absolute top-2 right-2 cursor-pointer z-10"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleItemClick(item.id);
+                      }}
+                    >
+                      <CheckCircle
+                        size={24}
+                        color={
+                          item.id === selectedItemId ? "#4CAF50" : "#E0E0E0"
+                        }
+                      />
+                    </div>
+                    <item.component
+                      {...item.props}
+                      style={itemStyles[item.id] || {}}
+                    />
+                  </div>
                 </DraggableItem>
               ))}
             </div>
