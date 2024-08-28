@@ -1,5 +1,5 @@
-import { getAnalysisById } from "@/lib/analysis"; // Tämä funktio pitää toteuttaa
-import ImageAnalysisView from "@/components/upload-file";
+import { getAnalysisById } from "@/lib/analysis";
+import ImageAnalysisView from "@/components/image-analysis-view";
 
 export default async function AnalysisPage({
   params,

@@ -2,38 +2,25 @@ import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useUploadFileStore } from "@/lib/store/store";
 
 export type AnalysisOptions = {
   includeColorScheme: boolean;
   styleTheme: "modern" | "classic" | "scandinavian";
 };
 
-type AnalysisOptionsProps = {
-  options: AnalysisOptions;
-  onChange: (options: AnalysisOptions) => void;
-};
+export function AnalysisOptions() {
+  const { analysisOptions, setAnalysisOptions } = useUploadFileStore();
 
-export function AnalysisOptions({ options, onChange }: AnalysisOptionsProps) {
   return (
     <div className="space-y-4">
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          id="includeColorScheme"
-          checked={options.includeColorScheme}
-          onCheckedChange={(checked) =>
-            onChange({ ...options, includeColorScheme: checked as boolean })
-          }
-        />
-        <Label htmlFor="includeColorScheme">Sisällytä värianalyysi</Label>
-      </div>
-
       <div>
         <Label>Tyylisuunta</Label>
         <RadioGroup
-          value={options.styleTheme}
+          value={analysisOptions.styleTheme}
           onValueChange={(value) =>
-            onChange({
-              ...options,
+            setAnalysisOptions({
+              ...analysisOptions,
               styleTheme: value as "modern" | "classic" | "scandinavian",
             })
           }
@@ -51,6 +38,19 @@ export function AnalysisOptions({ options, onChange }: AnalysisOptionsProps) {
             <Label htmlFor="scandinavian">Skandinaavinen</Label>
           </div>
         </RadioGroup>
+      </div>
+      <div className="flex items-center space-x-2 justify-center">
+        <Checkbox
+          id="includeColorScheme"
+          checked={analysisOptions.includeColorScheme}
+          onCheckedChange={(checked) =>
+            setAnalysisOptions({
+              ...analysisOptions,
+              includeColorScheme: checked as boolean,
+            })
+          }
+        />
+        <Label htmlFor="includeColorScheme">Poista kuvan tausta</Label>
       </div>
     </div>
   );

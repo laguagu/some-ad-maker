@@ -90,21 +90,6 @@ export async function POST(req: Request) {
           ],
         },
       ],
-      // messages: [
-      //   {
-      //     role: "user",
-      //     content: [
-      //       {
-      //         type: "text",
-      //         text: "Analysoi tämä kuva suomalaisen huonekaluliikkeen somemyyntipostausta varten. Tunnista huonekalu, sen tärkeimmät ominaisuudet, ehdota houkuttelevaa kuvausta, sopivia hashtageja suomeksi ja englanniksi, hinta-arviota ja toimintakehotusta. Vastaa suomeksi.",
-      //       },
-      //       {
-      //         type: "image",
-      //         image: image,
-      //       },
-      //     ],
-      //   },
-      // ],
     });
 
     return result.toTextStreamResponse();
