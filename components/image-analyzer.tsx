@@ -18,6 +18,7 @@ export function ImageAnalyzer() {
     setAnalysisUrl,
     setAnalysisId,
     setIsLoading,
+    setAnalyzedImageUrl,
     files,
   } = useUploadFileStore();
 
@@ -39,6 +40,9 @@ export function ImageAnalyzer() {
         let imageToAnalyze = previewUrl;
         if (analysisOptions.removeBackground) {
           imageToAnalyze = await removeBackGroundAction(files[0]);
+          setAnalyzedImageUrl(imageToAnalyze);
+        } else {
+          setAnalyzedImageUrl(previewUrl);
         }
         submit({ image: imageToAnalyze, options: analysisOptions });
       } catch (error) {

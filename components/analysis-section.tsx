@@ -17,7 +17,7 @@ export function AnalysisSection({
 }: AnalysisSectionProps) {
   const {
     setAnalysisOptions,
-    previewUrl,
+    analyzedImageUrl,
     analysisOptions,
     currentView,
     setCurrentView,
@@ -43,7 +43,7 @@ export function AnalysisSection({
       <ViewRenderer
         currentView={currentView}
         analysis={analysis}
-        imageUrl={previewUrl || ""}
+        imageUrl={analyzedImageUrl || ""}
         showColorScheme={analysisOptions.includeColorScheme}
       />
       <div className="flex gap-4 justify-center">

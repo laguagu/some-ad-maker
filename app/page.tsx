@@ -1,4 +1,4 @@
-import { ImageAnalyzer } from "@/components/upload-file";
+import { ImageAnalyzer } from "@/components/image-analyzer";
 
 export default function Page() {
   return (

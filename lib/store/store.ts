@@ -5,6 +5,7 @@ interface UploadFileState {
   isAnalysisComplete: boolean;
   files: File[];
   previewUrl: string | null;
+  analyzedImageUrl: string | null;
   analysisId: string | null;
   analysisUrl: string | null;
   analysisOptions: AnalysisOptions;
@@ -15,6 +16,7 @@ interface UploadFileState {
   setPreviewUrl: (url: string | null) => void;
   setAnalysisId: (id: string | null) => void;
   setAnalysisUrl: (url: string | null) => void;
+  setAnalyzedImageUrl: (url: string | null) => void;
   setAnalysisOptions: (options: AnalysisOptions) => void;
   setCurrentView: (view: "analysis" | "draggable") => void;
   setIsLoading: (value: boolean) => void;
@@ -26,6 +28,7 @@ export const useUploadFileStore = create<UploadFileState>((set) => ({
   previewUrl: null,
   analysisId: null,
   analysisUrl: null,
+  analyzedImageUrl: null,
   analysisOptions: {
     includeColorScheme: true,
     styleTheme: "modern",
@@ -38,6 +41,7 @@ export const useUploadFileStore = create<UploadFileState>((set) => ({
   setPreviewUrl: (url) => set({ previewUrl: url }),
   setAnalysisId: (id) => set({ analysisId: id }),
   setAnalysisUrl: (url) => set({ analysisUrl: url }),
+  setAnalyzedImageUrl: (url) => set({ analyzedImageUrl: url }),
   setAnalysisOptions: (options) => set({ analysisOptions: options }),
   setCurrentView: (view) => set({ currentView: view }),
   setIsLoading: (value) => set({ isLoading: value }),
