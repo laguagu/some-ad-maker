@@ -4,11 +4,6 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useUploadFileStore } from "@/lib/store/store";
 
-export type AnalysisOptions = {
-  includeColorScheme: boolean;
-  styleTheme: "modern" | "classic" | "scandinavian";
-};
-
 export function AnalysisOptions() {
   const { analysisOptions, setAnalysisOptions } = useUploadFileStore();
 
@@ -41,16 +36,20 @@ export function AnalysisOptions() {
       </div>
       <div className="flex items-center space-x-2 justify-center">
         <Checkbox
-          id="includeColorScheme"
-          checked={analysisOptions.includeColorScheme}
-          onCheckedChange={(checked) =>
-            setAnalysisOptions({
+          id="removaBackground"
+          checked={analysisOptions.removeBackground}
+          onCheckedChange={(checked) => {
+            const newOptions = {
               ...analysisOptions,
-              includeColorScheme: checked as boolean,
-            })
-          }
+              removeBackground: checked as boolean,
+            };
+            setAnalysisOptions(newOptions);
+          }}
         />
-        <Label htmlFor="includeColorScheme">Poista kuvan tausta</Label>
+        {/* Poista kuvan tausta */}
+        <div>
+          <Label htmlFor="removaBackground">Poista kuvan tausta</Label>
+        </div>
       </div>
     </div>
   );

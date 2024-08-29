@@ -10,3 +10,8 @@ export type ImageAnalysis = z.infer<typeof imageAnalysisSchema>["analysis"];
 // which constructs a type with all properties of `ImageAnalysis` set to optional.
 export type PartialImageAnalysis = Partial<ImageAnalysis>;
 export type StreamedAnalysis = Partial<Record<keyof ImageAnalysis, any>>;
+export type AnalysisOptions = {
+  includeColorScheme: boolean;
+  styleTheme: "modern" | "classic" | "scandinavian";
+  removeBackground: boolean;
+};

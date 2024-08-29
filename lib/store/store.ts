@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { AnalysisOptions } from "@/components/analysis-options";
+import { AnalysisOptions } from "../types";
 
 interface UploadFileState {
   isAnalysisComplete: boolean;
@@ -26,7 +26,11 @@ export const useUploadFileStore = create<UploadFileState>((set) => ({
   previewUrl: null,
   analysisId: null,
   analysisUrl: null,
-  analysisOptions: { includeColorScheme: true, styleTheme: "modern" },
+  analysisOptions: {
+    includeColorScheme: true,
+    styleTheme: "modern",
+    removeBackground: false,
+  },
   currentView: "analysis",
   isLoading: false,
   setIsAnalysisComplete: (value) => set({ isAnalysisComplete: value }),

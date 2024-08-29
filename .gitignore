@@ -37,6 +37,5 @@ next-env.d.ts
 
 # Python
 fastapi/.env
-fastapi/main.py
 fastapi/__pycache__
 fastapi/venv

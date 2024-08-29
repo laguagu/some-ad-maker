@@ -6,20 +6,19 @@ import { FileUploadSection } from "./file-upload";
 import { AnalysisSection } from "./analysis-section";
 import { AnalysisUrlSection } from "./analysis-url";
 import { useUploadFileStore } from "@/lib/store/store";
-import { Separator } from "./ui/separator";
+import { removeBackGroundAction } from "@/lib/actions";
 
 export function ImageAnalyzer() {
   const {
-    isAnalysisComplete,
     previewUrl,
     analysisUrl,
     analysisOptions,
     setIsAnalysisComplete,
-    setFiles,
     setPreviewUrl,
     setAnalysisUrl,
     setAnalysisId,
     setIsLoading,
+    files,
   } = useUploadFileStore();
 
   const { object, submit, isLoading, error } = useObject<{
@@ -30,25 +29,22 @@ export function ImageAnalyzer() {
     onFinish: () => {
       setIsAnalysisComplete(true);
       setIsLoading(false);
-      setPreviewUrl(null);
     },
   });
 
   const handleAnalyze = async () => {
-    if (previewUrl) {
+    if (previewUrl && files.length > 0) {
       setIsLoading(true);
-      submit({ image: previewUrl, options: analysisOptions });
-    }
-  };
-
-  const handleFileUpload = (files: File[]) => {
-    setFiles(files);
-    if (files.length > 0) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setPreviewUrl(e.target?.result as string);
-      };
-      reader.readAsDataURL(files[0]);
+      try {
+        let imageToAnalyze = previewUrl;
+        if (analysisOptions.removeBackground) {
+          imageToAnalyze = await removeBackGroundAction(files[0]);
+        }
+        submit({ image: imageToAnalyze, options: analysisOptions });
+      } catch (error) {
+        console.error("Virhe kuvan käsittelyssä:", error);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -68,10 +64,7 @@ export function ImageAnalyzer() {
   return (
     <div className="w-full container mx-auto bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 p-4">
       <div>
-        <FileUploadSection
-          handleFileUpload={handleFileUpload}
-          handleAnalyze={handleAnalyze}
-        />
+        <FileUploadSection handleAnalyze={handleAnalyze} />
         {object?.analysis && (
           <AnalysisSection
             analysis={object.analysis}

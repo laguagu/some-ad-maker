@@ -1,5 +1,6 @@
 import { Eye, Info, Palette, ShoppingCart, Tag } from "lucide-react";
 import Image from "next/image";
+import { useEffect } from "react";
 
 const ImageAnalysisView = ({
   analysis,
@@ -10,17 +11,13 @@ const ImageAnalysisView = ({
   imageUrl: string;
   showColorScheme: boolean;
 }) => {
-  // const analysisRef = useRef<HTMLDivElement>(null);
-  // useEffect(() => {
-  //   if (analysisRef.current) {
-  //     analysisRef.current.scrollIntoView({ behavior: "instant" });
-  //   }
-  // }, [analysis]);
   const capitalizeFirstLetter = (string: string) => {
     if (!string) return string;
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
-
+  useEffect(() => {
+    console.log(analysis);
+  }, [analysis]);
   return (
     <div className="mt-8 space-y-8">
       {/* Myynti-ilmoitus */}
