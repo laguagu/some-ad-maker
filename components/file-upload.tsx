@@ -30,7 +30,7 @@ export function FileUploadSection({ handleAnalyze }: FileUploadSectionProps) {
       {previewUrl && (
         <div className="relative mt-4 w-[450px] h-[450px] p-10 ">
           <Image
-            src={URL.createObjectURL(files[0])}
+            src={previewUrl}
             alt="Esikatselu"
             fill
             className="py-4 rounded-xl shadow-2xl border-y-2"

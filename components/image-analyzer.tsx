@@ -30,6 +30,7 @@ export function ImageAnalyzer() {
     onFinish: () => {
       setIsAnalysisComplete(true);
       setIsLoading(false);
+      setPreviewUrl(null);
     },
   });
 
@@ -39,7 +40,17 @@ export function ImageAnalyzer() {
       try {
         let imageToAnalyze = previewUrl;
         if (analysisOptions.removeBackground) {
-          imageToAnalyze = await removeBackGroundAction(files[0]);
+          const formData = new FormData();
+          formData.append("file", files[0]);
+          const response = await fetch("/api/remove-background", {
+            method: "POST",
+            body: formData,
+          });
+          if (!response.ok) {
+            throw new Error("Taustan poisto epäonnistui");
+          }
+          const { image } = await response.json();
+          imageToAnalyze = image;
           setAnalyzedImageUrl(imageToAnalyze);
         } else {
           setAnalyzedImageUrl(previewUrl);
@@ -47,6 +58,7 @@ export function ImageAnalyzer() {
         submit({ image: imageToAnalyze, options: analysisOptions });
       } catch (error) {
         console.error("Virhe kuvan käsittelyssä:", error);
+      } finally {
         setIsLoading(false);
       }
     }

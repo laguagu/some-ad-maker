@@ -1,8 +1,8 @@
 "use server";
 
-export async function removeBackGroundAction(file: File) {
+export async function removeBackGroundAction(fileBuffer: ArrayBuffer) {
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("file", new Blob([fileBuffer]));
 
   const response = await fetch(
     "http://localhost:8000/remove-background-base64/",

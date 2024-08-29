@@ -5,7 +5,7 @@ import { openai } from "@ai-sdk/openai";
 export const maxDuration = 30;
 
 // Aseta tämä true:ksi käyttääksesi mockattua dataa
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 // Mockattu data-objekti
 export const mockAnalysis = {
@@ -42,7 +42,6 @@ export const mockAnalysis = {
 
 export async function POST(req: Request) {
   const { image, options } = await req.json();
-  console.log("options", options);
   const promptTemplate = `Analysoi tämä kuva suomalaisen huonekaluliikkeen somemyyntipostausta varten. 
     Tunnista huonekalu, sen tärkeimmät ominaisuudet, ehdota houkuttelevaa kuvausta, 
     sopivia hashtageja suomeksi ja englanniksi, hinta-arviota ja toimintakehotusta. 
