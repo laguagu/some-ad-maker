@@ -39,3 +39,8 @@ next-env.d.ts
 fastapi/.env
 fastapi/__pycache__
 fastapi/venv
+
+# Saved images
+/data/*
+data/
+data/analysis.json
