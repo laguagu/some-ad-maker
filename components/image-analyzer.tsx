@@ -1,12 +1,16 @@
 "use client";
 import { experimental_useObject as useObject } from "ai/react";
 import { imageAnalysisSchema } from "@/lib/schemas";
-import { PartialImageAnalysis } from "@/lib/types";
+import {
+  FlexibleImageAnalysis,
+  ImageAnalysis,
+  PartialImageAnalysis,
+} from "@/lib/types";
 import { FileUploadSection } from "./file-upload";
 import { AnalysisSection } from "./analysis-section";
 import { AnalysisUrlSection } from "./analysis-url";
 import { useUploadFileStore } from "@/lib/store/store";
-import { removeBackGroundAction } from "@/lib/actions";
+import { removeBackGroundAction, saveAnalysisAction } from "@/lib/actions";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
 
@@ -38,7 +42,6 @@ export function ImageAnalyzer() {
     onFinish: () => {
       setIsAnalysisComplete(true);
       setIsLoading(false);
-      setPreviewUrl(null);
     },
     onError(error) {
       console.log("error tuli", JSON.parse(error.message).error);
@@ -51,17 +54,23 @@ export function ImageAnalyzer() {
       setIsLoading(true);
       try {
         let imageToAnalyze = previewUrl;
+
         if (analysisOptions.removeBackground) {
           const formData = new FormData();
           formData.append("file", files[0]);
-          const response = await fetch("/api/remove-background", {
-            method: "POST",
-            body: formData,
-          });
-          if (!response.ok) {
-            throw new Error("Taustan poisto epäonnistui");
-          }
-          const { image } = await response.json();
+          // const response = await fetch("/api/remove-background", {
+          //   method: "POST",
+          //   body: formData,
+          // });
+
+          // if (!response.ok) {
+          //   throw new Error("Taustan poisto epäonnistui");
+          // }
+
+          // const { image } = await response.json();
+
+          // Tulee jo base 64 muodossa
+          const image = await removeBackGroundAction(formData);
           imageToAnalyze = image;
           setAnalyzedImageUrl(imageToAnalyze);
         } else {
@@ -85,14 +94,22 @@ export function ImageAnalyzer() {
 
   const handleSaveAnalysis = async () => {
     if (object?.analysis && previewUrl) {
-      const response = await fetch("/api/save-analysis", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...object.analysis, imageUrl: previewUrl }),
-      });
-      const { id } = await response.json();
-      setAnalysisId(id);
-      setAnalysisUrl(`/analysis/${id}`);
+      try {
+        const analysisToSave: FlexibleImageAnalysis = {
+          ...object.analysis,
+          imageUrl: previewUrl,
+        };
+
+        const result = await saveAnalysisAction(analysisToSave);
+        setAnalysisId(result.id);
+        setAnalysisUrl(result.analysisUrl);
+        toast.success("Analyysi tallennettu onnistuneesti");
+      } catch (error) {
+        console.error("Virhe analyysin tallennuksessa:", error);
+        toast.error("Analyysin tallennus epäonnistui");
+      }
+    } else {
+      toast.error("Analyysiä ei ole vielä tehty");
     }
   };
 

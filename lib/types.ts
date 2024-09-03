@@ -15,3 +15,4 @@ export type AnalysisOptions = {
   styleTheme: "modern" | "classic" | "scandinavian";
   removeBackground: boolean;
 };
+export type FlexibleImageAnalysis = Record<string, any>;
