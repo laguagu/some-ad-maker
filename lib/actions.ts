@@ -9,7 +9,10 @@ import {
 
 export async function removeBackGroundAction(
   formData: FormData,
+  alpha_matting: boolean = false, // Pehmeämmän reunan saamiseksi jos True
 ): Promise<string> {
+  formData.append("alpha_matting", alpha_matting.toString());
+
   const response = await fetch(
     "http://localhost:8000/remove-background-base64/",
     {
