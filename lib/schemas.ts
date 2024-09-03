@@ -15,9 +15,7 @@ export const imageAnalysisSchema = z.object({
         .nullable()
         .optional()
         .describe("Huonekalun kuvan URL"),
-      hashtags: z
-        .array(z.string())
-        .describe("Sopivat hashtagit suomeksi ja englanniksi"),
+      hashtags: z.array(z.string()).describe("Sopivat hashtagit suomeksi"),
       price: z
         .string()
         .nullable()

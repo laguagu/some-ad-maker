@@ -1,17 +1,20 @@
 import Image from "next/image";
 import { AnalysisOptions } from "./analysis-options";
-import { FileUpload, GridPattern } from "./ui/file-upload";
+import { FileUpload } from "./ui/file-upload";
 import { Button } from "./ui/button";
 import { useUploadFileStore } from "@/lib/store/store";
 import { Separator } from "./ui/separator";
 
 interface FileUploadSectionProps {
   handleAnalyze: () => Promise<void>;
+  isLoading: boolean;
 }
 
-export function FileUploadSection({ handleAnalyze }: FileUploadSectionProps) {
-  const { previewUrl, files, isLoading, setFiles, setPreviewUrl } =
-    useUploadFileStore();
+export function FileUploadSection({
+  handleAnalyze,
+  isLoading,
+}: FileUploadSectionProps) {
+  const { previewUrl, files, setFiles, setPreviewUrl } = useUploadFileStore();
 
   const handleFileUpload = (files: File[]) => {
     setFiles(files);
@@ -26,9 +29,14 @@ export function FileUploadSection({ handleAnalyze }: FileUploadSectionProps) {
 
   return (
     <div className="relative flex gap-2 flex-col items-center space-y-2 border border-dashed border-neutral-200 rounded-lg p-4">
-      <FileUpload onChange={handleFileUpload} />
+      <div className="flex  flex-row items-center gap-2">
+        <FileUpload onChange={handleFileUpload} />
+        <div className="border-l-2 border-neutral-300 pl-8">
+          <AnalysisOptions />
+        </div>
+      </div>
       {previewUrl && (
-        <div className="relative mt-4 w-[450px] h-[450px] p-10 ">
+        <div className="relative mt-4 w-full max-w-[450px] h-[450px] mx-auto">
           <Image
             src={previewUrl}
             alt="Esikatselu"
@@ -38,9 +46,7 @@ export function FileUploadSection({ handleAnalyze }: FileUploadSectionProps) {
           />
         </div>
       )}
-      <Separator />
-      <div className="flex flex-col items-start gap-2 ">
-        <AnalysisOptions />
+      <div className="s">
         {files.length > 0 && (
           <Button onClick={handleAnalyze} className="mt-4" disabled={isLoading}>
             {isLoading ? "Analysoidaan..." : "Analysoi kuva"}

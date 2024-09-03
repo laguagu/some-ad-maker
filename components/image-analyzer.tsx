@@ -7,6 +7,8 @@ import { AnalysisSection } from "./analysis-section";
 import { AnalysisUrlSection } from "./analysis-url";
 import { useUploadFileStore } from "@/lib/store/store";
 import { removeBackGroundAction } from "@/lib/actions";
+import { useCallback } from "react";
+import toast from "react-hot-toast";
 
 export function ImageAnalyzer() {
   const {
@@ -17,12 +19,18 @@ export function ImageAnalyzer() {
     setPreviewUrl,
     setAnalysisUrl,
     setAnalysisId,
+    isLoading,
     setIsLoading,
     setAnalyzedImageUrl,
     files,
   } = useUploadFileStore();
 
-  const { object, submit, isLoading, error } = useObject<{
+  const {
+    object,
+    submit,
+    isLoading: isAiLoading,
+    error,
+  } = useObject<{
     analysis: PartialImageAnalysis;
   }>({
     api: "/api/image-analysis",
@@ -32,9 +40,13 @@ export function ImageAnalyzer() {
       setIsLoading(false);
       setPreviewUrl(null);
     },
+    onError(error) {
+      console.log("error tuli", JSON.parse(error.message).error);
+      toast.error(JSON.parse(error.message).error);
+    },
   });
 
-  const handleAnalyze = async () => {
+  const handleAnalyze = useCallback(async () => {
     if (previewUrl && files.length > 0) {
       setIsLoading(true);
       try {
@@ -62,7 +74,14 @@ export function ImageAnalyzer() {
         setIsLoading(false);
       }
     }
-  };
+  }, [
+    previewUrl,
+    files,
+    analysisOptions,
+    setIsLoading,
+    setAnalyzedImageUrl,
+    submit,
+  ]);
 
   const handleSaveAnalysis = async () => {
     if (object?.analysis && previewUrl) {
@@ -80,7 +99,10 @@ export function ImageAnalyzer() {
   return (
     <div className="w-full container mx-auto bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 p-4">
       <div>
-        <FileUploadSection handleAnalyze={handleAnalyze} />
+        <FileUploadSection
+          handleAnalyze={handleAnalyze}
+          isLoading={isLoading || isAiLoading}
+        />
         {object?.analysis && (
           <AnalysisSection
             analysis={object.analysis}

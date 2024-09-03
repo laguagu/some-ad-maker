@@ -1,11 +1,36 @@
 import { streamObject } from "ai";
 import { imageAnalysisSchema } from "@/lib/schemas";
 import { openai } from "@ai-sdk/openai";
+import sharp from "sharp";
 
-export const maxDuration = 30;
-
+export const maxDuration = 35;
 // Aseta tämä true:ksi käyttääksesi mockattua dataa
 const USE_MOCK_DATA = false;
+const llmModel = openai("gpt-4o-2024-08-06");
+const ALLOWED_FORMATS = ["png", "jpeg", "jpg", "gif", "webp"];
+
+async function validateAndResizeImage(base64Image: string): Promise<Buffer> {
+  // Erota tiedostotyyppi ja base64-data
+  const format = base64Image.split("/")[1].split(";")[0].toLowerCase();
+  console.log("format", format);
+
+  if (!format || !ALLOWED_FORMATS.includes(format)) {
+    throw new Error(
+      `Kuvaformaatti ei ole tuettu. Sallitut formaatit ovat: ${ALLOWED_FORMATS.join(", ")}.`,
+    );
+  }
+
+  // Erota base64-data
+  const base64Data = base64Image.split(",")[1];
+  const buffer = Buffer.from(base64Data, "base64");
+
+  const resizedBuffer = await sharp(buffer)
+    .resize(1024, 1024, { fit: "inside", withoutEnlargement: true })
+    .toFormat("jpeg", { quality: 80 })
+    .toBuffer();
+
+  return resizedBuffer;
+}
 
 // Mockattu data-objekti
 export const mockAnalysis = {
@@ -41,10 +66,13 @@ export const mockAnalysis = {
 };
 
 export async function POST(req: Request) {
-  const { image, options } = await req.json();
-  const promptTemplate = `Analysoi tämä kuva suomalaisen huonekaluliikkeen somemyyntipostausta varten. 
+  try {
+    const { image, options } = await req.json();
+
+    const validatedImage = await validateAndResizeImage(image);
+    const promptTemplate = `Analysoi tämä kuva suomalaisen huonekaluliikkeen sosiaalisen median myynti-ilmoitusta varten. 
     Tunnista huonekalu, sen tärkeimmät ominaisuudet, ehdota houkuttelevaa kuvausta, 
-    sopivia hashtageja suomeksi ja englanniksi, hinta-arviota ja toimintakehotusta. 
+    sopivia hashtageja, hinta-arviota ja toimintakehotusta. 
 
     ${
       options.includeColorScheme
@@ -63,34 +91,45 @@ export async function POST(req: Request) {
           : "Keskity skandinaavisen muotoilun yksinkertaisuuteen, toiminnallisuuteen ja luonnonläheisyyteen."
     }
 
-    Luo myynti-ilmoitus, joka heijastaa valittua tyylisuuntaa ja värimaailmaa (jos valittu). 
+    Luo myynti-ilmoitus, joka heijastaa valittua tyylisuuntaa. 
     Sisällytä ehdotus, miten myynti-ilmoituksen visuaalinen ilme voisi tukea valittua tyylisuuntaa ja värimaailmaa.
-
+    Sisällytä analyysiin myös värimaailma.
     Vastaa suomeksi.`;
 
-  if (USE_MOCK_DATA) {
-    // Simuloi viivettä
-    // await new Promise((resolve) => setTimeout(resolve, 1500));
+    if (USE_MOCK_DATA) {
+      return new Response(JSON.stringify(mockAnalysis), {
+        headers: { "Content-Type": "application/json" },
+      });
+    } else {
+      const result = await streamObject({
+        model: llmModel,
+        schema: imageAnalysisSchema,
+        messages: [
+          {
+            role: "user",
+            content: [
+              { type: "text", text: promptTemplate },
+              { type: "image", image: validatedImage },
+            ],
+          },
+        ],
+      });
 
-    // Palauta mockattu data streamObject-muodossa
-    return new Response(JSON.stringify(mockAnalysis), {
-      headers: { "Content-Type": "application/json" },
-    });
-  } else {
-    const result = await streamObject({
-      model: openai("gpt-4o-2024-08-06"),
-      schema: imageAnalysisSchema,
-      messages: [
-        {
-          role: "user",
-          content: [
-            { type: "text", text: promptTemplate },
-            { type: "image", image: image },
-          ],
-        },
-      ],
-    });
-
-    return result.toTextStreamResponse();
+      return result.toTextStreamResponse();
+    }
+  } catch (error) {
+    console.error("Virhe analyysissä on error:");
+    return new Response(
+      JSON.stringify({
+        error:
+          error instanceof Error
+            ? error.message
+            : "Tuntematon virhe kuvan analysoinnissa",
+      }),
+      {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   }
 }

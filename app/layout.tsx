@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter as FontSans } from "next/font/google";
-
+import { Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 
 const fontSans = FontSans({
@@ -30,6 +30,7 @@ export default function RootLayout({
         )}
       >
         {children}
+        <Toaster position="top-center" />
         {modal}
       </body>
     </html>
