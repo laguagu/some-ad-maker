@@ -117,7 +117,7 @@ export function ImageAnalyzer() {
   };
 
   return (
-    <div className="w-full container mx-auto bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 p-4 sm:p-6">
+    <div className="w-full container mx-auto border-neutral-200 dark:border-neutral-800 p-4 sm:p-6">
       {showUpload ? (
         <FileUploadSection
           handleAnalyze={handleAnalyze}
