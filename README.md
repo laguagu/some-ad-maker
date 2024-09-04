@@ -29,7 +29,7 @@ Tämä sovellus on tehokas työkalu myynti-ilmoitusten luomiseen tekoälyn avull
 1. Kloonaa repositorio:
 
    ```
-   git clone https://github.com/yourusername/ai-ad-image-generator.git
+   git clone https://github.com/laguagu/somepost-maker.git
    cd ai-ad-image-generator
    ```
 
@@ -42,7 +42,7 @@ Tämä sovellus on tehokas työkalu myynti-ilmoitusten luomiseen tekoälyn avull
 3. Kopioi `.env.example` tiedosto nimellä `.env.local` ja lisää tarvittavat ympäristömuuttujat:
    ```
    OPENAI_API_KEY=your_openai_api_key_here
-   NEXT_PUBLIC_BASE_URL=http://localhost:3000
+   NEXT_PUBLIC_BASE_URL=http://localhost:3000 
    ```
 
 4. Käynnistä kehityspalvelin:
