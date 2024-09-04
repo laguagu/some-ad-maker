@@ -8,9 +8,9 @@ export function AnalysisOptions() {
   const { analysisOptions, setAnalysisOptions } = useUploadFileStore();
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div>
-        <Label>Tyylisuunta</Label>
+        <Label className="text-sm font-medium mb-1 block">Tyylisuunta</Label>
         <RadioGroup
           value={analysisOptions.styleTheme}
           onValueChange={(value) =>
@@ -19,37 +19,36 @@ export function AnalysisOptions() {
               styleTheme: value as "modern" | "classic" | "scandinavian",
             })
           }
+          className="space-y-1"
         >
-          <div className="flex items-center space-x-2 space-y-2">
-            <RadioGroupItem value="modern" id="modern" />
-            <Label htmlFor="modern">Moderni</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="classic" id="classic" />
-            <Label htmlFor="classic">Klassinen</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="scandinavian" id="scandinavian" />
-            <Label htmlFor="scandinavian">Skandinaavinen</Label>
-          </div>
+          {[
+            { value: "modern", label: "Moderni" },
+            { value: "classic", label: "Klassinen" },
+            { value: "scandinavian", label: "Skandinaavinen" },
+          ].map((item) => (
+            <div key={item.value} className="flex items-center space-x-2">
+              <RadioGroupItem value={item.value} id={item.value} />
+              <Label htmlFor={item.value} className="text-sm">
+                {item.label}
+              </Label>
+            </div>
+          ))}
         </RadioGroup>
       </div>
-      <div className="flex items-center space-x-2 justify-center">
+      <div className="flex items-center space-x-2">
         <Checkbox
-          id="removaBackground"
+          id="removeBackground"
           checked={analysisOptions.removeBackground}
           onCheckedChange={(checked) => {
-            const newOptions = {
+            setAnalysisOptions({
               ...analysisOptions,
               removeBackground: checked as boolean,
-            };
-            setAnalysisOptions(newOptions);
+            });
           }}
         />
-        {/* Poista kuvan tausta */}
-        <div>
-          <Label htmlFor="removaBackground">Poista kuvan tausta</Label>
-        </div>
+        <Label htmlFor="removeBackground" className="text-sm">
+          Poista tausta
+        </Label>
       </div>
     </div>
   );

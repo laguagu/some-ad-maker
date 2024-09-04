@@ -24,7 +24,7 @@ import {
   FeaturesComponent,
 } from "./draggable-item";
 import { StyleCustomization, StyleProps } from "./style-customization";
-import { ImageAnalysis, PartialImageAnalysis } from "@/lib/schemas";
+import { ImageAnalysis, PartialImageAnalysis } from "@/lib/types";
 import { Tag, Info, ShoppingCart, List, Hash, CheckCircle } from "lucide-react";
 import html2canvas from "html2canvas";
 import { Button } from "../ui/button";

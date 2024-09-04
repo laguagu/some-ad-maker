@@ -14,41 +14,49 @@ export function FileUploadSection({
   handleAnalyze,
   isLoading,
 }: FileUploadSectionProps) {
-  const { previewUrl, files, setFiles, setPreviewUrl } = useUploadFileStore();
+  const { previewUrl, file, setFile, setPreviewUrl } = useUploadFileStore();
 
-  const handleFileUpload = (files: File[]) => {
-    setFiles(files);
-    if (files.length > 0) {
+  const handleFileUpload = (uploadedFile: File | null) => {
+    setFile(uploadedFile);
+    if (uploadedFile) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setPreviewUrl(e.target?.result as string);
       };
-      reader.readAsDataURL(files[0]);
+      reader.readAsDataURL(uploadedFile);
+    } else {
+      setPreviewUrl(null);
     }
   };
 
   return (
-    <div className="relative flex gap-2 flex-col items-center space-y-2 border border-dashed border-neutral-200 rounded-lg p-4">
-      <div className="flex  flex-row items-center gap-2">
-        <FileUpload onChange={handleFileUpload} />
-        <div className="border-l-2 border-neutral-300 pl-8">
+    <div className="relative flex flex-col items-center space-y-4 border border-dashed border-neutral-200 rounded-lg p-4 sm:p-6">
+      <div className="w-full flex flex-col sm:flex-row items-start sm:items-stretch gap-4">
+        <div className="">
+          <FileUpload onChange={handleFileUpload} />
+        </div>
+        <div className="w-full sm:w-1/2 sm:border-l sm:border-neutral-200 sm:pl-4 flex items-center justify-center">
           <AnalysisOptions />
         </div>
       </div>
       {previewUrl && (
-        <div className="relative mt-4 w-full max-w-[450px] h-[450px] mx-auto">
+        <div className="relative mt-6 w-full max-w-[300px] sm:max-w-[400px] h-[300px] sm:h-[400px] mx-auto">
           <Image
             src={previewUrl}
             alt="Esikatselu"
             fill
-            className="py-4 rounded-xl shadow-2xl border-y-2"
+            className="rounded-lg shadow-lg"
             style={{ objectFit: "contain" }}
           />
         </div>
       )}
-      <div className="s">
-        {files.length > 0 && (
-          <Button onClick={handleAnalyze} className="mt-4" disabled={isLoading}>
+      <div className="w-full sm:w-auto">
+        {file && (
+          <Button
+            onClick={handleAnalyze}
+            className="w-full sm:w-auto mt-4"
+            disabled={isLoading}
+          >
             {isLoading ? "Analysoidaan..." : "Analysoi kuva"}
           </Button>
         )}

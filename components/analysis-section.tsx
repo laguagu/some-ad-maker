@@ -8,13 +8,9 @@ import { Checkbox } from "./ui/checkbox";
 
 type AnalysisSectionProps = {
   analysis: StreamedAnalysis;
-  handleSaveAnalysis: () => Promise<void>;
 };
 
-export function AnalysisSection({
-  analysis,
-  handleSaveAnalysis,
-}: AnalysisSectionProps) {
+export function AnalysisSection({ analysis }: AnalysisSectionProps) {
   const {
     setAnalysisOptions,
     analyzedImageUrl,
@@ -24,10 +20,12 @@ export function AnalysisSection({
   } = useUploadFileStore();
 
   return (
-    <div className="mt-8">
-      <h3 className="text-xl font-bold mb-4 text-center">Myynti-ilmoitus</h3>
+    <div className="mt-4 sm:mt-8">
+      <h3 className="text-lg sm:text-xl font-bold mb-4 text-center">
+        Myynti-ilmoitus
+      </h3>
       <ViewSelector currentView={currentView} onViewChange={setCurrentView} />
-      <div className="flex items-center space-x-2 justify-center">
+      <div className="flex items-center space-x-2 justify-center my-4">
         <Checkbox
           id="includeColorScheme"
           checked={analysisOptions.includeColorScheme}
@@ -38,7 +36,9 @@ export function AnalysisSection({
             })
           }
         />
-        <Label htmlFor="includeColorScheme">Sisällytä värianalyysi</Label>
+        <Label htmlFor="includeColorScheme" className="text-sm sm:text-base">
+          Sisällytä värianalyysi
+        </Label>
       </div>
       <ViewRenderer
         currentView={currentView}
@@ -46,11 +46,6 @@ export function AnalysisSection({
         imageUrl={analyzedImageUrl || ""}
         showColorScheme={analysisOptions.includeColorScheme}
       />
-      <div className="flex gap-4 justify-center">
-        <Button onClick={handleSaveAnalysis} className="mt-4">
-          Tallenna myynti-ilmoitus
-        </Button>
-      </div>
     </div>
   );
 }

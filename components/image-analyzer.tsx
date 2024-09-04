@@ -11,8 +11,9 @@ import { AnalysisSection } from "./analysis-section";
 import { AnalysisUrlSection } from "./analysis-url";
 import { useUploadFileStore } from "@/lib/store/store";
 import { removeBackGroundAction, saveAnalysisAction } from "@/lib/actions";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
+import { Button } from "./ui/button";
 
 export function ImageAnalyzer() {
   const {
@@ -26,9 +27,10 @@ export function ImageAnalyzer() {
     isLoading,
     setIsLoading,
     setAnalyzedImageUrl,
-    files,
+    file,
+    setFile,
   } = useUploadFileStore();
-
+  const [showUpload, setShowUpload] = useState(true);
   const {
     object,
     submit,
@@ -42,6 +44,7 @@ export function ImageAnalyzer() {
     onFinish: () => {
       setIsAnalysisComplete(true);
       setIsLoading(false);
+      setShowUpload(false);
     },
     onError(error) {
       console.log("error tuli", JSON.parse(error.message).error);
@@ -50,42 +53,33 @@ export function ImageAnalyzer() {
   });
 
   const handleAnalyze = useCallback(async () => {
-    if (previewUrl && files.length > 0) {
+    if (previewUrl && file) {
       setIsLoading(true);
       try {
         let imageToAnalyze = previewUrl;
 
         if (analysisOptions.removeBackground) {
           const formData = new FormData();
-          formData.append("file", files[0]);
-          // const response = await fetch("/api/remove-background", {
-          //   method: "POST",
-          //   body: formData,
-          // });
-
-          // if (!response.ok) {
-          //   throw new Error("Taustan poisto epäonnistui");
-          // }
-
-          // const { image } = await response.json();
-
-          // Tulee jo base 64 muodossa
+          formData.append("file", file);
           const image = await removeBackGroundAction(formData);
           imageToAnalyze = image;
           setAnalyzedImageUrl(imageToAnalyze);
         } else {
           setAnalyzedImageUrl(previewUrl);
         }
-        submit({ image: imageToAnalyze, options: analysisOptions });
+        await submit({ image: imageToAnalyze, options: analysisOptions });
       } catch (error) {
-        console.error("Virhe kuvan käsittelyssä:", error);
+        console.error("Error processing image:", error);
+        toast.error("An error occurred while processing the image");
       } finally {
         setIsLoading(false);
       }
+    } else {
+      toast.error("Please upload an image first");
     }
   }, [
     previewUrl,
-    files,
+    file,
     analysisOptions,
     setIsLoading,
     setAnalyzedImageUrl,
@@ -113,20 +107,35 @@ export function ImageAnalyzer() {
     }
   };
 
+  const handleReupload = () => {
+    setShowUpload(true);
+    setFile(null);
+    setPreviewUrl(null);
+    setAnalyzedImageUrl(null);
+    setIsAnalysisComplete(false);
+    setAnalysisUrl(null);
+  };
+
   return (
-    <div className="w-full container mx-auto bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 p-4">
-      <div>
+    <div className="w-full container mx-auto bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 p-4 sm:p-6">
+      {showUpload ? (
         <FileUploadSection
           handleAnalyze={handleAnalyze}
           isLoading={isLoading || isAiLoading}
         />
-        {object?.analysis && (
-          <AnalysisSection
-            analysis={object.analysis}
-            handleSaveAnalysis={handleSaveAnalysis}
-          />
-        )}
-      </div>
+      ) : object?.analysis ? (
+        <>
+          <AnalysisSection analysis={object.analysis} />
+          <div className="flex flex-col sm:flex-row gap-4 justify-center align-middle my-6">
+            <Button onClick={handleReupload} className="w-full sm:w-auto">
+              Lataa uusi kuva
+            </Button>
+            <Button onClick={handleSaveAnalysis} className="w-full sm:w-auto">
+              Tallenna myynti-ilmoitus
+            </Button>
+          </div>
+        </>
+      ) : null}
       {analysisUrl && <AnalysisUrlSection analysisUrl={analysisUrl} />}
     </div>
   );

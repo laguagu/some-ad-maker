@@ -3,7 +3,7 @@ import { AnalysisOptions } from "../types";
 
 interface UploadFileState {
   isAnalysisComplete: boolean;
-  files: File[];
+  file: File | null;
   previewUrl: string | null;
   analyzedImageUrl: string | null;
   analysisId: string | null;
@@ -12,7 +12,7 @@ interface UploadFileState {
   currentView: "analysis" | "draggable";
   isLoading: boolean;
   setIsAnalysisComplete: (value: boolean) => void;
-  setFiles: (files: File[]) => void;
+  setFile: (file: File | null) => void;
   setPreviewUrl: (url: string | null) => void;
   setAnalysisId: (id: string | null) => void;
   setAnalysisUrl: (url: string | null) => void;
@@ -24,7 +24,7 @@ interface UploadFileState {
 
 export const useUploadFileStore = create<UploadFileState>((set) => ({
   isAnalysisComplete: false,
-  files: [],
+  file: null,
   previewUrl: null,
   analysisId: null,
   analysisUrl: null,
@@ -37,7 +37,7 @@ export const useUploadFileStore = create<UploadFileState>((set) => ({
   currentView: "analysis",
   isLoading: false,
   setIsAnalysisComplete: (value) => set({ isAnalysisComplete: value }),
-  setFiles: (files) => set({ files }),
+  setFile: (file) => set({ file }),
   setPreviewUrl: (url) => set({ previewUrl: url }),
   setAnalysisId: (id) => set({ analysisId: id }),
   setAnalysisUrl: (url) => set({ analysisUrl: url }),
