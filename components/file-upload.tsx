@@ -30,12 +30,12 @@ export function FileUploadSection({
   };
 
   return (
-    <div className="relative flex flex-col items-center space-y-4 border border-dashed border-neutral-200 rounded-lg p-4 sm:p-6">
+    <div className="relative flex flex-col items-center space-y-4 border border-dashed border-neutral-200 rounded-lg p-4 sm:p-6 ">
       <div className="w-full flex flex-col sm:flex-row items-start sm:items-stretch gap-4">
         <div className="">
           <FileUpload onChange={handleFileUpload} />
         </div>
-        <div className="w-full sm:w-1/2 sm:border-l sm:border-neutral-200 sm:pl-4 flex items-center justify-center">
+        <div className=" w-full sm:w-1/2 sm:border-l-2 sm:border-neutral-200 sm:pl-4 flex items-center justify-center">
           <AnalysisOptions />
         </div>
       </div>

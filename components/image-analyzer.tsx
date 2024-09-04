@@ -11,7 +11,7 @@ import { AnalysisSection } from "./analysis-section";
 import { AnalysisUrlSection } from "./analysis-url";
 import { useUploadFileStore } from "@/lib/store/store";
 import { removeBackGroundAction, saveAnalysisAction } from "@/lib/actions";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 
@@ -46,13 +46,15 @@ export function ImageAnalyzer() {
       setIsLoading(false);
       setShowUpload(false);
     },
-    onError(error) {
+    onError(error: { message: string }) {
       console.log("error tuli", JSON.parse(error.message).error);
       toast.error(JSON.parse(error.message).error);
     },
   });
-
-  const handleAnalyze = useCallback(async () => {
+  useEffect(() => {
+    console.log("object", object);
+  }, [object]);
+  const handleAnalyze =async () => {
     if (previewUrl && file) {
       setIsLoading(true);
       try {
@@ -67,7 +69,7 @@ export function ImageAnalyzer() {
         } else {
           setAnalyzedImageUrl(previewUrl);
         }
-        await submit({ image: imageToAnalyze, options: analysisOptions });
+        submit({ image: imageToAnalyze, options: analysisOptions });
       } catch (error) {
         console.error("Error processing image:", error);
         toast.error("An error occurred while processing the image");
@@ -77,14 +79,7 @@ export function ImageAnalyzer() {
     } else {
       toast.error("Please upload an image first");
     }
-  }, [
-    previewUrl,
-    file,
-    analysisOptions,
-    setIsLoading,
-    setAnalyzedImageUrl,
-    submit,
-  ]);
+  };
 
   const handleSaveAnalysis = async () => {
     if (object?.analysis && previewUrl) {
@@ -117,7 +112,7 @@ export function ImageAnalyzer() {
   };
 
   return (
-    <div className="w-full container mx-auto border-neutral-200 dark:border-neutral-800 p-4 sm:p-6">
+    <div className="w-full container mx-auto border-neutral-200 dark:border-neutral-800 p-4 sm:p-6 bg-white bg-opacity-85">
       {showUpload ? (
         <FileUploadSection
           handleAnalyze={handleAnalyze}
