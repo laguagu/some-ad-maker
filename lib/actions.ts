@@ -1,11 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { saveAnalysis } from "./analysis";
-import {
-  FlexibleImageAnalysis,
-  ImageAnalysis,
-  PartialImageAnalysis,
-} from "./types";
+import { saveAnalysis } from "./save-analysis";
+import { FlexibleImageAnalysis } from "./types";
 
 export async function removeBackGroundAction(
   formData: FormData,

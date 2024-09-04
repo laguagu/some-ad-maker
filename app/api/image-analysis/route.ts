@@ -2,10 +2,11 @@ import { streamObject } from "ai";
 import { imageAnalysisSchema } from "@/lib/schemas";
 import { openai } from "@ai-sdk/openai";
 import sharp from "sharp";
+import { AnalysisOptions } from "@/lib/types";
 
 export const maxDuration = 35;
 // Aseta tämä true:ksi käyttääksesi mockattua dataa
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 const llmModel = openai("gpt-4o-2024-08-06");
 const ALLOWED_FORMATS = ["png", "jpeg", "jpg", "gif", "webp"];
 
@@ -67,7 +68,10 @@ export const mockAnalysis = {
 
 export async function POST(req: Request) {
   try {
-    const { image, options } = await req.json();
+    const { image, options } = (await req.json()) as {
+      image: string;
+      options: AnalysisOptions;
+    };
 
     const validatedImage = await validateAndResizeImage(image);
     const promptTemplate = `Analysoi tämä kuva suomalaisen huonekaluliikkeen sosiaalisen median myynti-ilmoitusta varten. 

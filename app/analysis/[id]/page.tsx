@@ -1,4 +1,4 @@
-import { getAnalysisById } from "@/lib/analysis";
+import { getAnalysisById } from "@/lib/save-analysis";
 import ImageAnalysisView from "@/components/image-analysis-view";
 
 export default async function AnalysisPage({
