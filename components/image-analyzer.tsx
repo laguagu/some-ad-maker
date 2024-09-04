@@ -11,14 +11,16 @@ import { AnalysisSection } from "./analysis-section";
 import { AnalysisUrlSection } from "./analysis-url";
 import { useUploadFileStore } from "@/lib/store/store";
 import { removeBackGroundAction, saveAnalysisAction } from "@/lib/actions";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 
 export function ImageAnalyzer() {
+  const [analysisKey, setAnalysisKey] = useState(0);
   const {
     previewUrl,
     analysisUrl,
+    analysisId,
     analysisOptions,
     setIsAnalysisComplete,
     setPreviewUrl,
@@ -30,7 +32,7 @@ export function ImageAnalyzer() {
     file,
     setFile,
   } = useUploadFileStore();
-  const [showUpload, setShowUpload] = useState(true);
+  // const [showUpload, setShowUpload] = useState(true);
   const {
     object,
     submit,
@@ -41,16 +43,24 @@ export function ImageAnalyzer() {
   }>({
     api: "/api/image-analysis",
     schema: imageAnalysisSchema,
+    /*
+A unique identifier. If not provided, a random one will be generated. When provided, the `useObject` hook with the same `id` will have shared states across components.
+    */
+    id: analysisId || undefined,
     onFinish: () => {
       setIsAnalysisComplete(true);
       setIsLoading(false);
-      setShowUpload(false);
+      // setShowUpload(false);
     },
-    onError(error) {
+    onError(error: { message: string }) {
       console.log("error tuli", JSON.parse(error.message).error);
       toast.error(JSON.parse(error.message).error);
     },
   });
+
+  useEffect(() => {
+    console.log("object", object);
+  }, [object]);
 
   const handleAnalyze = useCallback(async () => {
     if (previewUrl && file) {
@@ -67,6 +77,10 @@ export function ImageAnalyzer() {
         } else {
           setAnalyzedImageUrl(previewUrl);
         }
+        // Generate a new analysis id
+        const newAnalysisId = `analysis-${Date.now()}`;
+        setAnalysisId(newAnalysisId);
+
         await submit({ image: imageToAnalyze, options: analysisOptions });
       } catch (error) {
         console.error("Error processing image:", error);
@@ -82,6 +96,7 @@ export function ImageAnalyzer() {
     file,
     analysisOptions,
     setIsLoading,
+    setAnalysisId,
     setAnalyzedImageUrl,
     submit,
   ]);
@@ -108,22 +123,23 @@ export function ImageAnalyzer() {
   };
 
   const handleReupload = () => {
-    setShowUpload(true);
+    // Reset all relevant states
     setFile(null);
     setPreviewUrl(null);
     setAnalyzedImageUrl(null);
     setIsAnalysisComplete(false);
     setAnalysisUrl(null);
+    setAnalysisId(null);
   };
 
   return (
-    <div className="bg-white bg-opacity-80 w-full container mx-auto border-neutral-200 dark:border-neutral-800 p-4 sm:p-6">
-      {showUpload ? (
+    <div className="w-full container mx-auto border-neutral-200 dark:border-neutral-800 p-4 sm:p-6 bg-white bg-opacity-85">
+      {!object?.analysis ? (
         <FileUploadSection
           handleAnalyze={handleAnalyze}
           isLoading={isLoading || isAiLoading}
         />
-      ) : object?.analysis ? (
+      ) : (
         <>
           <AnalysisSection analysis={object.analysis} />
           <div className="flex flex-col sm:flex-row gap-4 justify-center align-middle my-6">
@@ -135,7 +151,7 @@ export function ImageAnalyzer() {
             </Button>
           </div>
         </>
-      ) : null}
+      )}
       {analysisUrl && <AnalysisUrlSection analysisUrl={analysisUrl} />}
     </div>
   );
