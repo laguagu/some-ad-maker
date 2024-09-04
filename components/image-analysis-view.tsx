@@ -1,4 +1,6 @@
-import { Eye, Info, Palette, ShoppingCart, Tag } from "lucide-react";
+import { useUploadFileStore } from "@/lib/store/store";
+import { Eye, Info, Palette, ShoppingCart, Tag, Linkedin } from "lucide-react";
+import { SiInstagram, SiGitter } from "react-icons/si";
 import Image from "next/image";
 
 const ImageAnalysisView = ({
@@ -10,6 +12,9 @@ const ImageAnalysisView = ({
   imageUrl: string;
   showColorScheme: boolean;
 }) => {
+  const { analysisOptions } = useUploadFileStore();
+  const platform = analysisOptions.platform;
+
   const capitalizeFirstLetter = (string: string) => {
     if (!string) return string;
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -107,9 +112,9 @@ const ImageAnalysisView = ({
             {analysis.callToAction}
           </p>
         )}
-        <div className="flex flex-wrap gap-2 mt-4">
-          {analysis.hashtags &&
-            analysis.hashtags.map((tag: string, index: number) => (
+        {analysis.hashtags && (
+          <div className="flex flex-wrap gap-2 mt-4">
+            {analysis.hashtags.map((tag: string, index: number) => (
               <span
                 key={index}
                 className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-2 py-1 rounded-full text-sm"
@@ -117,7 +122,117 @@ const ImageAnalysisView = ({
                 {tag}
               </span>
             ))}
-        </div>
+          </div>
+        )}
+
+        {/* Instagram-spesifiset kentät */}
+        {platform === "instagram" && (
+          <>
+            {analysis.carouselImages && (
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center">
+                  <SiInstagram className="mr-2" size={24} />
+                  Karusellikusvat:
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {analysis.carouselImages.map((url: string, index: number) => (
+                    <Image
+                      key={index}
+                      src={url}
+                      alt={`Karusellikuva ${index + 1}`}
+                      width={100}
+                      height={100}
+                      className="rounded-lg"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {analysis.storyIdea && (
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center">
+                  <SiInstagram className="mr-2" size={24} />
+                  Story-idea:
+                </h3>
+                <p className="text-gray-700 dark:text-gray-200">
+                  {analysis.storyIdea}
+                </p>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Twitter-spesifiset kentät */}
+        {platform === "twitter" && (
+          <>
+            {analysis.shortDescription && (
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center">
+                  <SiGitter className="mr-2" size={24} />
+                  Lyhyt kuvaus:
+                </h3>
+                <p className="text-gray-700 dark:text-gray-200">
+                  {analysis.shortDescription}
+                </p>
+              </div>
+            )}
+            {analysis.relevantTrends && (
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center">
+                  <SiGitter className="mr-2" size={24} />
+                  Relevantit trendit:
+                </h3>
+                <ul className="list-disc pl-5">
+                  {analysis.relevantTrends.map(
+                    (trend: string, index: number) => (
+                      <li
+                        key={index}
+                        className="text-gray-700 dark:text-gray-200"
+                      >
+                        {trend}
+                      </li>
+                    ),
+                  )}
+                </ul>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* LinkedIn-spesifiset kentät */}
+        {platform === "linkedin" && (
+          <>
+            {analysis.professionalDescription && (
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center">
+                  <Linkedin className="mr-2" size={24} />
+                  Ammatillinen kuvaus:
+                </h3>
+                <p className="text-gray-700 dark:text-gray-200">
+                  {analysis.professionalDescription}
+                </p>
+              </div>
+            )}
+            {analysis.industryTags && (
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center">
+                  <Linkedin className="mr-2" size={24} />
+                  Toimialaavainsanat:
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {analysis.industryTags.map((tag: string, index: number) => (
+                    <span
+                      key={index}
+                      className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       {/* Visuaalinen ilme-ehdotus */}

@@ -1,8 +1,8 @@
 import { streamObject } from "ai";
-import { imageAnalysisSchema } from "@/lib/schemas";
 import { openai } from "@ai-sdk/openai";
 import sharp from "sharp";
 import { AnalysisOptions } from "@/lib/types";
+import { getSchemaByPlatform } from "@/lib/utils";
 
 export const maxDuration = 35;
 // Aseta tämä true:ksi käyttääksesi mockattua dataa
@@ -72,6 +72,7 @@ export async function POST(req: Request) {
       image: string;
       options: AnalysisOptions;
     };
+    const schema = getSchemaByPlatform(options.platform);
 
     const validatedImage = await validateAndResizeImage(image);
     const promptTemplate = `Analysoi tämä kuva suomalaisen huonekaluliikkeen sosiaalisen median myynti-ilmoitusta varten. 
@@ -107,7 +108,7 @@ export async function POST(req: Request) {
     } else {
       const result = await streamObject({
         model: llmModel,
-        schema: imageAnalysisSchema,
+        schema: schema,
         messages: [
           {
             role: "user",

@@ -40,9 +40,10 @@ Tämä sovellus on tehokas työkalu myynti-ilmoitusten luomiseen tekoälyn avull
    ```
 
 3. Kopioi `.env.example` tiedosto nimellä `.env.local` ja lisää tarvittavat ympäristömuuttujat:
+
    ```
    OPENAI_API_KEY=your_openai_api_key_here
-   NEXT_PUBLIC_BASE_URL=http://localhost:3000 
+   NEXT_PUBLIC_BASE_URL=http://localhost:3000
    ```
 
 4. Käynnistä kehityspalvelin:
@@ -54,18 +55,22 @@ Tämä sovellus on tehokas työkalu myynti-ilmoitusten luomiseen tekoälyn avull
 ## Käyttöohjeet
 
 1. **Kuvan lataus**
+
    - Avaa sovellus selaimessasi (oletuksena `http://localhost:3000`)
    - Käytä "Lataa kuva" -toimintoa ladataksesi kuvan laitteeltasi
 
 2. **Analyysiasetusten valinta**
+
    - Valitse haluamasi tyylisuunta (moderni, klassinen, skandinaavinen)
    - Halutessasi valitse "Poista tausta" -vaihtoehto
 
 3. **Myynti-ilmoituksen generointi**
+
    - Klikkaa "Analysoi kuva" -painiketta
    - Tekoäly analysoi kuvan ja luo alustavan myynti-ilmoituksen
 
 4. **Ilmoituksen muokkaus**
+
    - Käytä drag-and-drop -toimintoa elementtien uudelleenjärjestämiseen
    - Muokkaa tekstejä, värejä ja asettelua tarpeen mukaan
 
@@ -114,7 +119,7 @@ Server Action -funktiot löytyvät tiedostosta `lib/actions.ts`. Ne hoitavat mm.
 
 ```javascript
 const { object, submit, isLoading, error, stop } = useObject({
-  api: '/api/image-analysis',
+  api: "/api/image-analysis",
   schema: imageAnalysisSchema,
   id: analysisId,
   onFinish: () => {
@@ -122,7 +127,7 @@ const { object, submit, isLoading, error, stop } = useObject({
   },
   onError: (error) => {
     // Käsittele virhetilanteet
-  }
+  },
 });
 ```
 

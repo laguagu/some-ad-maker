@@ -1,6 +1,5 @@
 "use client";
 import { experimental_useObject as useObject } from "ai/react";
-import { imageAnalysisSchema } from "@/lib/schemas";
 import {
   FlexibleImageAnalysis,
   ImageAnalysis,
@@ -14,25 +13,25 @@ import { removeBackGroundAction, saveAnalysisAction } from "@/lib/actions";
 import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
+import { getSchemaByPlatform } from "@/lib/utils";
 
 export function ImageAnalyzer() {
-  const [analysisKey, setAnalysisKey] = useState(0);
   const {
     previewUrl,
     analysisUrl,
     analysisId,
     analysisOptions,
+    isLoading,
+    file,
     setIsAnalysisComplete,
     setPreviewUrl,
     setAnalysisUrl,
     setAnalysisId,
-    isLoading,
     setIsLoading,
     setAnalyzedImageUrl,
-    file,
     setFile,
   } = useUploadFileStore();
-  // const [showUpload, setShowUpload] = useState(true);
+  const schema = getSchemaByPlatform(analysisOptions.platform);
   const {
     object,
     submit,
@@ -42,7 +41,7 @@ export function ImageAnalyzer() {
     analysis: PartialImageAnalysis;
   }>({
     api: "/api/image-analysis",
-    schema: imageAnalysisSchema,
+    schema: schema,
     /*
 A unique identifier. If not provided, a random one will be generated. When provided, the `useObject` hook with the same `id` will have shared states across components.
     */
