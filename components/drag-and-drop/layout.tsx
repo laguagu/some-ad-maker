@@ -203,7 +203,7 @@ export function DraggableAdLayout({
   }, [itemStyles]);
 
   return (
-    <div>
+    <div className="bg-white">
       <StyleCustomization onStyleChange={handleStyleChange} />
       <div className="grid-layout-container" ref={adLayoutRef}>
         <DndContext
