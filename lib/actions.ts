@@ -27,7 +27,7 @@ export async function removeBackGroundAction(
 
 export async function saveAnalysisAction(analysis: FlexibleImageAnalysis) {
   try {
-    console.log("Tallennettava analyysi:", analysis);
+    console.log("Tallennettava analyysi:", analysis.furniture);
 
     const id = await saveAnalysis(analysis);
     console.log(`Analyysi tallennettu ID:llä ${id}`);

@@ -16,10 +16,12 @@ export default async function AnalysisPage({
 
   console.log(`Analyysi löytyi ID:llä ${params.id}`);
   return (
-    <ImageAnalysisView
-      analysis={analysis}
-      imageUrl={analysis.imageUrl || ""}
-      showColorScheme={true}
-    />
+    <div className="pb-8">
+      <ImageAnalysisView
+        analysis={analysis}
+        imageUrl={analysis.imageUrl || ""}
+        showColorScheme={true}
+      />
+    </div>
   );
 }

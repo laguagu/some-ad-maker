@@ -1,3 +1,4 @@
+"use client";
 import { useUploadFileStore } from "@/lib/store/store";
 import { Eye, Info, Palette, ShoppingCart, Tag, Linkedin } from "lucide-react";
 import { SiInstagram, SiGitter } from "react-icons/si";

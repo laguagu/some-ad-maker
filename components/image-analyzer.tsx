@@ -14,6 +14,7 @@ import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 import { getSchemaByPlatform } from "@/lib/utils";
+import ShareButton from "./share-button";
 
 export function ImageAnalyzer() {
   const {
@@ -109,7 +110,6 @@ A unique identifier. If not provided, a random one will be generated. When provi
         };
 
         const result = await saveAnalysisAction(analysisToSave);
-        setAnalysisId(result.id);
         setAnalysisUrl(result.analysisUrl);
         toast.success("Analyysi tallennettu onnistuneesti");
       } catch (error) {
@@ -140,7 +140,9 @@ A unique identifier. If not provided, a random one will be generated. When provi
         />
       ) : (
         <>
-          <AnalysisSection analysis={object.analysis} />
+          <div>
+            <AnalysisSection analysis={object.analysis} />
+          </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center align-middle my-6">
             <Button onClick={handleReupload} className="w-full sm:w-auto">
               Lataa uusi kuva
@@ -149,9 +151,15 @@ A unique identifier. If not provided, a random one will be generated. When provi
               Tallenna myynti-ilmoitus
             </Button>
           </div>
+
+          {analysisUrl && (
+            <div className="flex justify-center flex-col items-center h-full">
+              <ShareButton analysis={object.analysis} />
+              <AnalysisUrlSection analysisUrl={analysisUrl} />
+            </div>
+          )}
         </>
       )}
-      {analysisUrl && <AnalysisUrlSection analysisUrl={analysisUrl} />}
     </div>
   );
 }

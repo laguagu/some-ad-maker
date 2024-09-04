@@ -27,7 +27,7 @@ export async function saveAnalysis(
   data: FlexibleImageAnalysis,
 ): Promise<string> {
   writeAnalysis(data);
-  console.log(`Analyysi tallennettu:`, data);
+  console.log(`Analyysi tallennettu:`);
   return "latest"; // Käytämme "latest" ID:nä, koska meillä on vain yksi analyysi, voi vaihtaa UUID:ksi
 }
 
@@ -37,7 +37,7 @@ export async function getAnalysisById(
   console.log(`Haetaan analyysi`);
   const analysis = readAnalysis();
   if (analysis) {
-    console.log(`Analyysi löytyi:`, analysis);
+    console.log(`Analyysi löytyi:`, analysis.furniture);
     return analysis;
   } else {
     console.log(`Analyysiä ei löytynyt`);
