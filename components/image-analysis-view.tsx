@@ -38,10 +38,13 @@ const ImageAnalysisView = ({
   return (
     <div className="mt-8 space-y-8">
       <div className="flex justify-center">
-        <Button onClick={captureScreenshot}>Ota Kuvankaappaus</Button>
+        <Button onClick={captureScreenshot}>Lataa myynti-ilmoitus</Button>
       </div>
       {/* Myynti-ilmoitus */}
-      <div ref={contentRef} className="p-6 bg-custom-bg dark:bg-gray-800 border rounded-lg shadow-lg max-w-xl mx-auto">
+      <div
+        ref={contentRef}
+        className="p-6 bg-custom-bg dark:bg-gray-800 border rounded-lg shadow-lg max-w-xl mx-auto"
+      >
         <div className="flex items-center justify-center mb-6">
           {imageUrl && (
             <div className="relative w-full aspect-square max-w-[300px]">

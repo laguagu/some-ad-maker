@@ -140,16 +140,20 @@ A unique identifier. If not provided, a random one will be generated. When provi
         />
       ) : (
         <>
-          <div>
-            <AnalysisSection analysis={object.analysis} />
-          </div>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center align-middle my-6">
-            <Button onClick={handleReupload} className="w-full sm:w-auto">
-              Lataa uusi kuva
-            </Button>
-            <Button onClick={handleSaveAnalysis} className="w-full sm:w-auto">
-              Tallenna myynti-ilmoitus
-            </Button>
+          <div className="gap-2flex-row sm:flex align-middle justify-center items-center">
+            <div>
+              <AnalysisSection analysis={object.analysis} />
+            </div>
+            <div className="bg-red-50">
+              <div className="flex flex-col gap-4 justify-center align-middle my-6">
+                <Button onClick={handleReupload} className="w-full sm:w-auto">
+                  Lataa uusi kuva
+                </Button>
+                <Button onClick={handleSaveAnalysis} className="w-full sm:w-auto">
+                  Tallenna myynti-ilmoitus
+                </Button>
+              </div>
+            </div>
           </div>
 
           {analysisUrl && (
