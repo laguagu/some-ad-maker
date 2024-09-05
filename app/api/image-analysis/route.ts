@@ -17,7 +17,7 @@ async function validateAndResizeImage(base64Image: string): Promise<Buffer> {
 
   if (!format || !ALLOWED_FORMATS.includes(format)) {
     throw new Error(
-      `Kuvaformaatti ei ole tuettu. Sallitut formaatit ovat: ${ALLOWED_FORMATS.join(", ")}.`,
+      `Kuvaformaatti ei ole tuettu. Sallitut formaatit ovat: ${ALLOWED_FORMATS.join(", ")}.`
     );
   }
 
@@ -93,8 +93,10 @@ export async function POST(req: Request) {
         ? "Korosta moderneja, innovatiivisia ominaisuuksia ja minimalistista muotoilua."
         : options.styleTheme === "classic"
           ? "Painota ajatonta eleganssia, laadukkaita materiaaleja ja perinteistä käsityötaitoa."
-          : "Keskity skandinaavisen muotoilun yksinkertaisuuteen, toiminnallisuuteen ja luonnonläheisyyteen."
-    }
+          : options.styleTheme === "scandinavian"
+            ? "Keskity skandinaavisen muotoilun yksinkertaisuuteen, toiminnallisuuteen ja luonnonläheisyyteen."
+            : ""
+    } 
 
     Luo myynti-ilmoitus, joka heijastaa valittua tyylisuuntaa. 
     Sisällytä ehdotus, miten myynti-ilmoituksen visuaalinen ilme voisi tukea valittua tyylisuuntaa ja värimaailmaa.
@@ -134,7 +136,7 @@ export async function POST(req: Request) {
       {
         status: 400,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     );
   }
 }

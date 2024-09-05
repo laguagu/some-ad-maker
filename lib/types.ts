@@ -12,7 +12,7 @@ export type PartialImageAnalysis = Partial<ImageAnalysis>;
 export type StreamedAnalysis = Partial<Record<keyof ImageAnalysis, any>>;
 export type AnalysisOptions = {
   includeColorScheme: boolean;
-  styleTheme: "modern" | "classic" | "scandinavian";
+  styleTheme: "modern" | "classic" | "scandinavian" | "";
   removeBackground: boolean;
   platform: "instagram" | "twitter" | "linkedin" | "general";
 };

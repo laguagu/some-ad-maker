@@ -18,6 +18,7 @@ import {
   IconBrandLinkedin,
   IconWorld,
 } from "@tabler/icons-react";
+import { Castle, Globe, Lightbulb, Sparkles, Trees } from "lucide-react";
 
 export function AnalysisOptions() {
   const { analysisOptions, setAnalysisOptions } = useUploadFileStore();
@@ -37,19 +38,40 @@ export function AnalysisOptions() {
             onValueChange={(value) =>
               setAnalysisOptions({
                 ...analysisOptions,
-                styleTheme: value as "modern" | "classic" | "scandinavian",
+                styleTheme: value as "modern" | "classic" | "scandinavian" | "",
               })
             }
             className="flex flex-col space-y-1"
           >
             {[
-              { value: "modern", label: "Moderni" },
-              { value: "classic", label: "Klassinen" },
-              { value: "scandinavian", label: "Skandinaavinen" },
+              {
+                value: "",
+                label: "Yleinen",
+                icon: <Globe className="h-4 w-4 mr-2" />,
+              },
+              {
+                value: "modern",
+                label: "Moderni",
+                icon: <Lightbulb className="h-4 w-4 mr-2" />,
+              },
+              {
+                value: "classic",
+                label: "Klassinen",
+                icon: <Castle className="h-4 w-4 mr-2" />,
+              },
+              {
+                value: "scandinavian",
+                label: "Skandinaavinen",
+                icon: <Trees className="h-4 w-4 mr-2" />,
+              },
             ].map((item) => (
               <div key={item.value} className="flex items-center space-x-2">
                 <RadioGroupItem value={item.value} id={item.value} />
-                <Label htmlFor={item.value} className="text-sm">
+                <Label
+                  htmlFor={item.value}
+                  className="text-sm flex items-center"
+                >
+                  {item.icon}
                   {item.label}
                 </Label>
               </div>
@@ -77,10 +99,15 @@ export function AnalysisOptions() {
 
         <Separator />
 
-        <div>
-          <Label htmlFor="platform" className="text-sm font-medium mb-2 block">
-            Some Alusta
-          </Label>
+        <div className="space-y-3">
+          <div>
+            <Label htmlFor="platform" className="text-sm font-medium">
+              Julkaisualusta
+            </Label>
+            <p className="text-sm text-muted-foreground">
+              Valitse alusta, jolle myynti-ilmoitus optimoidaan
+            </p>
+          </div>
           <Select
             value={analysisOptions.platform}
             onValueChange={(value) =>
@@ -98,30 +125,27 @@ export function AnalysisOptions() {
               <SelectValue placeholder="Valitse alusta" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="general">
-                <div className="flex items-center">
-                  <IconWorld className="mr-2 h-4 w-4" />
-                  Yleinen
-                </div>
-              </SelectItem>
-              <SelectItem value="instagram">
-                <div className="flex items-center">
-                  <IconBrandInstagram className="mr-2 h-4 w-4" />
-                  Instagram
-                </div>
-              </SelectItem>
-              <SelectItem value="twitter">
-                <div className="flex items-center">
-                  <IconBrandTwitter className="mr-2 h-4 w-4" />
-                  Twitter
-                </div>
-              </SelectItem>
-              <SelectItem value="linkedin">
-                <div className="flex items-center">
-                  <IconBrandLinkedin className="mr-2 h-4 w-4" />
-                  LinkedIn
-                </div>
-              </SelectItem>
+              {[
+                { value: "general", label: "Yleinen", icon: IconWorld },
+                {
+                  value: "instagram",
+                  label: "Instagram",
+                  icon: IconBrandInstagram,
+                },
+                { value: "twitter", label: "Twitter", icon: IconBrandTwitter },
+                {
+                  value: "linkedin",
+                  label: "LinkedIn",
+                  icon: IconBrandLinkedin,
+                },
+              ].map((platform) => (
+                <SelectItem key={platform.value} value={platform.value}>
+                  <div className="flex items-center">
+                    <platform.icon className="mr-2 h-4 w-4" />
+                    {platform.label}
+                  </div>
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
