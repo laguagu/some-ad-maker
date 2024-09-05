@@ -33,18 +33,13 @@ export function AnalysisSection({ analysis }: AnalysisSectionProps) {
   };
 
   return (
-    <div className="mt-4 sm:mt-8 relative">
-      <h3 className="text-lg sm:text-xl font-bold mb-4 text-center">
-        Myynti-ilmoitus
-      </h3>
-      <Card>
-        <ViewRenderer
-          currentView={currentView}
-          analysis={analysis}
-          imageUrl={analyzedImageUrl || ""}
-          showColorScheme={analysisOptions.includeColorScheme}
-        />
-      </Card>
+    <div className="relative">
+      <ViewRenderer
+        currentView={currentView}
+        analysis={analysis}
+        imageUrl={analyzedImageUrl || ""}
+        showColorScheme={analysisOptions.includeColorScheme}
+      />
       <FloatingNav onReupload={handleReupload} />
     </div>
   );

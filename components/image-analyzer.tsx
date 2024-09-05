@@ -42,27 +42,29 @@ export function ImageAnalyzer() {
     },
   });
 
+  const getTitle = () => {
+    if (!previewUrl) return "Tekoälyllä tehostettu myynti-ilmoitusten luonti";
+    if (!object?.analysis) return "Kuvan analysointi";
+    return "Myynti-ilmoituksen esikatselu";
+  };
+
   return (
-    <Card className="container max-w-4xl">
-      <CardHeader className="border-b">
-        <CardTitle className="text-2xl font-bold text-gray-800">
-          Tekoälyllä tehostettu myynti-ilmoitusten luonti
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-6">
-        {!object?.analysis ? (
-          !previewUrl ? (
-            <InitialView />
-          ) : (
-            <ImagePreview
-              onAnalyze={() => handleAnalyze(submit)}
-              isLoading={isAiLoading}
-            />
-          )
+    <div className="container max-w-4xl">
+      <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        {getTitle()}
+      </h1>
+      {!object?.analysis ? (
+        !previewUrl ? (
+          <InitialView />
         ) : (
-          <AnalysisSection analysis={object.analysis} />
-        )}
-      </CardContent>
-    </Card>
+          <ImagePreview
+            onAnalyze={() => handleAnalyze(submit)}
+            isLoading={isAiLoading}
+          />
+        )
+      ) : (
+        <AnalysisSection analysis={object.analysis} />
+      )}
+    </div>
   );
 }

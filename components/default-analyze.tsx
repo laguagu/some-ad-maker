@@ -36,16 +36,15 @@ const DefaultAnalyze = ({
   }, [setContentRef]);
 
   return (
-    <div className="mt-8 space-y-8 pb-4">
+    <div className="space-y-8">
       <div
         ref={localContentRef}
-        className="p-6 border rounded-lg shadow-lg max-w-xl mx-auto"
+        className="p-6 border rounded-lg shadow-lg mx-auto"
         style={{
           backgroundColor: backgroundColor || "#FFFFFF",
           color: textColor,
           fontFamily: font,
           fontSize: `${fontSize}px`,
-          maxWidth: "none",
           width: "auto",
         }}
       >
