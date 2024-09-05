@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { StreamedAnalysis } from "@/lib/types";
 import { ViewRenderer } from "./view-render";
 import { useUploadFileStore } from "@/lib/store/store";
-import { FloatingNav } from "./floating-nav";
+import { FloatingNav } from "./nav/floating-nav";
 import { Card } from "./ui/card"; // shadcn component
 import { NavItems } from "./nav/nav-items";
 

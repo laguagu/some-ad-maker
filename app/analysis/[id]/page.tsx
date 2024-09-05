@@ -1,5 +1,5 @@
 import { getAnalysisById } from "@/lib/save-analysis";
-import DefaultAnalyze from "@/components/default-analyze";
+import DefaultAnalyze from "@/components/analysis/default-analyze";
 
 export default async function AnalysisPage({
   params,

@@ -1,6 +1,6 @@
 import React from "react";
 import { DraggableAdLayout } from "./drag-and-drop/layout";
-import DefaultAnalyze from "@/components/default-analyze";
+import DefaultAnalyze from "@/components/analysis/default-analyze";
 import { StreamedAnalysis } from "@/lib/types";
 
 type ViewProps = {

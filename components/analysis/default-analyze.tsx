@@ -1,6 +1,6 @@
 "use client";
 import { useUploadFileStore } from "@/lib/store/store";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStyleStore } from "@/lib/store/useStyleStore";
 import {
   AnalysisImage,
@@ -14,7 +14,7 @@ import {
   TwitterSpecific,
   LinkedInSpecific,
   VisualDesign,
-} from "./analysis";
+} from ".";
 
 const DefaultAnalyze = ({
   analysis,
@@ -30,10 +30,23 @@ const DefaultAnalyze = ({
   const platform = analysisOptions.platform;
 
   const { backgroundColor, textColor, font, fontSize } = useStyleStore();
+  const [editableAnalysis, setEditableAnalysis] = useState(analysis);
+
+  const handleFurnitureChange = (value: string) => {
+    setEditableAnalysis((prev: any) => ({ ...prev, furniture: value }));
+  };
+
+  const handlePriceChange = (value: string) => {
+    setEditableAnalysis((prev: any) => ({ ...prev, price: value }));
+  };
 
   useEffect(() => {
     setContentRef(localContentRef);
   }, [setContentRef]);
+
+  useEffect(() => {
+    setEditableAnalysis(analysis);
+  }, [analysis]);
 
   return (
     <div className="space-y-8">
@@ -50,9 +63,11 @@ const DefaultAnalyze = ({
       >
         <AnalysisImage imageUrl={imageUrl} furniture={analysis.furniture} />
         <AnalysisHeader
-          furniture={analysis.furniture}
-          price={analysis.price}
+          furniture={editableAnalysis.furniture}
+          price={editableAnalysis.price}
           textColor={textColor}
+          onFurnitureChange={handleFurnitureChange}
+          onPriceChange={handlePriceChange}
         />
         <AnalysisFeatures
           features={analysis.keyFeatures}

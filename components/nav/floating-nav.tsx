@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { toPng } from "html-to-image";
 import { Download, RefreshCw } from "lucide-react";
 import { useUploadFileStore } from "@/lib/store/store";
-import { NavItems } from "./nav/nav-items";
+import { NavItems } from "./nav-items";
 import {
   TooltipProvider,
   Tooltip,
   TooltipTrigger,
   TooltipContent,
 } from "@radix-ui/react-tooltip";
+import { useScreenshotStore } from "@/lib/store/screenshotStore";
 
 type FloatingNavProps = {
   className?: string;
@@ -29,6 +30,12 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
   const captureScreenshot = async () => {
     if (contentRef && contentRef.current) {
       try {
+        // Hide edit icons
+        const editIcons = contentRef.current.querySelectorAll(".edit-icon");
+        editIcons.forEach((icon) => {
+          (icon as HTMLElement).style.display = "none";
+        });
+
         const scale = 2;
         const element = contentRef.current;
 
@@ -59,6 +66,11 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
         link.href = dataUrl;
         link.download = "myynti-ilmoitus.png";
         link.click();
+
+        // Show edit icons again
+        editIcons.forEach((icon) => {
+          (icon as HTMLElement).style.display = "";
+        });
       } catch (error) {
         console.error("Screenshotin ottaminen epäonnistui:", error);
       }
