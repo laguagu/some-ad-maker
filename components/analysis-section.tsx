@@ -97,7 +97,7 @@ export function AnalysisSection({ analysis }: AnalysisSectionProps) {
       name: "Kuva",
       icon: <ImageIcon className="h-4 w-4" />,
       content: (
-        <div className="space-y-4">
+        <div className="flex items-center justify-center space-x-2">
           <Checkbox
             id="includeColorScheme"
             checked={analysisOptions.includeColorScheme}
@@ -108,7 +108,9 @@ export function AnalysisSection({ analysis }: AnalysisSectionProps) {
               })
             }
           />
-          <Label htmlFor="includeColorScheme">Sisällytä värianalyysi</Label>
+          <Label htmlFor="includeColorScheme" className="cursor-pointer">
+            Sisällytä värianalyysi
+          </Label>
         </div>
       ),
     },
