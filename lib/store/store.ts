@@ -34,7 +34,7 @@ export const useUploadFileStore = create<UploadFileState>((set) => ({
   analyzedImageUrl: null,
   analysisOptions: {
     includeColorScheme: true,
-    styleTheme: "modern",
+    styleTheme: "",
     removeBackground: false,
     platform: "general",
   },
