@@ -1,6 +1,6 @@
 import React from "react";
 import { DraggableAdLayout } from "./drag-and-drop/layout";
-import ImageAnalysisView from "@/components/image-analysis-view";
+import DefaultAnalyze from "@/components/default-analyze";
 import { StreamedAnalysis } from "@/lib/types";
 
 type ViewProps = {
@@ -14,7 +14,7 @@ const views = {
     <DraggableAdLayout adData={props.analysis} imageUrl={props.imageUrl} />
   ),
   analysis: (props: ViewProps) => (
-    <ImageAnalysisView
+    <DefaultAnalyze
       analysis={props.analysis}
       imageUrl={props.imageUrl}
       showColorScheme={props.showColorScheme}

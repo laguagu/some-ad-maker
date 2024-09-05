@@ -1,5 +1,5 @@
 import { getAnalysisById } from "@/lib/save-analysis";
-import ImageAnalysisView from "@/components/image-analysis-view";
+import DefaultAnalyze from "@/components/default-analyze";
 
 export default async function AnalysisPage({
   params,
@@ -17,7 +17,7 @@ export default async function AnalysisPage({
   console.log(`Analyysi löytyi ID:llä ${params.id}`);
   return (
     <div className="pb-8">
-      <ImageAnalysisView
+      <DefaultAnalyze
         analysis={analysis}
         imageUrl={analysis.imageUrl || ""}
         showColorScheme={true}

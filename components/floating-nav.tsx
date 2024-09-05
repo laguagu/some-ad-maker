@@ -1,30 +1,24 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { toPng } from "html-to-image";
 import { Download } from "lucide-react";
 import { useUploadFileStore } from "@/lib/store/store";
-
-type NavItem = {
-  name: string;
-  icon: React.ReactNode;
-  content: React.ReactNode;
-};
+import { NavItems } from "./nav/nav-items";
 
 type FloatingNavProps = {
-  navItems: NavItem[];
   className?: string;
   onReupload: () => void;
 };
 
 export const FloatingNav: React.FC<FloatingNavProps> = ({
-  navItems,
   className,
   onReupload,
 }) => {
   const [activeTab, setActiveTab] = useState<number | null>(null);
   const { contentRef } = useUploadFileStore();
+  const navItems = NavItems();
 
   const captureScreenshot = async () => {
     if (contentRef && contentRef.current) {
