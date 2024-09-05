@@ -3,6 +3,9 @@ import { useUploadFileStore } from "@/lib/store/store";
 import { Eye, Info, Palette, ShoppingCart, Tag, Linkedin } from "lucide-react";
 import { SiInstagram, SiGitter } from "react-icons/si";
 import Image from "next/image";
+import { useRef } from "react";
+import html2canvas from "html2canvas";
+import { Button } from "./ui/button";
 
 const ImageAnalysisView = ({
   analysis,
@@ -15,6 +18,18 @@ const ImageAnalysisView = ({
 }) => {
   const { analysisOptions } = useUploadFileStore();
   const platform = analysisOptions.platform;
+  const contentRef = useRef(null);
+
+  const captureScreenshot = async () => {
+    if (contentRef.current) {
+      const canvas = await html2canvas(contentRef.current);
+      const image = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = image;
+      link.download = "image-analysis-screenshot.png";
+      link.click();
+    }
+  };
 
   const capitalizeFirstLetter = (string: string) => {
     if (!string) return string;
@@ -22,8 +37,11 @@ const ImageAnalysisView = ({
   };
   return (
     <div className="mt-8 space-y-8">
+      <div className="flex justify-center">
+        <Button onClick={captureScreenshot}>Ota Kuvankaappaus</Button>
+      </div>
       {/* Myynti-ilmoitus */}
-      <div className="p-6 bg-custom-bg dark:bg-gray-800 border rounded-lg shadow-lg max-w-xl mx-auto">
+      <div ref={contentRef} className="p-6 bg-custom-bg dark:bg-gray-800 border rounded-lg shadow-lg max-w-xl mx-auto">
         <div className="flex items-center justify-center mb-6">
           {imageUrl && (
             <div className="relative w-full aspect-square max-w-[300px]">
@@ -192,7 +210,7 @@ const ImageAnalysisView = ({
                       >
                         {trend}
                       </li>
-                    ),
+                    )
                   )}
                 </ul>
               </div>
