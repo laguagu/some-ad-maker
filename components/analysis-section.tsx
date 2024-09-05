@@ -11,6 +11,7 @@ import { FontSelector } from "./settings/font-selector"; // Custom component
 import { Slider } from "./ui/slider"; // shadcn component
 import { Card } from "./ui/card"; // shadcn component
 import { Paintbrush, Type, Layout, Image as ImageIcon } from "lucide-react";
+import { useStyleStore } from "@/lib/store/useStyleStore";
 
 type AnalysisSectionProps = {
   analysis: StreamedAnalysis;
@@ -30,11 +31,16 @@ export function AnalysisSection({ analysis }: AnalysisSectionProps) {
     setAnalysisUrl,
     setAnalysisId,
   } = useUploadFileStore();
-
-  const [backgroundColor, setBackgroundColor] = useState("#FFFFFF");
-  const [textColor, setTextColor] = useState("#000000");
-  const [fontSize, setFontSize] = useState(16);
-  const [font, setFont] = useState("Arial");
+  const {
+    backgroundColor,
+    textColor,
+    fontSize,
+    font,
+    setBackgroundColor,
+    setTextColor,
+    setFontSize,
+    setFont,
+  } = useStyleStore(); // Haetaan tyylit Zustand-storesta
 
   const handleReupload = () => {
     setFile(null);
@@ -127,10 +133,6 @@ export function AnalysisSection({ analysis }: AnalysisSectionProps) {
           analysis={analysis}
           imageUrl={analyzedImageUrl || ""}
           showColorScheme={analysisOptions.includeColorScheme}
-          backgroundColor={backgroundColor}
-          textColor={textColor}
-          font={font}
-          fontSize={fontSize}
         />
       </Card>
       <FloatingNav navItems={navItems} onReupload={handleReupload} />

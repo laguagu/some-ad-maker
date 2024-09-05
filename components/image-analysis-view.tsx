@@ -4,27 +4,23 @@ import { Eye, Info, Palette, ShoppingCart, Tag, Linkedin } from "lucide-react";
 import { SiInstagram, SiGitter } from "react-icons/si";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import { useStyleStore } from "@/lib/store/useStyleStore";
 
 const ImageAnalysisView = ({
   analysis,
   imageUrl,
   showColorScheme,
-  backgroundColor,
-  textColor,
-  font,
-  fontSize,
 }: {
   analysis: any;
   imageUrl: string;
   showColorScheme: boolean;
-  backgroundColor: string;
-  textColor: string;
-  font: string;
-  fontSize: number;
 }) => {
   const { analysisOptions, setContentRef } = useUploadFileStore();
   const localContentRef = useRef<HTMLDivElement>(null);
   const platform = analysisOptions.platform;
+
+  // Haetaan tyylit Zustand-storesta
+  const { backgroundColor, textColor, font, fontSize } = useStyleStore();
 
   useEffect(() => {
     setContentRef(localContentRef);

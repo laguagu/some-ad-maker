@@ -18,7 +18,7 @@ import {
   IconBrandLinkedin,
   IconWorld,
 } from "@tabler/icons-react";
-import { Castle, Globe, Lightbulb, Sparkles, Trees } from "lucide-react";
+import { Castle, Globe, Lightbulb, Trees } from "lucide-react";
 
 export function AnalysisOptions() {
   const { analysisOptions, setAnalysisOptions } = useUploadFileStore();

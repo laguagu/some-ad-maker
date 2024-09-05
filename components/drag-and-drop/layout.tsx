@@ -28,6 +28,7 @@ import { ImageAnalysis, PartialImageAnalysis } from "@/lib/types";
 import { Tag, Info, ShoppingCart, List, Hash, CheckCircle } from "lucide-react";
 import html2canvas from "html2canvas";
 import { Button } from "../ui/button";
+import { useUploadFileStore } from "@/lib/store/store";
 
 interface DraggableAdLayoutProps {
   adData: PartialImageAnalysis;
@@ -44,6 +45,8 @@ export function DraggableAdLayout({
   adData,
   imageUrl,
 }: DraggableAdLayoutProps) {
+  const { setContentRef } = useUploadFileStore();
+  const localContentRef = useRef<HTMLDivElement>(null);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [itemStyles, setItemStyles] = useState<Record<string, StyleProps>>({});
   const [items, setItems] = useState<ItemType[]>([
@@ -86,8 +89,6 @@ export function DraggableAdLayout({
     },
   ]);
 
-  const adLayoutRef = useRef<HTMLDivElement>(null);
-
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -123,76 +124,6 @@ export function DraggableAdLayout({
     [selectedItemId],
   );
 
-  const handleSaveAsImage = async () => {
-    if (adLayoutRef.current) {
-      try {
-        console.log("Aloitetaan kuvan tallennus");
-
-        // Piilota valintaikonit ja poista valitun elementin taustaväri väliaikaisesti
-        const selectionIcons =
-          adLayoutRef.current.querySelectorAll(".selection-icon");
-        const selectedItems =
-          adLayoutRef.current.querySelectorAll(".selected-item");
-
-        selectionIcons.forEach(
-          (icon) => ((icon as HTMLElement).style.display = "none"),
-        );
-        selectedItems.forEach((item) => {
-          (item as HTMLElement).style.backgroundColor = "transparent";
-          (item as HTMLElement).style.border = "none";
-        });
-
-        const originalStyles = adLayoutRef.current.getAttribute("style");
-        adLayoutRef.current.style.width = "600px";
-        adLayoutRef.current.style.margin = "0";
-        adLayoutRef.current.style.padding = "20px";
-        adLayoutRef.current.style.backgroundColor = "#ffffff";
-
-        console.log("Väliaikaiset tyylit asetettu");
-
-        const canvas = await html2canvas(adLayoutRef.current, {
-          useCORS: true,
-          scale: 2,
-          logging: true,
-          backgroundColor: "#ffffff",
-        });
-
-        console.log("Canvas luotu");
-
-        const image = canvas.toDataURL("image/png", 1.0);
-        console.log("Kuva luotu, pituus:", image.length);
-
-        const link = document.createElement("a");
-        link.href = image;
-        link.download = "myynti-ilmoitus.png";
-        link.click();
-
-        console.log("Latauslinkki luotu ja klikattu");
-
-        // Palauta valintaikonit näkyviin ja valitun elementin taustaväri
-        selectionIcons.forEach(
-          (icon) => ((icon as HTMLElement).style.display = ""),
-        );
-        selectedItems.forEach((item) => {
-          (item as HTMLElement).style.backgroundColor = "";
-          (item as HTMLElement).style.border = "";
-        });
-
-        if (originalStyles) {
-          adLayoutRef.current.setAttribute("style", originalStyles);
-        } else {
-          adLayoutRef.current.removeAttribute("style");
-        }
-
-        console.log("Alkuperäiset tyylit palautettu");
-      } catch (error) {
-        console.error("Virhe kuvan tallennuksessa:", error);
-      }
-    } else {
-      console.log("Myynti-ilmoitus ei ole vielä valmis tallennettavaksi");
-    }
-  };
-
   const handleItemClick = useCallback((id: string) => {
     console.log("Item clicked:", id);
     setSelectedItemId((prevId) => (prevId === id ? null : id));
@@ -202,10 +133,14 @@ export function DraggableAdLayout({
     console.log("itemstyles", itemStyles);
   }, [itemStyles]);
 
+  useEffect(() => {
+    setContentRef(localContentRef);
+  }, [setContentRef]);
+
   return (
-    <div className="bg-white">
+    <div>
       <StyleCustomization onStyleChange={handleStyleChange} />
-      <div className="grid-layout-container" ref={adLayoutRef}>
+      <div className="grid-layout-container">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -213,9 +148,9 @@ export function DraggableAdLayout({
         >
           <SortableContext
             items={items.map((item) => item.id)}
-            strategy={rectSortingStrategy}
+            strategy={verticalListSortingStrategy}
           >
-            <div className="grid grid-cols-2 gap-4 p-4">
+            <div className="grid grid-cols-2 gap-4 p-4" ref={localContentRef}>
               {items.map((item) => (
                 <DraggableItem
                   key={item.id}
@@ -249,9 +184,6 @@ export function DraggableAdLayout({
           </SortableContext>
         </DndContext>
       </div>
-      <Button onClick={handleSaveAsImage} className="mt-4">
-        Lataa kuva
-      </Button>
     </div>
   );
 }

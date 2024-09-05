@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-
+import { Textarea } from "@/components/ui/textarea";
 // DraggableItem component
 interface DraggableItemProps {
   id: string;
@@ -26,7 +26,7 @@ export function DraggableItem({
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    border: isSelected ? "2px solid blue" : "1px solid #ccc",
+    border: isSelected ? "2px solid blue" : "",
     padding: "8px",
     margin: "4px",
   };
@@ -106,19 +106,49 @@ export const DescriptionComponent: React.FC<DescriptionComponentProps> = ({
   text,
   icon,
   style,
-}) => (
-  <div
-    className="flex items-start p-2 rounded"
-    style={{
-      ...style,
-      color: style?.textColor || style?.color || "inherit",
-      backgroundColor: style?.backgroundColor || "transparent",
-    }}
-  >
-    {icon && <span className="mr-2 mt-1">{icon}</span>}
-    <p>{text}</p>
-  </div>
-);
+}) => {
+  const [editableText, setEditableText] = useState(text);
+  const [isEditing, setIsEditing] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditableText(e.target.value);
+  };
+
+  useEffect(() => {
+    // Asettaa tekstialueen korkeuden sisällön mukaan
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [editableText]);
+
+  return (
+    <div
+      className="flex items-start p-2 rounded"
+      style={{
+        ...style,
+        color: style?.textColor || style?.color || "inherit",
+        backgroundColor: style?.backgroundColor || "transparent",
+      }}
+    >
+      {icon && <span className="mr-2 mt-1">{icon}</span>}
+      {isEditing ? (
+        <Textarea
+          ref={textareaRef}
+          value={editableText}
+          onChange={handleTextChange}
+          onBlur={() => setIsEditing(false)}
+          autoFocus
+          className="w-full p-2 border border-gray-300 rounded resize-none overflow-hidden"
+          rows={10} // Määrittää aloitusrivimäärän
+        />
+      ) : (
+        <p onClick={() => setIsEditing(true)}>{editableText}</p>
+      )}
+    </div>
+  );
+};
 
 interface PriceComponentProps {
   amount: string;
