@@ -7,6 +7,10 @@ type ViewProps = {
   analysis: StreamedAnalysis;
   imageUrl: string;
   showColorScheme: boolean;
+  backgroundColor: string;
+  textColor: string;
+  font: string;
+  fontSize: number;
 };
 
 const views = {
@@ -18,6 +22,10 @@ const views = {
       analysis={props.analysis}
       imageUrl={props.imageUrl}
       showColorScheme={props.showColorScheme}
+      backgroundColor={props.backgroundColor}
+      textColor={props.textColor}
+      font={props.font}
+      fontSize={props.fontSize}
     />
   ),
 };

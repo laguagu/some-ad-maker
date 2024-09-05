@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { AnalysisOptions } from "../types";
+import { MutableRefObject } from "react";
 
 interface UploadFileState {
   isAnalysisComplete: boolean;
@@ -11,6 +12,7 @@ interface UploadFileState {
   analysisOptions: AnalysisOptions;
   currentView: "analysis" | "draggable";
   isLoading: boolean;
+  contentRef: MutableRefObject<HTMLDivElement | null> | null;
   setIsAnalysisComplete: (value: boolean) => void;
   setFile: (file: File | null) => void;
   setPreviewUrl: (url: string | null) => void;
@@ -20,6 +22,7 @@ interface UploadFileState {
   setAnalysisOptions: (options: AnalysisOptions) => void;
   setCurrentView: (view: "analysis" | "draggable") => void;
   setIsLoading: (value: boolean) => void;
+  setContentRef: (ref: MutableRefObject<HTMLDivElement | null>) => void;
 }
 
 export const useUploadFileStore = create<UploadFileState>((set) => ({
@@ -38,6 +41,7 @@ export const useUploadFileStore = create<UploadFileState>((set) => ({
   currentView: "analysis",
   isLoading: false,
   platform: "general",
+  contentRef: null,
   setIsAnalysisComplete: (value) => set({ isAnalysisComplete: value }),
   setFile: (file) => set({ file }),
   setPreviewUrl: (url) => set({ previewUrl: url }),
@@ -47,4 +51,5 @@ export const useUploadFileStore = create<UploadFileState>((set) => ({
   setAnalysisOptions: (options) => set({ analysisOptions: options }),
   setCurrentView: (view) => set({ currentView: view }),
   setIsLoading: (value) => set({ isLoading: value }),
+  setContentRef: (ref) => set({ contentRef: ref }),
 }));

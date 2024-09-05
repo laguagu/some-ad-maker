@@ -17,7 +17,7 @@ async function validateAndResizeImage(base64Image: string): Promise<Buffer> {
 
   if (!format || !ALLOWED_FORMATS.includes(format)) {
     throw new Error(
-      `Kuvaformaatti ei ole tuettu. Sallitut formaatit ovat: ${ALLOWED_FORMATS.join(", ")}.`
+      `Kuvaformaatti ei ole tuettu. Sallitut formaatit ovat: ${ALLOWED_FORMATS.join(", ")}.`,
     );
   }
 
@@ -136,7 +136,7 @@ export async function POST(req: Request) {
       {
         status: 400,
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
   }
 }

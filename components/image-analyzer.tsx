@@ -115,15 +115,6 @@ export function ImageAnalyzer() {
     }
   };
 
-  const handleReupload = () => {
-    setFile(null);
-    setPreviewUrl(null);
-    setAnalyzedImageUrl(null);
-    setIsAnalysisComplete(false);
-    setAnalysisUrl(null);
-    setAnalysisId(null);
-  };
-
   const handleGoBack = () => {
     setFile(null);
     setPreviewUrl(null);
@@ -140,13 +131,13 @@ export function ImageAnalyzer() {
                     luomiseen tekoälyn avulla. Lataa kuva, ja anna tekoälyn
                     generoida houkutteleva ilmoitus automaattisesti.
                   </p> */}
-      <Card className="container max-w-5xl">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">
+      <Card className="container max-w-4xl">
+        <CardHeader className="border-b">
+          <CardTitle className="text-2xl font-bold text-gray-800">
             Tekoälyllä tehostettu myynti-ilmoitusten luonti
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           {!object?.analysis ? (
             <>
               {!previewUrl ? (
@@ -166,13 +157,6 @@ export function ImageAnalyzer() {
                       ))}
                     </ul>
                     <div className="mt-4">
-                      {/* <Image
-                        src="/example-product-no-background.png"
-                        alt="Esimerkki tuotekuvasta ilman taustaa"
-                        width={300}
-                        height={300}
-                        className="rounded-lg shadow-lg"
-                      /> */}
                       <ComapreImages />
                     </div>
                   </div>
@@ -218,36 +202,9 @@ export function ImageAnalyzer() {
               )}
             </>
           ) : (
-            <>
-              <div className="gap-2 flex-row sm:flex align-middle justify-center items-center">
-                <div>
-                  <AnalysisSection analysis={object.analysis} />
-                </div>
-                <div className="bg-red-50">
-                  <div className="flex flex-col gap-4 justify-center align-middle my-6">
-                    <Button
-                      onClick={handleReupload}
-                      className="w-full sm:w-auto"
-                    >
-                      Lataa uusi kuva
-                    </Button>
-                    <Button
-                      onClick={handleSaveAnalysis}
-                      className="w-full sm:w-auto"
-                    >
-                      Tallenna myynti-ilmoitus
-                    </Button>
-                  </div>
-                </div>
-              </div>
-
-              {analysisUrl && (
-                <div className="flex justify-center flex-col items-center h-full">
-                  <ShareButton analysis={object.analysis} />
-                  <AnalysisUrlSection analysisUrl={analysisUrl} />
-                </div>
-              )}
-            </>
+            <div className="w-full">
+              <AnalysisSection analysis={object.analysis} />
+            </div>
           )}
         </CardContent>
       </Card>

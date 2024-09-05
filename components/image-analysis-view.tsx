@@ -3,47 +3,52 @@ import { useUploadFileStore } from "@/lib/store/store";
 import { Eye, Info, Palette, ShoppingCart, Tag, Linkedin } from "lucide-react";
 import { SiInstagram, SiGitter } from "react-icons/si";
 import Image from "next/image";
-import { useRef } from "react";
-import html2canvas from "html2canvas";
+import { useEffect, useRef } from "react";
+
 import { Button } from "./ui/button";
 
 const ImageAnalysisView = ({
   analysis,
   imageUrl,
   showColorScheme,
+  backgroundColor,
+  textColor,
+  font,
+  fontSize,
 }: {
   analysis: any;
   imageUrl: string;
   showColorScheme: boolean;
+  backgroundColor: string;
+  textColor: string;
+  font: string;
+  fontSize: number;
 }) => {
-  const { analysisOptions } = useUploadFileStore();
+  const { analysisOptions, setContentRef } = useUploadFileStore();
+  const localContentRef = useRef<HTMLDivElement>(null);
   const platform = analysisOptions.platform;
-  const contentRef = useRef(null);
 
-  const captureScreenshot = async () => {
-    if (contentRef.current) {
-      const canvas = await html2canvas(contentRef.current);
-      const image = canvas.toDataURL("image/png");
-      const link = document.createElement("a");
-      link.href = image;
-      link.download = "image-analysis-screenshot.png";
-      link.click();
-    }
-  };
+  useEffect(() => {
+    setContentRef(localContentRef);
+  }, [setContentRef]);
 
   const capitalizeFirstLetter = (string: string) => {
     if (!string) return string;
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
+
   return (
-    <div className="mt-8 space-y-8">
-      <div className="flex justify-center">
-        <Button onClick={captureScreenshot}>Lataa myynti-ilmoitus</Button>
-      </div>
+    <div className="mt-8 space-y-8 pb-4">
       {/* Myynti-ilmoitus */}
       <div
-        ref={contentRef}
-        className="p-6 bg-custom-bg dark:bg-gray-800 border rounded-lg shadow-lg max-w-xl mx-auto"
+        ref={localContentRef}
+        className="p-6 border rounded-lg shadow-lg max-w-xl mx-auto"
+        style={{
+          backgroundColor,
+          color: textColor,
+          fontFamily: font,
+          fontSize: `${fontSize}px`,
+        }}
       >
         <div className="flex items-center justify-center mb-6">
           {imageUrl && (
@@ -59,17 +64,26 @@ const ImageAnalysisView = ({
             </div>
           )}
         </div>
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
+        <h2
+          className="text-2xl font-bold mb-4 flex items-center"
+          style={{ color: textColor }}
+        >
           <Tag className="mr-2" size={24} />
           {capitalizeFirstLetter(analysis.furniture)}
         </h2>
         {analysis.price && (
-          <p className="text-xl font-semibold text-green-600 dark:text-green-400 mb-4 flex items-center">
+          <p
+            className="text-xl font-semibold mb-4 flex items-center"
+            style={{ color: textColor }}
+          >
             Hinta: {analysis.price}
           </p>
         )}
         <div className="mb-4">
-          <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center">
+          <h3
+            className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center"
+            style={{ color: textColor }}
+          >
             Tärkeimmät ominaisuudet:
           </h3>
           <ul className="list-none space-y-2">
@@ -78,6 +92,7 @@ const ImageAnalysisView = ({
                 <li
                   key={index}
                   className="text-gray-700 dark:text-gray-200 flex items-center"
+                  style={{ color: textColor }}
                 >
                   <div className="mr-2 text-blue-500">•</div>
                   {feature}
@@ -91,7 +106,10 @@ const ImageAnalysisView = ({
           </ul>
         </div>
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center">
+          <h3
+            className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center"
+            style={{ color: textColor }}
+          >
             <Info className="mr-2" size={24} />
             Kuvaus:
           </h3>
@@ -101,7 +119,10 @@ const ImageAnalysisView = ({
         </div>
         {showColorScheme && analysis.colorScheme && (
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center">
+            <h3
+              className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center"
+              style={{ color: textColor }}
+            >
               <Palette className="mr-2" size={24} />
               Värimaailma:
             </h3>
@@ -129,7 +150,10 @@ const ImageAnalysisView = ({
           </div>
         )}
         {analysis.callToAction && (
-          <p className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-4 flex items-center">
+          <p
+            className="text-lg font-semibold  mb-4 flex items-center"
+            style={{ color: textColor }}
+          >
             <ShoppingCart className="mr-2" size={24} />
             {analysis.callToAction}
           </p>
