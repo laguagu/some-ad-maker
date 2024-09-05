@@ -138,7 +138,7 @@ export function DraggableAdLayout({
   }, [setContentRef]);
 
   return (
-    <div>
+    <div className="bg-white">
       <StyleCustomization onStyleChange={handleStyleChange} />
       <div className="grid-layout-container">
         <DndContext
