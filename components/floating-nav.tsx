@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import html2canvas from "html2canvas";
+import { toPng } from "html-to-image";
 import { Download } from "lucide-react";
 import { useUploadFileStore } from "@/lib/store/store";
 
@@ -28,12 +28,40 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
 
   const captureScreenshot = async () => {
     if (contentRef && contentRef.current) {
-      const canvas = await html2canvas(contentRef.current);
-      const image = canvas.toDataURL("image/png");
-      const link = document.createElement("a");
-      link.href = image;
-      link.download = "myynti-ilmoitus.png";
-      link.click();
+      try {
+        const scale = 2;
+        const element = contentRef.current;
+
+        // Lasketaan todellinen sisällön leveys
+        const computedStyle = window.getComputedStyle(element);
+        const paddingLeft = parseFloat(computedStyle.paddingLeft);
+        const paddingRight = parseFloat(computedStyle.paddingRight);
+        const contentWidth = element.scrollWidth - paddingLeft - paddingRight;
+
+        // Käytetään suurempaa arvoa elementin leveydestä tai sisällön leveydestä
+        const width = Math.max(element.offsetWidth, contentWidth) * scale;
+        const height = element.scrollHeight * scale;
+
+        const dataUrl = await toPng(element, {
+          quality: 1,
+          width,
+          height,
+          style: {
+            transform: `scale(${scale})`,
+            transformOrigin: "top left",
+            width: `${width / scale}px`,
+            height: `${height / scale}px`,
+            maxWidth: "none", // Poistetaan max-width rajoitus
+          },
+        });
+
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = "myynti-ilmoitus.png";
+        link.click();
+      } catch (error) {
+        console.error("Screenshotin ottaminen epäonnistui:", error);
+      }
     }
   };
 

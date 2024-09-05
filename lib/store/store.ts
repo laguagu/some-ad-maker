@@ -12,7 +12,7 @@ interface UploadFileState {
   analysisOptions: AnalysisOptions;
   currentView: "analysis" | "draggable";
   isLoading: boolean;
-  contentRef: MutableRefObject<HTMLDivElement | null> | null;
+  contentRef: React.RefObject<HTMLDivElement> | null;
   setIsAnalysisComplete: (value: boolean) => void;
   setFile: (file: File | null) => void;
   setPreviewUrl: (url: string | null) => void;
@@ -22,7 +22,7 @@ interface UploadFileState {
   setAnalysisOptions: (options: AnalysisOptions) => void;
   setCurrentView: (view: "analysis" | "draggable") => void;
   setIsLoading: (value: boolean) => void;
-  setContentRef: (ref: MutableRefObject<HTMLDivElement | null>) => void;
+  setContentRef: (ref: React.RefObject<HTMLDivElement>) => void;
 }
 
 export const useUploadFileStore = create<UploadFileState>((set) => ({

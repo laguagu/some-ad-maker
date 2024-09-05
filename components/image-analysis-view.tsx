@@ -5,8 +5,6 @@ import { SiInstagram, SiGitter } from "react-icons/si";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-import { Button } from "./ui/button";
-
 const ImageAnalysisView = ({
   analysis,
   imageUrl,
@@ -38,19 +36,21 @@ const ImageAnalysisView = ({
   };
 
   return (
-    <div className="mt-8 space-y-8 pb-4">
+    <div className="mt-8 space-y-8 pb-4 ">
       {/* Myynti-ilmoitus */}
       <div
         ref={localContentRef}
         className="p-6 border rounded-lg shadow-lg max-w-xl mx-auto"
         style={{
-          backgroundColor,
+          backgroundColor: backgroundColor || "#FFFFFF",
           color: textColor,
           fontFamily: font,
           fontSize: `${fontSize}px`,
+          maxWidth: "none", // Poistetaan max-width rajoitus
+          width: "auto", // Annetaan elementin leveyden määräytyä sisällön mukaan
         }}
       >
-        <div className="flex items-center justify-center mb-6">
+        <div className="flex items-center justify-center mb-6 ">
           {imageUrl && (
             <div className="relative w-full aspect-square max-w-[300px]">
               <Image
