@@ -1,4 +1,5 @@
 import { ImageAnalyzer } from "@/components/image-analyzer";
+import { Suspense } from "react";
 
 export default function Page() {
   return (
@@ -8,7 +9,9 @@ export default function Page() {
         <div className="absolute pointer-events-none inset-0 dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
       </div>
       <div className="relative z-10 w-full max-w-4xl ">
-        <ImageAnalyzer />
+        <Suspense fallback={<div>Mainosmestari tulossa . . .</div>}>
+          <ImageAnalyzer />
+        </Suspense>
       </div>
     </main>
   );
