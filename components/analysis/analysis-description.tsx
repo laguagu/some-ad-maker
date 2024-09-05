@@ -16,6 +16,6 @@ export const AnalysisDescription = ({
       <Info className="mr-2" size={24} />
       Kuvaus:
     </h3>
-    <p className="text-gray-700 dark:text-gray-200">{description}</p>
+    <p className="text-gray-700 dark:text-gray-200" style={{ color: textColor }}>{description}</p>
   </div>
 );
