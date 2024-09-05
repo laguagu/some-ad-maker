@@ -1,9 +1,10 @@
 import { cn } from "@/lib/utils";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { IconUpload } from "@tabler/icons-react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
+import { useUploadFileStore } from "@/lib/store/store";
 
 const mainVariant = {
   initial: {
@@ -26,21 +27,27 @@ const secondaryVariant = {
   },
 };
 
-export const FileUpload = ({
-  onChange,
-}: {
-  onChange?: (files: File | null) => void;
-}) => {
-  const [file, setFile] = useState<File | null>(null);
+export const FileUpload = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { file, setFile, setPreviewUrl } = useUploadFileStore();
 
-  const handleFileChange = (newFiles: File[]) => {
-    if (newFiles.length > 0) {
-      const newFile = newFiles[0];
-      setFile(newFile);
-      onChange && onChange(newFile);
-    }
-  };
+  const handleFileChange = useCallback(
+    (newFiles: File[]) => {
+      if (newFiles.length > 0) {
+        const newFile = newFiles[0];
+        setFile(newFile);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setPreviewUrl(e.target?.result as string);
+        };
+        reader.readAsDataURL(newFile);
+      } else {
+        setFile(null);
+        setPreviewUrl(null);
+      }
+    },
+    [setFile, setPreviewUrl],
+  );
 
   const handleClick = () => {
     fileInputRef.current?.click();
@@ -74,7 +81,7 @@ export const FileUpload = ({
         </div>
         <div className="flex flex-col items-center justify-center">
           <p className="relative z-20 font-sans font-bold text-neutral-700 dark:text-neutral-300 text-base">
-            Lataa kuva
+            {file ? "Lataa uusi kuva" : "Lataa kuva"}
           </p>
           <p className="relative z-20 font-sans font-normal text-neutral-400 dark:text-neutral-400 text-base mt-2">
             Vedä tai pudota kuvasi tähän tai napsauta ladataksesi

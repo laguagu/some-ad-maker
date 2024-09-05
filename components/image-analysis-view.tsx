@@ -213,7 +213,7 @@ const ImageAnalysisView = ({
                       >
                         {trend}
                       </li>
-                    )
+                    ),
                   )}
                 </ul>
               </div>
