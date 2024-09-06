@@ -55,12 +55,16 @@ export function ImageAnalyzer() {
       </h1>
       {!object?.analysis ? (
         !previewUrl ? (
-          <InitialView />
+          <Card className="p-6 rounded-lg shadow-lg">
+            <InitialView />
+          </Card>
         ) : (
-          <ImagePreview
-            onAnalyze={() => handleAnalyze(submit)}
-            isLoading={isAiLoading}
-          />
+          <Card className="p-6 rounded-lg shadow-lg">
+            <ImagePreview
+              onAnalyze={() => handleAnalyze(submit)}
+              isLoading={isAiLoading}
+            />
+          </Card>
         )
       ) : (
         <AnalysisSection analysis={object.analysis} />

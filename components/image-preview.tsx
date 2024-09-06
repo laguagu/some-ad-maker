@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { ReuploadButton } from "./buttons/reupload";
 import { AnalysisOptions } from "./analysis-options";
 import { useUploadFileStore } from "@/lib/store/store";
+import { Card } from "./ui/card";
 
 interface ImagePreviewProps {
   onAnalyze: () => void;
@@ -20,14 +21,14 @@ export function ImagePreview({ onAnalyze, isLoading }: ImagePreviewProps) {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-6 justify-between items-start">
-      <div className="flex-1">
+    <div className="flex flex-col sm:flex-row gap-6 justify-between items-center">
+      <div className="flex-1 p-4 border shadow-sm rounded-xl">
         <div className="w-full aspect-square max-w-sm mx-auto relative">
           <Image
             src={previewUrl!}
             alt="Esikatselu"
             fill
-            className="rounded-lg shadow-lg object-contain"
+            className="rounded-lg  object-contain"
           />
         </div>
         <div className="mt-4 flex justify-center gap-4">

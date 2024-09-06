@@ -6,7 +6,7 @@ import { getSchemaByPlatform } from "@/lib/utils";
 
 export const maxDuration = 35;
 // Aseta tämä true:ksi käyttääksesi mockattua dataa
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 const llmModel = openai("gpt-4o-2024-08-06");
 const ALLOWED_FORMATS = ["png", "jpeg", "jpg", "gif", "webp"];
 

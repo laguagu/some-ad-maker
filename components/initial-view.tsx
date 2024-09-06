@@ -5,7 +5,7 @@ import { ComapreImages } from "./compare-imgs";
 
 export function InitialView() {
   return (
-    <div className="flex flex-col md:flex-row items-start gap-8">
+    <div className="flex flex-col md:flex-row items-start gap-8 ">
       <div className="md:w-2/3 space-y-4">
         <ul className="space-y-2">
           {[
