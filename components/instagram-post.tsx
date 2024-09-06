@@ -189,9 +189,7 @@ export default function InstagramPost({
                 analysis.hashtags &&
                 analysis.hashtags.length > 0 && (
                   <p className="text-sm text-blue-500">
-                    {analysis.hashtags
-                      .map((tag: string) => `#${tag}`)
-                      .join(" ")}
+                    {analysis.hashtags.map((tag: string) => `${tag}`).join(" ")}
                   </p>
                 )}
             </div>
