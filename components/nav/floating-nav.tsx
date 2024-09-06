@@ -107,7 +107,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
     <TooltipProvider>
       <div
         className={cn(
-          "fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50",
+          "fixed bottom-4 left-1/2  transform -translate-x-1/2 z-50",
           className,
         )}
       >
