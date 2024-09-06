@@ -33,14 +33,16 @@ export function AnalysisSection({ analysis }: AnalysisSectionProps) {
   };
 
   return (
-    <div className="relative pb-16"> {/* Lisätty padding-top */}
-    <ViewRenderer
-      currentView={currentView}
-      analysis={analysis}
-      imageUrl={analyzedImageUrl || ""}
-      showColorScheme={analysisOptions.includeColorScheme}
-    />
-    <FloatingNav onReupload={handleReupload} />
-  </div>
+    <div className="relative pb-16">
+      {" "}
+      {/* Lisätty padding-top */}
+      <ViewRenderer
+        currentView={currentView}
+        analysis={analysis}
+        imageUrl={analyzedImageUrl || ""}
+        showColorScheme={analysisOptions.includeColorScheme}
+      />
+      <FloatingNav onReupload={handleReupload} />
+    </div>
   );
 }

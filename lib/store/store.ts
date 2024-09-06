@@ -12,6 +12,7 @@ interface UploadFileState {
   analysisOptions: AnalysisOptions;
   currentView: "analysis" | "draggable";
   isLoading: boolean;
+  showHashtags: boolean;
   contentRef: React.RefObject<HTMLDivElement> | null;
   setIsAnalysisComplete: (value: boolean) => void;
   setFile: (file: File | null) => void;
@@ -23,6 +24,7 @@ interface UploadFileState {
   setCurrentView: (view: "analysis" | "draggable") => void;
   setIsLoading: (value: boolean) => void;
   setContentRef: (ref: React.RefObject<HTMLDivElement>) => void;
+  setShowHashtags: (show: boolean) => void;
 }
 
 export const useUploadFileStore = create<UploadFileState>((set) => ({
@@ -42,6 +44,7 @@ export const useUploadFileStore = create<UploadFileState>((set) => ({
   isLoading: false,
   platform: "general",
   contentRef: null,
+  showHashtags: true,
   setIsAnalysisComplete: (value) => set({ isAnalysisComplete: value }),
   setFile: (file) => set({ file }),
   setPreviewUrl: (url) => set({ previewUrl: url }),
@@ -52,4 +55,5 @@ export const useUploadFileStore = create<UploadFileState>((set) => ({
   setCurrentView: (view) => set({ currentView: view }),
   setIsLoading: (value) => set({ isLoading: value }),
   setContentRef: (ref) => set({ contentRef: ref }),
+  setShowHashtags: (show) => set({ showHashtags: show }),
 }));

@@ -25,7 +25,7 @@ const DefaultAnalyze = ({
   imageUrl: string;
   showColorScheme: boolean;
 }) => {
-  const { analysisOptions, setContentRef } = useUploadFileStore();
+  const { showHashtags, analysisOptions, setContentRef } = useUploadFileStore();
   const localContentRef = useRef<HTMLDivElement>(null);
   const platform = analysisOptions.platform;
 
@@ -87,7 +87,9 @@ const DefaultAnalyze = ({
           callToAction={analysis.callToAction}
           textColor={textColor}
         />
-       <AnalysisHashtags hashtags={analysis.hashtags || []} />
+        {showHashtags && (
+          <AnalysisHashtags hashtags={analysis.hashtags || []} />
+        )}
 
         {platform === "instagram" && <InstagramSpecific analysis={analysis} />}
         {platform === "twitter" && <TwitterSpecific analysis={analysis} />}

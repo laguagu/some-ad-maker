@@ -9,8 +9,14 @@ import { useStyleStore } from "@/lib/store/useStyleStore";
 import { Label } from "../ui/label";
 
 export function NavItems() {
-  const { setAnalysisOptions, analysisOptions, currentView, setCurrentView } =
-    useUploadFileStore();
+  const {
+    setAnalysisOptions,
+    analysisOptions,
+    currentView,
+    setCurrentView,
+    showHashtags,
+    setShowHashtags,
+  } = useUploadFileStore();
   const {
     backgroundColor,
     textColor,
@@ -58,18 +64,18 @@ export function NavItems() {
         </div>
       ),
     },
-    {
-      name: "Asettelu",
-      icon: <Layout className="h-4 w-4" />,
-      content: (
-        <div className="space-y-4">
-          <ViewSelector
-            currentView={currentView}
-            onViewChange={setCurrentView}
-          />
-        </div>
-      ),
-    },
+    // {
+    //   name: "Asettelu",
+    //   icon: <Layout className="h-4 w-4" />,
+    //   content: (
+    //     <div className="space-y-4">
+    //       <ViewSelector
+    //         currentView={currentView}
+    //         onViewChange={setCurrentView}
+    //       />
+    //     </div>
+    //   ),
+    // },
     {
       name: "Kuva",
       icon: <ImageIcon className="h-4 w-4" />,
@@ -78,7 +84,7 @@ export function NavItems() {
           <Checkbox
             id="includeColorScheme"
             checked={analysisOptions.includeColorScheme}
-            onCheckedChange={(checked) =>
+            onCheckedChange={(checked: boolean) =>
               setAnalysisOptions({
                 ...analysisOptions,
                 includeColorScheme: checked as boolean,
@@ -87,6 +93,14 @@ export function NavItems() {
           />
           <Label htmlFor="includeColorScheme" className="cursor-pointer">
             Sisällytä värianalyysi
+          </Label>
+          <Checkbox
+            id="showHashtags"
+            checked={showHashtags}
+            onCheckedChange={(checked: boolean) => setShowHashtags(checked)}
+          />
+          <Label htmlFor="showHashtags" className="cursor-pointer">
+            Näytä hashtagit
           </Label>
         </div>
       ),

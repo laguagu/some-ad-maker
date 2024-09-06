@@ -96,7 +96,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
           onClick={captureScreenshot}
           className="w-full flex items-center justify-center gap-2"
         >
-          <Download size={16} />
+          {/* <Download size={16} /> */}
           Lataa myynti-ilmoitus
         </Button>
       ),
@@ -107,7 +107,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
     <TooltipProvider>
       <div
         className={cn(
-          "fixed bottom-6 left-1/2  transform -translate-x-1/2 z-50",
+          "fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50",
           className,
         )}
       >
@@ -134,7 +134,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
                   {item.icon}
                 </motion.button>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent className="bg-gray-800 text-white px-3 py-2 rounded-md shadow-lg text-sm font-medium z-50">
                 <p>{item.name}</p>
               </TooltipContent>
             </Tooltip>

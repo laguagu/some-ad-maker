@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Tag, Edit2 } from "lucide-react";
 import { useScreenshotStore } from "@/lib/store/screenshotStore";
+import style from "styled-jsx/style";
 
 interface AnalysisHeaderProps {
   furniture: string;
@@ -70,15 +71,15 @@ export const AnalysisHeader: React.FC<AnalysisHeaderProps> = ({
           className="text-xl font-semibold mb-4 flex items-center relative group"
           style={{ color: textColor }}
         >
-          Hinta:
-          <div className="relative ml-1 inline-flex items-center">
+          <span className="mr-2  flex-shrink-0">Hinta:</span>
+          <div className="relative flex items-center">
             <input
               type="text"
               value={editablePrice}
               onChange={handlePriceChange}
               onFocus={() => setIsPriceEditing(true)}
               onBlur={() => setIsPriceEditing(false)}
-              className={`bg-transparent outline-none text-xl font-semibold ${
+              className={`bg-transparent outline-none text-xl font-semibold leading-none p-0 mt-1 ${
                 isPriceEditing
                   ? "border-b-2 border-blue-500"
                   : "border-b-2 border-transparent"
@@ -87,11 +88,12 @@ export const AnalysisHeader: React.FC<AnalysisHeaderProps> = ({
                 color: textColor,
                 width: `${editablePrice.length + 2}ch`,
                 transition: "border-color 0.3s ease",
+                lineHeight: "1.15", // Tämä auttaa kohdistamaan tekstin vertikaalisesti
               }}
             />
             <Edit2
               size={16}
-              className={`edit-icon ml-2 text-gray-400 transition-opacity duration-300 ${
+              className={`edit-icon ml-2 text-gray-400 transition-opacity duration-300 flex-shrink-0 ${
                 isPriceEditing
                   ? "opacity-0"
                   : "opacity-100 group-hover:text-blue-500"
