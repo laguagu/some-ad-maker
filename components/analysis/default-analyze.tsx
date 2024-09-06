@@ -87,7 +87,7 @@ const DefaultAnalyze = ({
           callToAction={analysis.callToAction}
           textColor={textColor}
         />
-        <AnalysisHashtags hashtags={analysis.hashtags} />
+       <AnalysisHashtags hashtags={analysis.hashtags || []} />
 
         {platform === "instagram" && <InstagramSpecific analysis={analysis} />}
         {platform === "twitter" && <TwitterSpecific analysis={analysis} />}
