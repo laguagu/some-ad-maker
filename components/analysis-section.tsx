@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { use, useEffect, useMemo } from "react";
 import { StreamedAnalysis } from "@/lib/types";
 import { ViewRenderer } from "./view-render";
 import { useUploadFileStore } from "@/lib/store/store";
@@ -32,6 +32,9 @@ export function AnalysisSection({ analysis }: AnalysisSectionProps) {
     setAnalysisId(null);
   };
 
+  useEffect(() => {
+    console.log("analysis", analysis);
+  }, [analysis]);
   return (
     <div className="relative pb-16">
       {" "}

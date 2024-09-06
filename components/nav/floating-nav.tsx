@@ -12,7 +12,6 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@radix-ui/react-tooltip";
-import { useScreenshotStore } from "@/lib/store/screenshotStore";
 
 type FloatingNavProps = {
   className?: string;
@@ -30,7 +29,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
   const captureScreenshot = async () => {
     if (contentRef && contentRef.current) {
       try {
-        // Hide edit icons
+        // Hide edit icons before taking screenshot
         const editIcons = contentRef.current.querySelectorAll(".edit-icon");
         editIcons.forEach((icon) => {
           (icon as HTMLElement).style.display = "none";
@@ -102,17 +101,20 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
       ),
     },
   ];
+  const isViewSelectorActive = activeTab === 2;
 
   return (
     <TooltipProvider>
       <div
-        className={cn(
-          "fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50",
-          className,
-        )}
+        className={
+          "fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-[320px]"
+        }
       >
         <motion.div
-          className="bg-white dark:bg-gray-800 rounded-full shadow-lg p-2 flex items-center justify-center"
+          className={cn(
+            "bg-white dark:bg-gray-800 rounded-full shadow-lg p-2 flex items-center justify-center",
+            isViewSelectorActive ? "w-full" : "w-auto",
+          )}
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -147,7 +149,9 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.2 }}
-              className="absolute bottom-full left-0 w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 mb-2"
+              className={
+                "absolute bottom-full left-0 bg-white dark:bg-gray-800 rounded-lg shadow-lg mb-2 w-full p-4"
+              }
             >
               {allNavItems[activeTab].content}
             </motion.div>

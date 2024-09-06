@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, use } from "react";
 import { Tag, Edit2 } from "lucide-react";
-import { useScreenshotStore } from "@/lib/store/screenshotStore";
-import style from "styled-jsx/style";
 
 interface AnalysisHeaderProps {
   furniture: string;

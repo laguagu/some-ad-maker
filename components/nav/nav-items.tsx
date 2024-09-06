@@ -64,18 +64,18 @@ export function NavItems() {
         </div>
       ),
     },
-    // {
-    //   name: "Asettelu",
-    //   icon: <Layout className="h-4 w-4" />,
-    //   content: (
-    //     <div className="space-y-4">
-    //       <ViewSelector
-    //         currentView={currentView}
-    //         onViewChange={setCurrentView}
-    //       />
-    //     </div>
-    //   ),
-    // },
+    {
+      name: "Asettelu",
+      icon: <Layout className="h-4 w-4" />,
+      content: (
+        <div className="space-y-4">
+          <ViewSelector
+            currentView={currentView}
+            onViewChange={setCurrentView}
+          />
+        </div>
+      ),
+    },
     {
       name: "Kuva",
       icon: <ImageIcon className="h-4 w-4" />,

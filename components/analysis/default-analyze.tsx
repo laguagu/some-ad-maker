@@ -15,6 +15,7 @@ import {
   LinkedInSpecific,
   VisualDesign,
 } from ".";
+import { Card } from "../ui/card";
 
 const DefaultAnalyze = ({
   analysis,
@@ -90,12 +91,19 @@ const DefaultAnalyze = ({
         {showHashtags && (
           <AnalysisHashtags hashtags={analysis.hashtags || []} />
         )}
-
-        {platform === "instagram" && <InstagramSpecific analysis={analysis} />}
-        {platform === "twitter" && <TwitterSpecific analysis={analysis} />}
-        {platform === "linkedin" && <LinkedInSpecific analysis={analysis} />}
       </div>
-
+      {platform !== "general" && (
+        <Card className="p-4">
+          <h2 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center">
+            Alusta kohtainen sisältö ehdotus:
+          </h2>
+          {platform === "twitter" && <TwitterSpecific analysis={analysis} />}
+          {platform === "linkedin" && <LinkedInSpecific analysis={analysis} />}
+          {platform === "instagram" && (
+            <InstagramSpecific analysis={analysis} />
+          )}
+        </Card>
+      )}
       {analysis.visualDesign && <VisualDesign design={analysis.visualDesign} />}
     </div>
   );

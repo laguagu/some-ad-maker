@@ -4,7 +4,7 @@ import { SiInstagram } from "react-icons/si";
 
 export const InstagramSpecific = ({ analysis }: { analysis: any }) => (
   <>
-    {analysis.carouselImages && (
+    {/* {analysis.carouselImages && (
       <div className="mt-4">
         <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center">
           <SiInstagram className="mr-2" size={24} />
@@ -23,7 +23,7 @@ export const InstagramSpecific = ({ analysis }: { analysis: any }) => (
           ))}
         </div>
       </div>
-    )}
+    )} */}
     {analysis.storyIdea && (
       <div className="mt-4">
         <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2 flex items-center">

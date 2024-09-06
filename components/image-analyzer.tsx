@@ -5,10 +5,11 @@ import { AnalysisSection } from "./analysis-section";
 import { useUploadFileStore } from "@/lib/store/store";
 import toast from "react-hot-toast";
 import { getSchemaByPlatform } from "@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card } from "./ui/card";
 import { ImagePreview } from "./image-preview";
 import { useAnalyzeImage } from "@/lib/hooks/useAnalyzeImage";
 import { InitialView } from "./initial-view";
+import ModalSpinner from "./loaders/modal-spinner";
 
 export function ImageAnalyzer() {
   const {
@@ -67,7 +68,10 @@ export function ImageAnalyzer() {
           </Card>
         )
       ) : (
-        <AnalysisSection analysis={object.analysis} />
+        <div>
+          {isAiLoading && <ModalSpinner />}
+          <AnalysisSection analysis={object.analysis} />
+        </div>
       )}
     </div>
   );

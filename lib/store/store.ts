@@ -10,10 +10,11 @@ interface UploadFileState {
   analysisId: string | null;
   analysisUrl: string | null;
   analysisOptions: AnalysisOptions;
-  currentView: "analysis" | "draggable";
+  currentView: "analysis" | "draggable" | "instagram";
   isLoading: boolean;
   showHashtags: boolean;
   contentRef: React.RefObject<HTMLDivElement> | null;
+  storeAvatarUrl: string | null;
   setIsAnalysisComplete: (value: boolean) => void;
   setFile: (file: File | null) => void;
   setPreviewUrl: (url: string | null) => void;
@@ -21,10 +22,11 @@ interface UploadFileState {
   setAnalysisUrl: (url: string | null) => void;
   setAnalyzedImageUrl: (url: string | null) => void;
   setAnalysisOptions: (options: AnalysisOptions) => void;
-  setCurrentView: (view: "analysis" | "draggable") => void;
+  setCurrentView: (view: "analysis" | "draggable" | "instagram") => void;
   setIsLoading: (value: boolean) => void;
   setContentRef: (ref: React.RefObject<HTMLDivElement>) => void;
   setShowHashtags: (show: boolean) => void;
+  setStoreAvatarUrl: (url: string | null) => void;
 }
 
 export const useUploadFileStore = create<UploadFileState>((set) => ({
@@ -45,6 +47,7 @@ export const useUploadFileStore = create<UploadFileState>((set) => ({
   platform: "general",
   contentRef: null,
   showHashtags: true,
+  storeAvatarUrl: null,
   setIsAnalysisComplete: (value) => set({ isAnalysisComplete: value }),
   setFile: (file) => set({ file }),
   setPreviewUrl: (url) => set({ previewUrl: url }),
@@ -56,4 +59,5 @@ export const useUploadFileStore = create<UploadFileState>((set) => ({
   setIsLoading: (value) => set({ isLoading: value }),
   setContentRef: (ref) => set({ contentRef: ref }),
   setShowHashtags: (show) => set({ showHashtags: show }),
+  setStoreAvatarUrl: (url) => set({ storeAvatarUrl: url }),
 }));

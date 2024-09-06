@@ -2,6 +2,7 @@ import React from "react";
 import { DraggableAdLayout } from "./drag-and-drop/layout";
 import DefaultAnalyze from "@/components/analysis/default-analyze";
 import { StreamedAnalysis } from "@/lib/types";
+import InstagramPost from "./instagram-post";
 
 type ViewProps = {
   analysis: StreamedAnalysis;
@@ -19,6 +20,9 @@ const views = {
       imageUrl={props.imageUrl}
       showColorScheme={props.showColorScheme}
     />
+  ),
+  instagram: (props: ViewProps) => (
+    <InstagramPost analysis={props.analysis} imageUrl={props.imageUrl} />
   ),
 };
 

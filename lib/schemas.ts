@@ -52,7 +52,10 @@ const baseAnalysisSchema = z.object({
     .string()
     .describe("Houkutteleva kuvaus somemyyntipostausta varten suomeksi"),
   imageUrl: z.string().nullable().optional().describe("Huonekalun kuvan URL"),
-  price: z.string().nullable().optional().describe("Huonekalun hinta euroina"),
+  price: z
+    .string()
+    .nullable()
+    .describe("Huonekalun hinta euroina päättyen väliin ja €-merkkiin"),
   callToAction: z.string().describe("Toimintakehotus suomeksi"),
   colorScheme: z
     .object({
@@ -64,7 +67,9 @@ const baseAnalysisSchema = z.object({
       accent: z.string().optional().describe("Korostusväri englanniksi"),
     })
     .optional()
-    .describe("Huonekalun ja kuvan värimaailma"),
+    .describe(
+      "Huonekalun ja kuvan värimaailma, joka on yhteensopiva background-color CSS ominaisuuden kanssa",
+    ),
   visualDesign: z
     .string()
     .describe("Ehdotus myynti-ilmoituksen visuaalisesta ilmeestä"),
@@ -72,18 +77,10 @@ const baseAnalysisSchema = z.object({
 
 export const instagramAnalysisSchema = baseAnalysisSchema.extend({
   hashtags: z.array(z.string()).describe("Instagram-sopivat hashtagit"),
-  carouselImages: z
-    .array(z.string())
-    .optional()
-    .describe("URLs lisäkuville karusellipostausta varten"),
   storyIdea: z.string().optional().describe("Idea Instagram Storyyn"),
 });
 
 export const twitterAnalysisSchema = baseAnalysisSchema.extend({
-  shortDescription: z
-    .string()
-    .max(280)
-    .describe("Lyhyt kuvaus Twitteriä varten, max 280 merkkiä"),
   relevantTrends: z
     .array(z.string())
     .optional()

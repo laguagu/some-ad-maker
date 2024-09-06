@@ -2,8 +2,8 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 
 type ViewSelectorProps = {
-  currentView: "analysis" | "draggable";
-  onViewChange: (view: "analysis" | "draggable") => void;
+  currentView: "analysis" | "draggable" | "instagram";
+  onViewChange: (view: "analysis" | "draggable" | "instagram") => void;
 };
 
 export const ViewSelector: React.FC<ViewSelectorProps> = ({
@@ -16,13 +16,13 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
         onClick={() => onViewChange("analysis")}
         variant={currentView === "analysis" ? "default" : "outline"}
       >
-        Perinteinen näkymä
+        Yleinen näkymä
       </Button>
       <Button
-        onClick={() => onViewChange("draggable")}
-        variant={currentView === "draggable" ? "default" : "outline"}
+        onClick={() => onViewChange("instagram")}
+        variant={currentView === "instagram" ? "default" : "outline"}
       >
-        Muokattava näkymä
+        Instragram näkymä
       </Button>
     </div>
   );
