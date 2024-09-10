@@ -1,10 +1,9 @@
-import { cn } from "@/lib/utils";
-import React, { useCallback, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { IconUpload } from "@tabler/icons-react";
-import { useDropzone } from "react-dropzone";
-import Image from "next/image";
 import { useUploadFileStore } from "@/lib/store/store";
+import { cn } from "@/lib/utils";
+import { IconUpload } from "@tabler/icons-react";
+import { motion } from "framer-motion";
+import { useCallback, useRef } from "react";
+import { useDropzone } from "react-dropzone";
 
 const mainVariant = {
   initial: {
@@ -30,6 +29,7 @@ const secondaryVariant = {
 export const FileUpload = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { file, setFile, setPreviewUrl } = useUploadFileStore();
+  const { hasAnimated, setHasAnimated } = useUploadFileStore();
 
   const handleFileChange = useCallback(
     (newFiles: File[]) => {

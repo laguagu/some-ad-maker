@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { AnalysisOptions } from "../types";
-import { MutableRefObject } from "react";
 
 interface UploadFileState {
   isAnalysisComplete: boolean;
@@ -15,6 +14,7 @@ interface UploadFileState {
   showHashtags: boolean;
   contentRef: React.RefObject<HTMLDivElement> | null;
   storeAvatarUrl: string | null;
+  hasAnimated: boolean;
   setIsAnalysisComplete: (value: boolean) => void;
   setFile: (file: File | null) => void;
   setPreviewUrl: (url: string | null) => void;
@@ -27,6 +27,7 @@ interface UploadFileState {
   setContentRef: (ref: React.RefObject<HTMLDivElement>) => void;
   setShowHashtags: (show: boolean) => void;
   setStoreAvatarUrl: (url: string | null) => void;
+  setHasAnimated: (value: boolean) => void;
 }
 
 export const useUploadFileStore = create<UploadFileState>((set) => ({
@@ -48,6 +49,7 @@ export const useUploadFileStore = create<UploadFileState>((set) => ({
   contentRef: null,
   showHashtags: true,
   storeAvatarUrl: null,
+  hasAnimated: false,
   setIsAnalysisComplete: (value) => set({ isAnalysisComplete: value }),
   setFile: (file) => set({ file }),
   setPreviewUrl: (url) => set({ previewUrl: url }),
@@ -60,4 +62,6 @@ export const useUploadFileStore = create<UploadFileState>((set) => ({
   setContentRef: (ref) => set({ contentRef: ref }),
   setShowHashtags: (show) => set({ showHashtags: show }),
   setStoreAvatarUrl: (url) => set({ storeAvatarUrl: url }),
+
+  setHasAnimated: (value) => set({ hasAnimated: value }),
 }));

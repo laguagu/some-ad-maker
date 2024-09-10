@@ -1,15 +1,16 @@
 "use client";
-import { experimental_useObject as useObject } from "ai/react";
-import { PartialImageAnalysis } from "@/lib/types";
-import { AnalysisSection } from "./analysis-section";
-import { useUploadFileStore } from "@/lib/store/store";
-import toast from "react-hot-toast";
-import { getSchemaByPlatform } from "@/lib/utils";
-import { Card } from "./ui/card";
-import { ImagePreview } from "./image-preview";
 import { useAnalyzeImage } from "@/lib/hooks/useAnalyzeImage";
+import { useUploadFileStore } from "@/lib/store/store";
+import { PartialImageAnalysis } from "@/lib/types";
+import { getSchemaByPlatform } from "@/lib/utils";
+import { experimental_useObject as useObject } from "ai/react";
+import toast from "react-hot-toast";
+import { AnalysisSection } from "./analysis-section";
+import { ImagePreview } from "./image-preview";
 import { InitialView } from "./initial-view";
 import ModalSpinner from "./loaders/modal-spinner";
+import { Card } from "./ui/card";
+import { TextGenerateEffect } from "./ui/text-generate-effect";
 
 export function ImageAnalyzer() {
   const {
@@ -44,13 +45,18 @@ export function ImageAnalyzer() {
   });
 
   const getTitle = () => {
-    if (!previewUrl) return "Tekoälyllä tehostettu myynti-ilmoitusten luonti";
+    if (!previewUrl)
+      return (
+        <TextGenerateEffect
+          words={"Tekoälyllä tehostettu myynti-ilmoitusten luonti"}
+        />
+      );
     if (!object?.analysis) return "Kuvan analysointi";
     return "Myynti-ilmoituksen esikatselu";
   };
 
   return (
-    <div className="container max-w-4xl">
+    <div className="max-w-4xl">
       <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
         {getTitle()}
       </h1>
@@ -60,7 +66,7 @@ export function ImageAnalyzer() {
             <InitialView />
           </Card>
         ) : (
-          <Card className="p-6 rounded-lg shadow-lg">
+          <Card className="container p-6 rounded-lg shadow-lg">
             <ImagePreview
               onAnalyze={() => handleAnalyze(submit)}
               isLoading={isAiLoading}
