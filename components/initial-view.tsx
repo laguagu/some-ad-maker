@@ -28,20 +28,20 @@ export function InitialView() {
               uploadTitleRef.current,
               uploadContentRef.current.children,
             ],
-            { opacity: 0, y: 20 },
+            { opacity: 0, y: 20 }
           );
 
           gsap
             .timeline({
-              defaults: { duration: 0.6, ease: "power2.out" },
-              delay: 0.2,
+              defaults: { duration: 0.6, ease: "power2.out" }, // Oletusarvot animaatioille
+              delay: 0.2, // Viive ennen aikajanan käynnistymistä
             })
-            .to(uploadCardRef.current, { opacity: 1, y: 0 })
-            .to(uploadTitleRef.current, { opacity: 1, y: 0 }, "-=0.4")
+            .to(uploadCardRef.current, { opacity: 1, y: 0 }) // Ensimmäinen animaatio
+            .to(uploadTitleRef.current, { opacity: 1, y: 0 }, "-=0.4") // Toinen animaatio, alkaa 0.4 sekuntia ennen ensimmäisen päättymistä
             .to(
               Array.from(uploadContentRef.current.children),
-              { opacity: 1, y: 0, stagger: 0.1 },
-              "-=0.4",
+              { opacity: 1, y: 0, stagger: 0.1 }, // Kolmas animaatio, alkaa myös 0.4 sekuntia ennen edellisen päättymistä
+              "-=0.4"
             );
         }
       });

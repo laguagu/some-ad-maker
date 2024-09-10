@@ -69,3 +69,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Piilota vierityspalkki Webkit-selaimissa (Chrome, Safari) */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Piilota vierityspalkki Firefox-selaimessa */
+html {
+  scrollbar-width: none;
+}
+
+/* Piilota vierityspalkki IE ja Edge -selaimissa */
+body {
+  -ms-overflow-style: none;
+}
