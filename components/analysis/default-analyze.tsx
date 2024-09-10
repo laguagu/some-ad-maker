@@ -1,18 +1,18 @@
 "use client";
 import { useUploadFileStore } from "@/lib/store/store";
-import { useEffect, useRef, useState } from "react";
 import { useStyleStore } from "@/lib/store/useStyleStore";
+import { useEffect, useRef, useState } from "react";
 import {
-  AnalysisImage,
-  AnalysisHeader,
-  AnalysisFeatures,
-  AnalysisDescription,
-  AnalysisColorScheme,
   AnalysisCallToAction,
+  AnalysisColorScheme,
+  AnalysisDescription,
+  AnalysisFeatures,
   AnalysisHashtags,
+  AnalysisHeader,
+  AnalysisImage,
   InstagramSpecific,
-  TwitterSpecific,
   LinkedInSpecific,
+  TwitterSpecific,
   VisualDesign,
 } from ".";
 import { Card } from "../ui/card";
@@ -50,7 +50,7 @@ const DefaultAnalyze = ({
   }, [analysis]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-[600px] mx-auto">
       <div
         ref={localContentRef}
         className="p-6 border rounded-lg shadow-lg mx-auto"
