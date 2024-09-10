@@ -62,7 +62,7 @@ export function ImageAnalyzer() {
       </h1>
       {!object?.analysis ? (
         !previewUrl ? (
-          <Card className="p-6 rounded-lg shadow-lg">
+          <Card className="md:p-10 p-4 rounded-lg shadow-lg bg-slate-200">
             <InitialView />
           </Card>
         ) : (

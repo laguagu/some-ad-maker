@@ -54,8 +54,8 @@ export const AnimateText: React.FC = () => {
     <ul ref={listRef} className="space-y-4">
       {textSections.map((text, index) => (
         <li key={index} className="flex items-center space-x-3">
-          <CheckCircle className="h-6 w-6 text-green-500 icon" />
-          <span className="text-lg">{text}</span>
+          <CheckCircle className="h-5 w-5 lg:h-6 lg:w-6 text-green-500 icon flex-shrink-0" />
+          <span className="text-sm lg:text-base">{text}</span>
         </li>
       ))}
     </ul>

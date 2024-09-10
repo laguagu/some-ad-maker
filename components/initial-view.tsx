@@ -1,4 +1,4 @@
-import { useUploadFileStore } from "@/lib/store/store";
+import { useStyleStore } from "@/lib/store/useStyleStore";
 import gsap from "gsap";
 import { Info } from "lucide-react";
 import { useLayoutEffect, useRef } from "react";
@@ -12,7 +12,7 @@ export function InitialView() {
   const uploadTitleRef = useRef<HTMLHeadingElement>(null);
   const uploadContentRef = useRef<HTMLDivElement>(null);
 
-  const { hasAnimated, setHasAnimated } = useUploadFileStore();
+  const { hasAnimated, setHasAnimated } = useStyleStore();
 
   useLayoutEffect(() => {
     if (!hasAnimated) {
@@ -52,41 +52,45 @@ export function InitialView() {
   }, [hasAnimated, setHasAnimated]);
 
   return (
-    <div className="flex flex-col md:flex-row items-start gap-8">
-      <div className="md:w-2/3 space-y-4">
-        {/* Tähän GSAP Animaatio. Jokinen Ul listan teksti tulee yksitellen näkyviin j jokinen iconi pyörähtäen. */}
-        <Card>
+    <div className="flex flex-col lg:flex-row items-stretch gap-4 lg:gap-8">
+      <div className="w-full lg:w-2/3 space-y-4 flex flex-col">
+        <Card className="w-full flex-grow">
           <CardHeader>
-            <CardTitle>Ominaisuudet</CardTitle>
+            <CardTitle className="text-lg lg:text-xl">Ominaisuudet</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="h-full">
             <AnimateText />
           </CardContent>
         </Card>
-        <Card className="overflow-hidden">
+        <Card className="w-full flex-grow overflow-hidden">
           <CardHeader>
-            <CardTitle>Esimerkki julkaisu</CardTitle>
+            <CardTitle className="text-lg lg:text-xl">
+              Esimerkki julkaisu
+            </CardTitle>
           </CardHeader>
-          <CardContent className="p-0">
-            <div className="relative h-[350px] ">
-              <Scene />
-            </div>
+          <CardContent className="p-0 h-[250px] lg:h-[350px]">
+            <Scene />
           </CardContent>
         </Card>
       </div>
-      <div className="lg:w-1/3 space-y-8 flex-1">
-        <Card ref={uploadCardRef}>
+      <div className="w-full lg:w-1/3 flex flex-col">
+        <Card ref={uploadCardRef} className="w-full flex-grow">
           <CardHeader>
-            <CardTitle ref={uploadTitleRef}>Aloita tästä</CardTitle>
+            <CardTitle ref={uploadTitleRef} className="text-lg lg:text-xl">
+              Aloita tästä
+            </CardTitle>
           </CardHeader>
           <CardContent ref={uploadContentRef}>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-xs lg:text-sm text-gray-600 mb-4">
               Lataa kuva tuotteestasi ja anna Mainosmestarin luoda sinulle
               ammattimainen myynti-ilmoitus.
             </p>
-            <FileUpload />
-            <div className="mt-4 text-sm text-gray-500 flex items-start">
-              <Info className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
+            <div className="border-2  rounded-2xl">
+              {" "}
+              <FileUpload />
+            </div>
+            <div className="mt-4 text-xs lg:text-sm text-gray-500 flex items-start">
+              <Info className="h-4 w-4 lg:h-5 lg:w-5 mr-2 flex-shrink-0 mt-0.5" />
               <p>
                 Hyväksymme JPG, PNG ja WebP -kuvaformaatit. Parhaan tuloksen
                 saat kuvalla, jossa tuote näkyy selkeästi.

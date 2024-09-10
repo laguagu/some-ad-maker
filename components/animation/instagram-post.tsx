@@ -44,7 +44,23 @@ function InstagramPost() {
   const animationProgress = useRef(0);
 
   useEffect(() => {
+    // Aseta alkutila pieneksi ja läpinäkyväksi
+    if (groupRef.current) {
+      groupRef.current.scale.set(0.1, 0.1, 0.1);
+      groupRef.current.traverse((child) => {
+        if (
+          child instanceof THREE.Mesh &&
+          child.material &&
+          "opacity" in child.material
+        ) {
+          child.material.opacity = 0;
+        }
+      });
+    }
     setIsAnimationReady(true);
+    // Pieni viive ennen animaation aloittamista
+    const timer = setTimeout(() => setIsAnimationReady(true), 100);
+    return () => clearTimeout(timer);
   }, []);
 
   useFrame((state, delta) => {
@@ -57,13 +73,13 @@ function InstagramPost() {
 
       groupRef.current.scale.set(scale, scale, scale);
 
-      // Apply opacity to all children with materials
       groupRef.current.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          const meshChild = child as THREE.Mesh;
-          if (meshChild.material && "opacity" in meshChild.material) {
-            meshChild.material.opacity = opacity;
-          }
+        if (
+          child instanceof THREE.Mesh &&
+          child.material &&
+          "opacity" in child.material
+        ) {
+          child.material.opacity = opacity;
         }
       });
 
@@ -80,7 +96,9 @@ function InstagramPost() {
         position={[0, 0, 0]}
         center
       >
-        <BackgroundGradient>
+        <BackgroundGradient
+          className={`transition-opacity duration-500 ${isAnimationReady ? "opacity-100" : "opacity-0"}`}
+        >
           <div className="flex justify-center w-[400px] select-none">
             <Card className="w-[400px] max-w-md">
               <CardHeader className="flex flex-row items-center justify-between p-4">
@@ -118,7 +136,7 @@ function InstagramPost() {
                 />
               </CardContent>
               <CardFooter className="flex flex-col p-4">
-                <div className="flex justify-between items-center w-full mb-4">
+                <div className="flex justify-between items-center w-full">
                   <div className="flex gap-4">
                     <Heart className="h-6 w-6" style={{ userSelect: "none" }} />
                     <MessageCircle
@@ -178,11 +196,13 @@ function InstagramPost() {
 
 export function Scene() {
   return (
-    <Canvas camera={{ position: [0, 0, 5] }}>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} />
-      <InstagramPost />
-      <OrbitControls enableZoom={false} />
-    </Canvas>
+    <div className="w-full h-full">
+      <Canvas camera={{ position: [0, 0, 5] }}>
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} />
+        <InstagramPost />
+        <OrbitControls enableZoom={false} />
+      </Canvas>
+    </div>
   );
 }
