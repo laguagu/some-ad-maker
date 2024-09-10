@@ -59,8 +59,8 @@ function InstagramPost() {
     }
     setIsAnimationReady(true);
     // Pieni viive ennen animaation aloittamista
-    const timer = setTimeout(() => setIsAnimationReady(true), 100);
-    return () => clearTimeout(timer);
+    // const timer = setTimeout(() => setIsAnimationReady(true), 100);
+    // return () => clearTimeout(timer);
   }, []);
 
   useFrame((state, delta) => {
