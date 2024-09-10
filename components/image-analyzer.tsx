@@ -53,7 +53,7 @@ export function ImageAnalyzer() {
 
   const getTitle = () => {
     if (currentLayout === "initial")
-      return "Tekoälyllä tehostettu myynti-ilmoitusten luonti";
+      return "Mainos-Mestari - Myynti-ilmoituksen luonti";
     if (currentLayout === "preview") return "Kuvan analysointi";
     return "Myynti-ilmoituksen esikatselu";
   };
@@ -80,6 +80,7 @@ export function ImageAnalyzer() {
 
   return (
     <div className="max-w-4xl mx-auto">
+      
       <AnimatePresence mode="wait">
         <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
           {currentLayout === "initial" ? (
