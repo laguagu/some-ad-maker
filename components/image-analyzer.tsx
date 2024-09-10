@@ -66,10 +66,34 @@ export function ImageAnalyzer() {
     }
   }, [previewUrl, setCurrentLayout]);
 
-  const variants = {
-    initial: { opacity: 0, y: 20 },
-    enter: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 },
+  // Määrittelee animaatiovariantit lapsielementeille
+  const childVariants = {
+    initial: { opacity: 0, y: 20 }, // Alkuarvo: näkymätön ja siirtynyt 20 yksikköä alaspäin
+    enter: { opacity: 1, y: 0 }, // Sisääntulo: näkyvä ja siirtynyt takaisin alkuperäiseen paikkaan
+    exit: { opacity: 0, y: -20 }, // Poistuminen: näkymätön ja siirtynyt 20 yksikköä ylöspäin
+  };
+
+  // Määrittelee animaatiovariantit kontainerille
+  const containerVariants = {
+    initial: { opacity: 0, y: 20 }, // Alkuarvo: näkymätön ja siirtynyt 20 yksikköä alaspäin
+    enter: {
+      opacity: 1,
+      y: 0, // Sisääntulo: näkyvä ja siirtynyt takaisin alkuperäiseen paikkaan
+      transition: {
+        when: "beforeChildren", // Animaatio tapahtuu ennen lapsielementtien animaatioita
+        staggerChildren: 0.1, // Lapsielementtien animaatiot tapahtuvat 0.1 sekunnin välein
+        delayChildren: 0.1, // Lapsielementtien animaatiot alkavat 0.1 sekunnin viiveellä
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: -20, // Poistuminen: näkymätön ja siirtynyt 20 yksikköä ylöspäin
+      transition: {
+        when: "afterChildren", // Animaatio tapahtuu lapsielementtien animaatioiden jälkeen
+        staggerChildren: 0.1, // Lapsielementtien animaatiot tapahtuvat 0.1 sekunnin välein
+        staggerDirection: -1, // Lapsielementtien animaatiot tapahtuvat käänteisessä järjestyksessä
+      },
+    },
   };
 
   const handleGoBack = () => {
@@ -80,61 +104,50 @@ export function ImageAnalyzer() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      
       <AnimatePresence mode="wait">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          {currentLayout === "initial" ? (
-            <TextGenerateEffect words={getTitle()} />
-          ) : (
-            getTitle()
-          )}
-          {/* {getTitle()} */}
-        </h1>
-        {currentLayout === "initial" && (
-          <motion.div
-            key="initial"
-            variants={variants}
-            initial="initial"
-            animate="enter"
-            exit="exit"
-            transition={{ duration: 0.3 }}
+        <motion.div
+          key={currentLayout}
+          variants={containerVariants}
+          initial="initial"
+          animate="enter"
+          exit="exit"
+        >
+          <motion.h1
+            className="text-2xl font-bold text-gray-800 mb-6 text-center"
+            variants={childVariants}
           >
+            {currentLayout === "initial" ? (
+              <TextGenerateEffect words={getTitle()} />
+            ) : (
+              getTitle()
+            )}
+          </motion.h1>
+
+          {currentLayout === "initial" && (
             <Card className="md:p-10 p-4 rounded-lg shadow-lg bg-slate-200">
               <InitialView />
             </Card>
-          </motion.div>
-        )}
-        {currentLayout === "preview" && (
-          <motion.div
-            key="preview"
-            variants={variants}
-            initial="initial"
-            animate="enter"
-            exit="exit"
-            transition={{ duration: 0.3 }}
-          >
-            <Card className="container p-6 rounded-lg shadow-lg">
-              <ImagePreview
-                onAnalyze={() => handleAnalyze(submit)}
-                isLoading={isAiLoading}
-                onGoBack={handleGoBack}
-              />
-            </Card>
-          </motion.div>
-        )}
-        {currentLayout === "analysis" && (
-          <motion.div
-            key="analysis"
-            variants={variants}
-            initial="initial"
-            animate="enter"
-            exit="exit"
-            transition={{ duration: 0.3 }}
-          >
-            {isAiLoading && <ModalSpinner />}
-            {object?.analysis && <AnalysisSection analysis={object.analysis} />}
-          </motion.div>
-        )}
+          )}
+          {currentLayout === "preview" && (
+            <motion.div variants={childVariants}>
+              <Card className="container p-6 rounded-lg shadow-lg">
+                <ImagePreview
+                  onAnalyze={() => handleAnalyze(submit)}
+                  isLoading={isAiLoading}
+                  onGoBack={handleGoBack}
+                />
+              </Card>
+            </motion.div>
+          )}
+          {currentLayout === "analysis" && (
+            <motion.div variants={childVariants}>
+              {isAiLoading && <ModalSpinner />}
+              {object?.analysis && (
+                <AnalysisSection analysis={object.analysis} />
+              )}
+            </motion.div>
+          )}
+        </motion.div>
       </AnimatePresence>
     </div>
   );
