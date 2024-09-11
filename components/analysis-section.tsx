@@ -1,10 +1,8 @@
-import React, { use, useEffect, useMemo } from "react";
-import { StreamedAnalysis } from "@/lib/types";
-import { ViewRenderer } from "./view-render";
 import { useUploadFileStore } from "@/lib/store/store";
+import { StreamedAnalysis } from "@/lib/types";
+import { useEffect } from "react";
 import { FloatingNav } from "./nav/floating-nav";
-import { Card } from "./ui/card"; // shadcn component
-import { NavItems } from "./nav/nav-items";
+import { ViewRenderer } from "./view-render";
 
 type AnalysisSectionProps = {
   analysis: StreamedAnalysis;
@@ -15,6 +13,7 @@ export function AnalysisSection({ analysis }: AnalysisSectionProps) {
     analyzedImageUrl,
     analysisOptions,
     currentView,
+    isAnalysisComplete,
     setFile,
     setPreviewUrl,
     setAnalyzedImageUrl,
@@ -37,15 +36,16 @@ export function AnalysisSection({ analysis }: AnalysisSectionProps) {
   }, [analysis]);
   return (
     <div className="relative pb-16">
-      {" "}
-      {/* Lisätty padding-top */}
       <ViewRenderer
         currentView={currentView}
         analysis={analysis}
         imageUrl={analyzedImageUrl || ""}
         showColorScheme={analysisOptions.includeColorScheme}
       />
-      <FloatingNav onReupload={handleReupload} />
+      <FloatingNav
+        onReupload={handleReupload}
+        isAnalysisComplete={isAnalysisComplete}
+      />
     </div>
   );
 }

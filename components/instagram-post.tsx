@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { SetStateAction, useEffect, useRef, useState } from "react";
+import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 
 interface PostProps {
@@ -37,7 +38,7 @@ interface PostProps {
 export default function InstagramPost({
   analysis,
   imageUrl,
-  initialStoreName = "HuonekaluKauppa",
+  initialStoreName = "Mainosmestari",
 }: PostProps) {
   const { setContentRef, showHashtags, storeAvatarUrl, setStoreAvatarUrl } =
     useUploadFileStore();
@@ -238,12 +239,12 @@ export default function InstagramPost({
                       onChange={handleFurnitureChange}
                       onKeyDown={(e) => handleKeyDown(e, "furniture")}
                       onBlur={() => setIsEditingFurniture(false)}
-                      className="font-bold text-lg"
+                      className="font-bold text-lg "
                       autoFocus
                     />
                   ) : (
                     <h2
-                      className="font-bold text-lg cursor-pointer"
+                      className="font-bold text-lg cursor-pointer hover:text-gray-400 "
                       onClick={() => setIsEditingFurniture(true)}
                     >
                       {analysis.furniture}
@@ -252,7 +253,7 @@ export default function InstagramPost({
                   <Edit
                     size={16}
                     className={clsx(
-                      "absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-400 transition-opacity duration-300",
+                      "absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-400  transition-opacity duration-300",
                       {
                         "opacity-0": isEditingFurniture,
                         "opacity-0 group-hover:opacity-100":
@@ -263,34 +264,43 @@ export default function InstagramPost({
                 </div>
               )}
               {analysis.price && (
-                <div className="relative group">
-                  {isEditingPrice ? (
-                    <Input
-                      value={analysis.price}
-                      onChange={handlePriceChange}
-                      onKeyDown={(e) => handleKeyDown(e, "price")}
-                      onBlur={() => setIsEditingPrice(false)}
-                      className="font-semibold"
-                      autoFocus
-                    />
-                  ) : (
-                    <p
-                      className="font-semibold cursor-pointer"
-                      onClick={() => setIsEditingPrice(true)}
-                    >
-                      {analysis.price}
-                    </p>
-                  )}
-                  <Edit
-                    size={16}
-                    className={clsx(
-                      "absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-400 transition-opacity duration-300",
-                      {
-                        "opacity-0": isEditingPrice,
-                        "opacity-0 group-hover:opacity-100": !isEditingPrice,
-                      },
+                <div className="flex items-center space-x-1.5 my-2">
+                  <Label
+                    htmlFor="price"
+                    className="text-lg font-semibold whitespace-nowrap"
+                  >
+                    Hinta:
+                  </Label>
+                  <div className="relative group flex-grow ">
+                    {isEditingPrice ? (
+                      <Input
+                        id="price"
+                        value={analysis.price}
+                        onChange={handlePriceChange}
+                        onKeyDown={(e) => handleKeyDown(e, "price")}
+                        onBlur={() => setIsEditingPrice(false)}
+                        className="font-semibold pl-0 pr-6"
+                        autoFocus
+                      />
+                    ) : (
+                      <p
+                        className="font-semibold cursor-pointer text-lg hover:text-gray-400 transition-colors duration-200 pl-0"
+                        onClick={() => setIsEditingPrice(true)}
+                      >
+                        {analysis.price}
+                      </p>
                     )}
-                  />
+                    <Edit
+                      size={16}
+                      className={clsx(
+                        "absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-400 transition-opacity duration-300",
+                        {
+                          "opacity-0": isEditingPrice,
+                          "opacity-0 group-hover:opacity-100": !isEditingPrice,
+                        },
+                      )}
+                    />
+                  </div>
                 </div>
               )}
               {analysis.description && (
@@ -307,7 +317,7 @@ export default function InstagramPost({
                     />
                   ) : (
                     <p
-                      className="cursor-pointer"
+                      className="cursor-pointer hover:text-gray-400"
                       onClick={() => setIsEditingDescription(true)}
                     >
                       {analysis.description}
@@ -316,7 +326,7 @@ export default function InstagramPost({
                   <Edit
                     size={16}
                     className={clsx(
-                      "absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-400 transition-opacity duration-300",
+                      "absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-400  transition-opacity duration-300",
                       {
                         "opacity-0": isEditingDescription,
                         "opacity-0 group-hover:opacity-100":

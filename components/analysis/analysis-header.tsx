@@ -69,7 +69,7 @@ export const AnalysisHeader: React.FC<AnalysisHeaderProps> = ({
         </div>
       </div>
       {analysis.price !== undefined && (
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1.5">
           <label
             htmlFor="price"
             className="text-lg font-semibold whitespace-nowrap"

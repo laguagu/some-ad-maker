@@ -43,7 +43,6 @@ export function ImageAnalyzer() {
     onFinish: () => {
       setIsAnalysisComplete(true);
       setIsLoading(false);
-      setCurrentLayout("analysis");
     },
     onError(error: { message: string }) {
       console.error("Analysis error:", JSON.parse(error.message).error);
@@ -102,6 +101,11 @@ export function ImageAnalyzer() {
     setPreviewUrl(null);
   };
 
+  const handleStartAnalysis = async () => {
+    await handleAnalyze(submit);
+    setCurrentLayout("analysis");
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
       <AnimatePresence mode="wait">
@@ -133,7 +137,7 @@ export function ImageAnalyzer() {
             <motion.div variants={childVariants}>
               <Card className="container p-6 rounded-lg shadow-lg">
                 <ImagePreview
-                  onAnalyze={() => handleAnalyze(submit)}
+                  onAnalyze={handleStartAnalysis}
                   isLoading={isAiLoading}
                   onGoBack={handleGoBack}
                 />
