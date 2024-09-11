@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useUploadFileStore } from "@/lib/store/store";
-import { useStyleStore } from "@/lib/store/useStyleStore";
 import { StreamedAnalysis } from "@/lib/types";
 import clsx from "clsx";
 import { gsap } from "gsap";
@@ -36,7 +35,7 @@ interface PostProps {
 }
 
 export default function InstagramPost({
-  analysis,
+  analysis: initialAnalysis,
   imageUrl,
   initialStoreName = "Mainosmestari",
 }: PostProps) {
@@ -49,7 +48,7 @@ export default function InstagramPost({
   const [isEditingPrice, setIsEditingPrice] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { analysis: editableAnalysis, updateAnalysisField } = useStyleStore();
+  const [analysis, setAnalysis] = useState(initialAnalysis);
 
   const heartRef = useRef<SVGSVGElement>(null);
   const messageRef = useRef<SVGSVGElement>(null);
@@ -81,18 +80,11 @@ export default function InstagramPost({
     }
   };
 
-  const handleFurnitureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateAnalysisField("furniture", e.target.value);
-  };
-
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateAnalysisField("price", e.target.value);
-  };
-
-  const handleDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
+  const handleAnalysisChange = (
+    field: keyof StreamedAnalysis,
+    value: string,
   ) => {
-    updateAnalysisField("description", e.target.value);
+    setAnalysis((prev: any) => ({ ...prev, [field]: value }));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent, field: string) => {
@@ -112,6 +104,9 @@ export default function InstagramPost({
     }
   };
 
+  useEffect(() => {
+    console.log("analysis", analysis);
+  }, [analysis]);
   const animateIcon = (iconRef: React.RefObject<SVGSVGElement>) => {
     gsap.to(iconRef.current, {
       rotation: 360,
@@ -236,7 +231,9 @@ export default function InstagramPost({
                   {isEditingFurniture ? (
                     <Input
                       value={analysis.furniture}
-                      onChange={handleFurnitureChange}
+                      onChange={(e) =>
+                        handleAnalysisChange("furniture", e.target.value)
+                      }
                       onKeyDown={(e) => handleKeyDown(e, "furniture")}
                       onBlur={() => setIsEditingFurniture(false)}
                       className="font-bold text-lg "
@@ -276,7 +273,9 @@ export default function InstagramPost({
                       <Input
                         id="price"
                         value={analysis.price}
-                        onChange={handlePriceChange}
+                        onChange={(e) =>
+                          handleAnalysisChange("price", e.target.value)
+                        }
                         onKeyDown={(e) => handleKeyDown(e, "price")}
                         onBlur={() => setIsEditingPrice(false)}
                         className="font-semibold pl-0 pr-6"
@@ -308,7 +307,9 @@ export default function InstagramPost({
                   {isEditingDescription ? (
                     <Textarea
                       value={analysis.description}
-                      onChange={handleDescriptionChange}
+                      onChange={(e) =>
+                        handleAnalysisChange("description", e.target.value)
+                      }
                       onKeyDown={(e) => handleKeyDown(e, "description")}
                       onBlur={() => setIsEditingDescription(false)}
                       className="w-full p-2 border rounded"
