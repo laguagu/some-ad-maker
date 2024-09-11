@@ -15,12 +15,12 @@ import clsx from "clsx";
 import { gsap } from "gsap";
 import {
   Bookmark,
-  Check,
   Edit,
   Heart,
   MessageCircle,
   MoreVertical,
   Send,
+  Star,
   Upload,
 } from "lucide-react";
 import Image from "next/image";
@@ -343,7 +343,7 @@ export default function InstagramPost({
                   {analysis.keyFeatures.map(
                     (feature: string, index: number) => (
                       <li key={index} className="flex items-center gap-2">
-                        <Check className="h-4 w-4 text-green-500" />
+                        <Star className="h-5 w-5 text-yellow-400 flex-shrink-0" />
                         <span>{feature}</span>
                       </li>
                     )
