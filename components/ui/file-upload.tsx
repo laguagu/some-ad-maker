@@ -29,7 +29,6 @@ const secondaryVariant = {
 export const FileUpload = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { file, setFile, setPreviewUrl } = useUploadFileStore();
-  const { hasAnimated, setHasAnimated } = useUploadFileStore();
 
   const handleFileChange = useCallback(
     (newFiles: File[]) => {

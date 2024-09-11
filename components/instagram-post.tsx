@@ -1,33 +1,36 @@
 "use client";
 
-import {
-  Heart,
-  MessageCircle,
-  Send,
-  Bookmark,
-  MoreHorizontal,
-  Check,
-  Edit,
-  Upload,
-  MoreVertical,
-} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useUploadFileStore } from "@/lib/store/store";
+import { useStyleStore } from "@/lib/store/useStyleStore";
 import { StreamedAnalysis } from "@/lib/types";
+import clsx from "clsx";
+import { gsap } from "gsap";
+import {
+  Bookmark,
+  Check,
+  Edit,
+  Heart,
+  MessageCircle,
+  MoreVertical,
+  Send,
+  Upload,
+} from "lucide-react";
 import Image from "next/image";
 import { SetStateAction, useEffect, useRef, useState } from "react";
-import { useUploadFileStore } from "@/lib/store/store";
+import { Textarea } from "./ui/textarea";
 
 interface PostProps {
-  analysis: StreamedAnalysis;
-  imageUrl: string;
+  analysis: StreamedAnalysis | any;
+  imageUrl?: string;
   initialStoreName?: string;
 }
 
@@ -41,7 +44,16 @@ export default function InstagramPost({
   const localContentRef = useRef<HTMLDivElement>(null);
   const [storeName, setStoreName] = useState(initialStoreName);
   const [isEditingName, setIsEditingName] = useState(false);
+  const [isEditingFurniture, setIsEditingFurniture] = useState(false);
+  const [isEditingPrice, setIsEditingPrice] = useState(false);
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { analysis: editableAnalysis, updateAnalysisField } = useStyleStore();
+
+  const heartRef = useRef<SVGSVGElement>(null);
+  const messageRef = useRef<SVGSVGElement>(null);
+  const sendRef = useRef<SVGSVGElement>(null);
+  const bookmarkRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     setContentRef(localContentRef);
@@ -68,8 +80,47 @@ export default function InstagramPost({
     }
   };
 
+  const handleFurnitureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateAnalysisField("furniture", e.target.value);
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateAnalysisField("price", e.target.value);
+  };
+
+  const handleDescriptionChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    updateAnalysisField("description", e.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent, field: string) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (field) {
+        case "furniture":
+          setIsEditingFurniture(false);
+          break;
+        case "price":
+          setIsEditingPrice(false);
+          break;
+        case "description":
+          setIsEditingDescription(false);
+          break;
+      }
+    }
+  };
+
+  const animateIcon = (iconRef: React.RefObject<SVGSVGElement>) => {
+    gsap.to(iconRef.current, {
+      rotation: 360,
+      duration: 0.5,
+      ease: "power2.out",
+    });
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mb-10">
       <div className="flex items-center justify-center space-x-4">
         <Avatar className="w-16 h-16">
           <AvatarImage src={storeAvatarUrl ?? ""} alt="Store avatar" />
@@ -148,28 +199,133 @@ export default function InstagramPost({
           <CardFooter className="flex flex-col p-4">
             <div className="flex justify-between items-center w-full mb-4">
               <div className="flex gap-4">
-                <Button variant="ghost" size="icon">
-                  <Heart className="h-6 w-6" />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => animateIcon(heartRef)}
+                >
+                  <Heart className="h-6 w-6" ref={heartRef} />
                 </Button>
-                <Button variant="ghost" size="icon">
-                  <MessageCircle className="h-6 w-6" />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => animateIcon(messageRef)}
+                >
+                  <MessageCircle className="h-6 w-6" ref={messageRef} />
                 </Button>
-                <Button variant="ghost" size="icon">
-                  <Send className="h-6 w-6" />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => animateIcon(sendRef)}
+                >
+                  <Send className="h-6 w-6" ref={sendRef} />
                 </Button>
               </div>
-              <Button variant="ghost" size="icon">
-                <Bookmark className="h-6 w-6" />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => animateIcon(bookmarkRef)}
+              >
+                <Bookmark className="h-6 w-6" ref={bookmarkRef} />
               </Button>
             </div>
             <div className="space-y-2">
               {analysis.furniture && (
-                <h2 className="font-bold text-lg">{analysis.furniture}</h2>
+                <div className="relative group">
+                  {isEditingFurniture ? (
+                    <Input
+                      value={analysis.furniture}
+                      onChange={handleFurnitureChange}
+                      onKeyDown={(e) => handleKeyDown(e, "furniture")}
+                      onBlur={() => setIsEditingFurniture(false)}
+                      className="font-bold text-lg"
+                      autoFocus
+                    />
+                  ) : (
+                    <h2
+                      className="font-bold text-lg cursor-pointer"
+                      onClick={() => setIsEditingFurniture(true)}
+                    >
+                      {analysis.furniture}
+                    </h2>
+                  )}
+                  <Edit
+                    size={16}
+                    className={clsx(
+                      "absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-400 transition-opacity duration-300",
+                      {
+                        "opacity-0": isEditingFurniture,
+                        "opacity-0 group-hover:opacity-100":
+                          !isEditingFurniture,
+                      },
+                    )}
+                  />
+                </div>
               )}
               {analysis.price && (
-                <p className="font-semibold">{analysis.price}</p>
+                <div className="relative group">
+                  {isEditingPrice ? (
+                    <Input
+                      value={analysis.price}
+                      onChange={handlePriceChange}
+                      onKeyDown={(e) => handleKeyDown(e, "price")}
+                      onBlur={() => setIsEditingPrice(false)}
+                      className="font-semibold"
+                      autoFocus
+                    />
+                  ) : (
+                    <p
+                      className="font-semibold cursor-pointer"
+                      onClick={() => setIsEditingPrice(true)}
+                    >
+                      {analysis.price}
+                    </p>
+                  )}
+                  <Edit
+                    size={16}
+                    className={clsx(
+                      "absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-400 transition-opacity duration-300",
+                      {
+                        "opacity-0": isEditingPrice,
+                        "opacity-0 group-hover:opacity-100": !isEditingPrice,
+                      },
+                    )}
+                  />
+                </div>
               )}
-              {analysis.description && <p>{analysis.description}</p>}
+              {analysis.description && (
+                <div className="relative group">
+                  {isEditingDescription ? (
+                    <Textarea
+                      value={analysis.description}
+                      onChange={handleDescriptionChange}
+                      onKeyDown={(e) => handleKeyDown(e, "description")}
+                      onBlur={() => setIsEditingDescription(false)}
+                      className="w-full p-2 border rounded"
+                      rows={6}
+                      autoFocus
+                    />
+                  ) : (
+                    <p
+                      className="cursor-pointer"
+                      onClick={() => setIsEditingDescription(true)}
+                    >
+                      {analysis.description}
+                    </p>
+                  )}
+                  <Edit
+                    size={16}
+                    className={clsx(
+                      "absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-400 transition-opacity duration-300",
+                      {
+                        "opacity-0": isEditingDescription,
+                        "opacity-0 group-hover:opacity-100":
+                          !isEditingDescription,
+                      },
+                    )}
+                  />
+                </div>
+              )}
               {analysis.keyFeatures && analysis.keyFeatures.length > 0 && (
                 <ul className="space-y-1">
                   {analysis.keyFeatures.map(

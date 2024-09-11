@@ -1,25 +1,25 @@
-import React, { useState, useEffect, useRef, use } from "react";
-import { Tag, Edit2 } from "lucide-react";
+import { useStyleStore } from "@/lib/store/useStyleStore";
+import clsx from "clsx";
+import { Edit2, Tag } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { Input } from "../ui/input";
 
 interface AnalysisHeaderProps {
   furniture: string;
   price?: string;
   textColor: string;
-  onFurnitureChange?: (value: string) => void;
-  onPriceChange?: (value: string) => void;
 }
 
 export const AnalysisHeader: React.FC<AnalysisHeaderProps> = ({
   furniture,
   price,
   textColor,
-  onFurnitureChange,
-  onPriceChange,
 }) => {
   const [editablePrice, setEditablePrice] = useState(price || "");
   const [isFurnitureEditing, setIsFurnitureEditing] = useState(false);
   const [isPriceEditing, setIsPriceEditing] = useState(false);
   const furnitureRef = useRef<HTMLDivElement>(null);
+  const { analysis, updateAnalysisField } = useStyleStore();
 
   useEffect(() => {
     if (furnitureRef.current) {
@@ -30,13 +30,12 @@ export const AnalysisHeader: React.FC<AnalysisHeaderProps> = ({
 
   const handleFurnitureChange = () => {
     const newValue = furnitureRef.current?.textContent || "";
-    onFurnitureChange?.(newValue);
+    updateAnalysisField("furniture", newValue);
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    setEditablePrice(newValue);
-    onPriceChange?.(newValue);
+    updateAnalysisField("price", newValue);
   };
 
   return (
@@ -46,7 +45,10 @@ export const AnalysisHeader: React.FC<AnalysisHeaderProps> = ({
           <Tag className="mr-2" size={24} />
           <div
             ref={furnitureRef}
-            className="text-2xl font-bold outline-none mr-2"
+            className={clsx("text-2xl font-bold mr-2", {
+              "border-blue-500": isFurnitureEditing || isPriceEditing,
+              "border-transparent": !isFurnitureEditing && !isPriceEditing,
+            })}
             style={{ color: textColor }}
             contentEditable
             suppressContentEditableWarning
@@ -56,46 +58,54 @@ export const AnalysisHeader: React.FC<AnalysisHeaderProps> = ({
           />
           <Edit2
             size={16}
-            className={`edit-icon text-gray-400 transition-opacity duration-300 ${
-              isFurnitureEditing
-                ? "opacity-0"
-                : "opacity-100 group-hover:text-blue-500"
-            }`}
+            className={clsx(
+              "edit-icon text-gray-400 transition-opacity duration-300",
+              {
+                "opacity-0": isFurnitureEditing,
+                "opacity-100 group-hover:text-blue-500": !isFurnitureEditing,
+              },
+            )}
           />
         </div>
       </div>
-      {editablePrice !== undefined && (
-        <div
-          className="text-xl font-semibold mb-4 flex items-center relative group"
-          style={{ color: textColor }}
-        >
-          <span className="mr-2  flex-shrink-0">Hinta:</span>
+      {analysis.price !== undefined && (
+        <div className="flex items-center space-x-2">
+          <label
+            htmlFor="price"
+            className="text-lg font-semibold whitespace-nowrap"
+            style={{ color: textColor }}
+          >
+            Hinta:
+          </label>
           <div className="relative flex items-center">
-            <input
+            <Input
+              id="price"
               type="text"
-              value={editablePrice}
+              value={analysis.price}
               onChange={handlePriceChange}
               onFocus={() => setIsPriceEditing(true)}
               onBlur={() => setIsPriceEditing(false)}
-              className={`bg-transparent outline-none text-xl font-semibold leading-none p-0 mt-1 ${
-                isPriceEditing
-                  ? "border-b-2 border-blue-500"
-                  : "border-b-2 border-transparent"
-              }`}
+              className={clsx(
+                "bg-transparent outline-none text-xl font-semibold leading-none p-0 max-w-[150px] w-full",
+                {
+                  "border-blue-500": isPriceEditing,
+                  "border-transparent": !isPriceEditing,
+                },
+              )}
               style={{
                 color: textColor,
-                width: `${editablePrice.length + 2}ch`,
                 transition: "border-color 0.3s ease",
-                lineHeight: "1.15", // Tämä auttaa kohdistamaan tekstin vertikaalisesti
               }}
             />
             <Edit2
               size={16}
-              className={`edit-icon ml-2 text-gray-400 transition-opacity duration-300 flex-shrink-0 ${
-                isPriceEditing
-                  ? "opacity-0"
-                  : "opacity-100 group-hover:text-blue-500"
-              }`}
+              className={clsx(
+                "edit-icon text-gray-400 transition-opacity duration-300 absolute right-2",
+                {
+                  "opacity-0": isPriceEditing,
+                  "opacity-100 group-hover:text-blue-500": !isPriceEditing,
+                },
+              )}
             />
           </div>
         </div>

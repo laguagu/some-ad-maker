@@ -1,7 +1,7 @@
 "use client";
 import { useUploadFileStore } from "@/lib/store/store";
 import { useStyleStore } from "@/lib/store/useStyleStore";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   AnalysisCallToAction,
   AnalysisColorScheme,
@@ -26,31 +26,31 @@ const DefaultAnalyze = ({
   imageUrl: string;
   showColorScheme: boolean;
 }) => {
+  console.log("analysis", analysis);
+
   const { showHashtags, analysisOptions, setContentRef } = useUploadFileStore();
   const localContentRef = useRef<HTMLDivElement>(null);
   const platform = analysisOptions.platform;
 
-  const { backgroundColor, textColor, font, fontSize } = useStyleStore();
-  const [editableAnalysis, setEditableAnalysis] = useState(analysis);
-
-  const handleFurnitureChange = (value: string) => {
-    setEditableAnalysis((prev: any) => ({ ...prev, furniture: value }));
-  };
-
-  const handlePriceChange = (value: string) => {
-    setEditableAnalysis((prev: any) => ({ ...prev, price: value }));
-  };
+  const {
+    backgroundColor,
+    textColor,
+    font,
+    fontSize,
+    setAnalysis,
+    analysis: editableAnalysis,
+  } = useStyleStore();
 
   useEffect(() => {
     setContentRef(localContentRef);
   }, [setContentRef]);
 
   useEffect(() => {
-    setEditableAnalysis(analysis);
-  }, [analysis]);
+    setAnalysis(analysis);
+  }, [analysis, setAnalysis]);
 
   return (
-    <div className="space-y-8 max-w-[600px] mx-auto">
+    <div className="space-y-8 max-w-[600px] mx-auto mb-10">
       <div
         ref={localContentRef}
         className="p-6 border rounded-lg shadow-lg mx-auto"
@@ -67,8 +67,6 @@ const DefaultAnalyze = ({
           furniture={editableAnalysis.furniture}
           price={editableAnalysis.price}
           textColor={textColor}
-          onFurnitureChange={handleFurnitureChange}
-          onPriceChange={handlePriceChange}
         />
         <AnalysisFeatures
           features={analysis.keyFeatures}

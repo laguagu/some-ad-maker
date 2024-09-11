@@ -105,6 +105,7 @@ export function ImageAnalyzer() {
   return (
     <div className="max-w-4xl mx-auto">
       <AnimatePresence mode="wait">
+        {/* <InstagramPost analysis={mockAnalysis} /> */}
         <motion.div
           key={currentLayout}
           variants={containerVariants}
@@ -113,7 +114,7 @@ export function ImageAnalyzer() {
           exit="exit"
         >
           <motion.h1
-            className="text-2xl font-bold text-gray-800 mb-6 text-center"
+            className="text-2xl font-bold text-gray-800 my-6 text-center"
             variants={childVariants}
           >
             {currentLayout === "initial" ? (

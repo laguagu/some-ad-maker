@@ -14,6 +14,7 @@ export const AnalysisImage = ({
           src={imageUrl}
           alt={furniture || "Kuva analysoidusta tuotteesta"}
           fill
+          quality={100} // Määrittää kuvan laadun 100%
           style={{ objectFit: "cover" }}
           sizes="(max-width: 300px) 100vw, 300px"
           className="rounded-xl"
