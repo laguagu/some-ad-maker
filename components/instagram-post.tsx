@@ -82,7 +82,7 @@ export default function InstagramPost({
 
   const handleAnalysisChange = (
     field: keyof StreamedAnalysis,
-    value: string,
+    value: string
   ) => {
     setAnalysis((prev: any) => ({ ...prev, [field]: value }));
   };
@@ -104,10 +104,11 @@ export default function InstagramPost({
     }
   };
 
-  useEffect(() => {
-    console.log("analysis", analysis);
-  }, [analysis]);
   const animateIcon = (iconRef: React.RefObject<SVGSVGElement>) => {
+    // Reset the icon's rotation to 0 before starting the new animation
+    gsap.set(iconRef.current, { rotation: 0 });
+
+    // Animate the icon
     gsap.to(iconRef.current, {
       rotation: 360,
       duration: 0.5,
@@ -255,7 +256,7 @@ export default function InstagramPost({
                         "opacity-0": isEditingFurniture,
                         "opacity-0 group-hover:opacity-100":
                           !isEditingFurniture,
-                      },
+                      }
                     )}
                   />
                 </div>
@@ -296,7 +297,7 @@ export default function InstagramPost({
                         {
                           "opacity-0": isEditingPrice,
                           "opacity-0 group-hover:opacity-100": !isEditingPrice,
-                        },
+                        }
                       )}
                     />
                   </div>
@@ -332,7 +333,7 @@ export default function InstagramPost({
                         "opacity-0": isEditingDescription,
                         "opacity-0 group-hover:opacity-100":
                           !isEditingDescription,
-                      },
+                      }
                     )}
                   />
                 </div>
@@ -345,7 +346,7 @@ export default function InstagramPost({
                         <Check className="h-4 w-4 text-green-500" />
                         <span>{feature}</span>
                       </li>
-                    ),
+                    )
                   )}
                 </ul>
               )}
