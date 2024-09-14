@@ -65,7 +65,7 @@ export function InitialView() {
         </Card>
         <Card className="w-full flex-grow overflow-hidden">
           <CardHeader>
-            <CardTitle className="text-lg lg:text-xl flex justify-between items-center bg-slate-200 py-2 rounded-full px-4 border-2">
+            <CardTitle className="text-lg lg:text-xl flex justify-between items-center bg-slate-200 bg-opacity-25 py-2 rounded-full px-4 border-2">
               <span>Esimerkki julkaisu</span>
               <div className="flex items-center space-x-4">
                 <div className="flex items-center">
