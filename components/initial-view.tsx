@@ -1,9 +1,10 @@
 import { useStyleStore } from "@/lib/store/useStyleStore";
 import gsap from "gsap";
-import { Info } from "lucide-react";
+import { Heart, Info, MessageCircle } from "lucide-react";
 import { useLayoutEffect, useRef } from "react";
 import { AnimateText } from "./animation/gsap";
 import { Scene } from "./animation/instagram-post";
+import NumberTicker from "./magicui/number-ticker";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { FileUpload } from "./ui/file-upload";
 
@@ -64,8 +65,18 @@ export function InitialView() {
         </Card>
         <Card className="w-full flex-grow overflow-hidden">
           <CardHeader>
-            <CardTitle className="text-lg lg:text-xl">
-              Esimerkki julkaisu
+            <CardTitle className="text-lg lg:text-xl flex justify-between items-center bg-slate-200 py-2 rounded-full px-4 border-2">
+              <span>Esimerkki julkaisu</span>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center">
+                  <Heart className="w-5 h-5 text-red-500  mr-2" />
+                  <NumberTicker value={425} className="text-lg font-bold" />
+                </div>
+                <div className="flex items-center">
+                  <MessageCircle className="w-5 h-5 text-blue-500 mr-2" />
+                  <NumberTicker value={44} className="text-lg font-bold" />
+                </div>
+              </div>
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0 h-[250px] lg:h-[350px]">

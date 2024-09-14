@@ -82,7 +82,7 @@ export default function InstagramPost({
 
   const handleAnalysisChange = (
     field: keyof StreamedAnalysis,
-    value: string
+    value: string,
   ) => {
     setAnalysis((prev: any) => ({ ...prev, [field]: value }));
   };
@@ -256,7 +256,7 @@ export default function InstagramPost({
                         "opacity-0": isEditingFurniture,
                         "opacity-0 group-hover:opacity-100":
                           !isEditingFurniture,
-                      }
+                      },
                     )}
                   />
                 </div>
@@ -297,7 +297,7 @@ export default function InstagramPost({
                         {
                           "opacity-0": isEditingPrice,
                           "opacity-0 group-hover:opacity-100": !isEditingPrice,
-                        }
+                        },
                       )}
                     />
                   </div>
@@ -333,7 +333,7 @@ export default function InstagramPost({
                         "opacity-0": isEditingDescription,
                         "opacity-0 group-hover:opacity-100":
                           !isEditingDescription,
-                      }
+                      },
                     )}
                   />
                 </div>
@@ -346,7 +346,7 @@ export default function InstagramPost({
                         <Star className="h-5 w-5 text-yellow-400 flex-shrink-0" />
                         <span>{feature}</span>
                       </li>
-                    )
+                    ),
                   )}
                 </ul>
               )}
