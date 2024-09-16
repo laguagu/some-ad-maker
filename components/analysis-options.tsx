@@ -1,8 +1,7 @@
-import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useUploadFileStore } from "@/lib/store/store";
 import {
   Select,
   SelectContent,
@@ -11,11 +10,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useUploadFileStore } from "@/lib/store/store";
 import {
   IconBrandInstagram,
-  IconBrandTwitter,
   IconBrandLinkedin,
+  IconBrandTwitter,
   IconWorld,
 } from "@tabler/icons-react";
 import { Castle, Globe, Lightbulb, Trees } from "lucide-react";
@@ -84,6 +83,7 @@ export function AnalysisOptions() {
         <div className="flex items-center space-x-2">
           <Checkbox
             id="removeBackground"
+            disabled={true}
             checked={analysisOptions.removeBackground}
             onCheckedChange={(checked) => {
               setAnalysisOptions({
@@ -93,7 +93,7 @@ export function AnalysisOptions() {
             }}
           />
           <Label htmlFor="removeBackground" className="text-sm">
-            Poista kuvan tausta
+            Poista kuvan tausta - Ei käytössä tässä versiossa
           </Label>
         </div>
 

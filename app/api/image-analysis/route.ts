@@ -6,7 +6,7 @@ import sharp from "sharp";
 
 export const maxDuration = 35;
 // Aseta tämä true:ksi käyttääksesi mockattua dataa
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 const llmModel = openai("gpt-4o-2024-08-06");
 const ALLOWED_FORMATS = ["png", "jpeg", "jpg", "gif", "webp"];
 
@@ -34,7 +34,7 @@ async function validateAndResizeImage(base64Image: string): Promise<Buffer> {
 }
 
 // Mockattu data-objekti
-export const mockAnalysis = {
+const mockAnalysis = {
   analysis: {
     furniture: "Moderni jakkara",
     keyFeatures: [

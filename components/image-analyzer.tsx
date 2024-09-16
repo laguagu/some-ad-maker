@@ -52,7 +52,7 @@ export function ImageAnalyzer() {
 
   const getTitle = () => {
     if (currentLayout === "initial")
-      return "Mainos-Mestari 🪄  Myynti-ilmoituksen luonti";
+      return "Mainos-Mestari ✨ Myynti-ilmoituksen luonti";
     if (currentLayout === "preview") return "Kuvan analysointi";
     return "Myynti-ilmoituksen esikatselu";
   };
