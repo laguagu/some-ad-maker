@@ -18,10 +18,12 @@ Tässä muutamia kuvia sovelluksen eri näkymistä ja toiminnallisuuksista:
 
 ### Default näkymä
 ![Default näkymä](/docs/images/edit-1.png)
+
 *Vaihda näkymää perinteisen ja Instagram näkymän välillä ja muokkaa myynti-ilmoituksen kenttiä haluammallasi tavalla*
 
 ### Instagram näkymä
 ![Instagram näkymä](/docs/images/edit-2.png)
+
 *Voit vaihtaa työkalupalkista näkymää halutessasi myös ja ladata myynti-ilmoituksen*
 
 ## Ominaisuudet
