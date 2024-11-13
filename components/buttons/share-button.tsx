@@ -1,12 +1,11 @@
-import { PartialImageAnalysis, StreamedAnalysis } from "@/lib/types";
 import React from "react";
 import {
-  FacebookShareButton,
-  TwitterShareButton,
-  LinkedinShareButton,
   FacebookIcon,
-  TwitterIcon,
+  FacebookShareButton,
   LinkedinIcon,
+  LinkedinShareButton,
+  TwitterIcon,
+  TwitterShareButton,
 } from "react-share";
 
 type ShareButtonProps = {
@@ -14,7 +13,7 @@ type ShareButtonProps = {
 };
 
 const ShareButton: React.FC<ShareButtonProps> = ({ analysis }) => {
-  const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/analysis/latest`;
+  const shareUrl = `/analysis/latest`;
 
   // Delete duplicate hashtags
   const cleanHashtags = (hashtags: string[] | undefined) =>

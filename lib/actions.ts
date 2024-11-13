@@ -1,7 +1,4 @@
 "use server";
-import { revalidatePath } from "next/cache";
-import { saveAnalysis } from "./save-analysis";
-import { FlexibleImageAnalysis } from "./types";
 
 export async function removeBackGroundAction(
   formData: FormData,
@@ -25,17 +22,3 @@ export async function removeBackGroundAction(
   return `data:image/png;base64,${image}`;
 }
 
-export async function saveAnalysisAction(analysis: FlexibleImageAnalysis) {
-  try {
-    console.log("Tallennettava analyysi:", analysis.furniture);
-
-    const id = await saveAnalysis(analysis);
-    console.log(`Analyysi tallennettu ID:llä ${id}`);
-
-    revalidatePath(`/analysis/${id}`);
-    return { id, analysisUrl: `/analysis/${id}` };
-  } catch (error) {
-    console.error("Virhe analyysin tallennuksessa:", error);
-    throw error;
-  }
-}

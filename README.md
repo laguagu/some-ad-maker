@@ -1,150 +1,176 @@
-# Ensimmäinen versio mainosmestari soveluksesta ( Ei opiskelijaryhmän tekemä )
+# AI-Powered Ad Image Generator (mainosmestari beta version)
 
 ## Projektin kuvaus
 
-Tämä sovellus on tehokas työkalu myynti-ilmoitusten luomiseen tekoälyn avulla. Se mahdollistaa kuvien lataamisen, automaattisen myynti-ilmoituksen generoinnin ja sen jälkeen ilmoituksen visuaalisen muokkaamisen. Lopputuloksena on ammattimainen ja houkutteleva myynti-ilmoitus, jonka voi helposti jakaa sosiaalisessa mediassa tai tallentaa myöhempää käyttöä varten.
+Tämä sovellus on tekoälypohjainen työkalu myynti-ilmoitusten luomiseen. Se hyödyntää OpenAI:n GPT-4 mallia kuvien analysointiin ja myynti-ilmoitusten automaattiseen generointiin. Sovellus mahdollistaa kuvien lataamisen, taustan poiston, myynti-ilmoitusten luomisen ja visuaalisen muokkaamisen drag-and-drop -toiminnallisuudella.
 
 ## Ominaisuudet
 
 - Kuvien lataus ja esikatselu
-- Tekoälypohjainen myynti-ilmoituksen generointi
-- Drag-and-drop -muokkaustyökalu
-- Värien ja fonttikoon muokkaus
-- Kuvan tallennus ja jakaminen
+- Tekoälypohjainen kuva-analyysi ja myynti-ilmoitusten generointi
 - Taustan poisto -ominaisuus
+- Drag-and-drop muokkaustyökalu
+- Värien ja fonttikoon muokkaus
 - Eri tyylisuuntien valinta (moderni, klassinen, skandinaavinen)
+- Sosiaalisen median alustakohtaiset optimoinnit
+
+## Teknologiat
+
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- Zustand (tilanhallinnan)
+- OpenAI API (GPT-4)
+- DND Kit (drag-and-drop toiminnallisuus)
+- Zod (skeemavalidointi)
+
+### Skeemat ja Myynti-ilmoituksen Generointi
+
+Sovellus käyttää Zod-skeemoja määrittämään myynti-ilmoitusten rakenteen. Perusskeeema (`baseAnalysisSchema`) määrittelee myynti-ilmoituksen perusrakenteen:
+
+```typescript
+const baseAnalysisSchema = {
+  furniture: string,            // Huonekalun nimi
+  keyFeatures: string[],       // Tärkeimmät ominaisuudet
+  description: string,         // Kuvaus somemyyntipostausta varten
+  imageUrl: string,           // Huonekalun kuvan URL
+  price: string,              // Hinta-arvio
+  callToAction: string,       // Toimintakehotus
+  colorScheme: {              // Värimaailma
+    primary: string,
+    secondary?: string,
+    accent?: string
+  },
+  visualDesign: string        // Visuaalisen ilmeen ehdotus
+}
+```
+
+Tämän perusteella on luotu alustakohtaiset skeemat:
+
+- `instagramAnalysisSchema` - Instagram-optimoitu rakenne
+- `twitterAnalysisSchema` - Twitter-optimoitu rakenne
+- `linkedinAnalysisSchema` - LinkedIn-optimoitu rakenne
+- `generalAnalysisSchema` - Yleinen somerakenne
+
+API (`/api/image-analysis`) käyttää näitä skeemoja yhdessä OpenAI:n kanssa generoidakseen myynti-ilmoituksen:
+
+1. Kuva validoidaan ja optimoidaan
+2. Valittu skeema määrittää generoitavan sisällön rakenteen
+3. Streamattu vastaus muunnetaan JSON-muotoon käyttöliittymää varten
+
+Esimerkki API-kutsusta:
+
+```typescript
+const result = await streamObject({
+  model: llmModel,
+  schema: schema,
+  messages: [
+    {
+      role: "user",
+      content: [
+        { type: "text", text: promptTemplate },
+        { type: "image", image: validatedImage },
+      ],
+    },
+  ],
+});
+```
 
 ## Projektin rakenne
 
-- `/lib`: Sisältää apufunktioita ja keskeisiä määrittelyjä
-  - `/store/store.ts`: Zustand-store sovelluksen tilan hallintaan
-  - `schemas.ts`: Zod-skeemat datan validointiin
-  - `types.ts`: TypeScript-tyyppimäärittelyt
-  - `actions.ts`: Server Action -funktiot
-- `/components`: React-komponentit
-- `/app`: Next.js sivut ja API-reitit
+```
+somepost-maker/
+├── app/
+│   ├── api/
+│   │   ├── image-analysis/
+│   │   └── remove-background/
+│   └── page.tsx
+├── components/
+├── lib/
+│   ├── store/
+│   │   ├── screenshotStore.ts
+│   │   ├── store.ts
+│   │   └── useStyleStore.ts
+│   ├── hooks/
+│   ├── schemas.ts
+│   ├── types.ts
+│   └── utils.ts
+└── public/
+```
+
+## Keskeisimmät komponentit
+
+### API Routes
+
+- `/api/image-analysis` - Käsittelee kuva-analyysin ja generoi myynti-ilmoituksen
+- `/api/remove-background` - Taustan poisto -toiminnallisuus
+
+### Stores (Zustand)
+
+- `store.ts` - Päätilan hallinta (kuvatiedostot, analyysin asetukset)
+- `screenshotStore.ts` - Kuvakaappausten hallinta
+- `useStyleStore.ts` - Tyylien hallinta
 
 ## Asennus
 
 1. Kloonaa repositorio:
 
-   ```
-   git clone https://github.com/laguagu/somepost-maker.git
-   cd ai-ad-image-generator
-   ```
-
-2. Asenna riippuvuudet:
-
-   ```
-   npm install
-   ```
-
-3. Kopioi `.env.example` tiedosto nimellä `.env.local` ja lisää tarvittavat ympäristömuuttujat:
-
-   ```
-   OPENAI_API_KEY=your_openai_api_key_here
-   NEXT_PUBLIC_BASE_URL=http://localhost:3000
-   ```
-
-4. Käynnistä kehityspalvelin:
-
-   ```
-   npm run dev
-   ```
-
-## Käyttöohjeet
-
-1. **Kuvan lataus**
-
-   - Avaa sovellus selaimessasi (oletuksena `http://localhost:3000`)
-   - Käytä "Lataa kuva" -toimintoa ladataksesi kuvan laitteeltasi
-
-2. **Analyysiasetusten valinta**
-
-   - Valitse haluamasi tyylisuunta (moderni, klassinen, skandinaavinen)
-   - Halutessasi valitse "Poista tausta" -vaihtoehto
-
-3. **Myynti-ilmoituksen generointi**
-
-   - Klikkaa "Analysoi kuva" -painiketta
-   - Tekoäly analysoi kuvan ja luo alustavan myynti-ilmoituksen
-
-4. **Ilmoituksen muokkaus**
-
-   - Käytä drag-and-drop -toimintoa elementtien uudelleenjärjestämiseen
-   - Muokkaa tekstejä, värejä ja asettelua tarpeen mukaan
-
-5. **Kuvan tallennus ja jakaminen**
-   - Tallenna valmis ilmoitus klikkaamalla "Tallenna myynti-ilmoitus"
-   - Jaa tallennettu kuva haluamallasi tavalla
-
-## Kehittäjille
-
-### Zustand Store
-
-Sovelluksen tila hallitaan Zustand-storen avulla. Store löytyy tiedostosta `lib/store/store.ts`. Se sisältää mm. seuraavat tilat ja toiminnot:
-
-- `file`: Ladattu kuvatiedosto
-- `previewUrl`: Esikatseltavan kuvan URL
-- `analysisOptions`: Analyysin asetukset (tyylisuunta, taustan poisto jne.)
-- `setFile`, `setPreviewUrl`, `setAnalysisOptions`: Funktiot tilojen päivittämiseen
-
-### Tyypit ja skeemat
-
-- `lib/types.ts` sisältää keskeiset TypeScript-tyyppimäärittelyt
-- `lib/schemas.ts` sisältää Zod-skeemat datan validointiin
-
-### Server Actions
-
-Server Action -funktiot löytyvät tiedostosta `lib/actions.ts`. Ne hoitavat mm. taustan poiston ja analyysin tallennuksen.
-
-## Kehitysideat
-
-- Useamman kuvan tuki yhdessä ilmoituksessa
-- Lisää muokkaustyökaluja (esim. tekstin korostus, emojit)
-- Käyttäjäprofiilien ja tallennettujen mallien tuki
-- Integraatio eri sosiaalisen median alustoille
-- Erilaisten skeemojen ja objektien generointi tilamuuttujan avulla:
-  - Implementoi järjestelmä, joka mahdollistaa erilaisten skeemojen (esim. `imageAnalysisSchema`) valinnan tilamuuttujan perusteella.
-  - Luo eri sosiaalisen median alustoille optimoituja skeemoja (esim. Instagram, Twitter, LinkedIn).
-  - Mahdollista yksinkertaistettujen tai laajennettujen analyysien generointi käyttäjän tarpeiden mukaan.
-
-## Kehittäjille
-
-### useObject Hook
-
-`useObject` on kokeellinen [Vercel AI SDK:n](https://sdk.vercel.ai/docs/reference/ai-sdk-ui/use-object) tarjoama hook React-sovelluksissa. Se mahdollistaa JSON-objekteja edustavien tekstivirtojen kulutuksen ja jäsentämisen kokonaisiksi objekteiksi määritellyn skeeman perusteella. Tätä hookia käytetään yhdessä backend-puolen `streamObject` funktion kanssa.
-
-#### Käyttö
-
-```javascript
-const { object, submit, isLoading, error, stop } = useObject({
-  api: "/api/image-analysis",
-  schema: imageAnalysisSchema,
-  id: analysisId,
-  onFinish: () => {
-    // Käsittele analyysin valmistuminen
-  },
-  onError: (error) => {
-    // Käsittele virhetilanteet
-  },
-});
+```bash
+git clone https://github.com/yourusername/somepost-maker.git
+cd somepost-maker
 ```
 
-#### Tärkeimmät ominaisuudet
+3. Hanki OpenAI API avain:
+   - Mene osoitteeseen https://platform.openai.com/
+   - Kirjaudu sisään tai luo uusi tili
+   - Siirry API-avaimen luontiin: https://platform.openai.com/api-keys
+   - Luo uusi API-avain ja kopioi se talteen
 
-- `api`: API-endpoint, joka streamaa JSON-dataa chunkeina.
-- `schema`: Zod-skeema tai JSON-skeema, joka määrittelee objektin rakenteen.
-- `id`: Uniikki tunniste, joka mahdollistaa tilan jakamisen komponenttien välillä.
-- `submit`: Funktio API-kutsun tekemiseen.
-- `object`: Generoitu objekti, joka päivittyy sitä mukaa kun API streamaa JSON-chunkkeja.
-- `isLoading`: Boolean-lippu, joka ilmaisee onko pyyntö käynnissä.
-- `stop`: Funktio nykyisen API-pyynnön keskeyttämiseen.
+4. Luo `.env.local` tiedosto ja lisää tarvittavat ympäristömuuttujat:
 
-Tämä hook on erityisen hyödyllinen käsiteltäessä suuria datamääriä tai pitkäkestoisia operaatioita, sillä se mahdollistaa datan progressiivisen renderöinnin käyttöliittymässä.
+```bash
+OPENAI_API_KEY=your_openai_api_key_here
+```
 
-Lisätietoja `useObject` hookista ja sen käytöstä löydät [Vercel AI SDK:n dokumentaatiosta](https://sdk.vercel.ai/docs/reference/ai-sdk-ui/use-object).
+5. Käynnistä kehityspalvelin:
+
+```bash
+npm run dev
+```
+
+## Julkaisu Rahti CSC -ympäristöön
+
+Sovelluksen julkaisu Rahti CSC -ympäristöön tapahtuu seuraavasti:
+
+1. Rakenna Docker-image:
+
+```bash
+docker build --no-cache -t mainosmestari .
+```
+
+2. Kirjaudu Rahti-ympäristöön OpenShift CLI:n avulla:
+
+```bash
+# Kirjaudu ensin Rahti-konsoliin ja hae kirjautumiskomento
+oc login ...
+
+# Kirjaudu konttirekisteriin
+docker login -u $(oc whoami) -p $(oc whoami -t) image-registry.apps.2.rahti.csc.fi
+```
+
+3. Tagaa ja julkaise image:
+
+```bash
+# Tagaa image
+docker tag mainosmestari image-registry.apps.2.rahti.csc.fi/alyakokeilut/mainosmestari:latest
+
+# Pushaa image Rahdin rekisteriin
+docker push image-registry.apps.2.rahti.csc.fi/alyakokeilut/mainosmestari:latest
+```
+
+4. Tarkista julkaisu Rahti-konsolista ja määritä tarvittavat ympäristömuuttujat (esim. OPENAI_API_KEY) Rahdin kautta.
+
 
 ## Lisenssi
 
-Tämä projekti on lisensoitu MIT-lisenssin alla. Katso [LICENSE](LICENSE) tiedosto lisätietoja varten.
+MIT License - katso [LICENSE](LICENSE) tiedosto lisätietoja varten.
