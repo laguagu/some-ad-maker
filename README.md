@@ -1,4 +1,4 @@
-# AI-Powered Ad Image Generator
+# Ensimmäinen versio mainosmestari soveluksesta ( Ei opiskelijaryhmän tekemä )
 
 ## Projektin kuvaus
 
