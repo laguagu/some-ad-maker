@@ -4,6 +4,26 @@
 
 Tämä sovellus on tekoälypohjainen työkalu myynti-ilmoitusten luomiseen. Se hyödyntää OpenAI:n GPT-4 mallia kuvien analysointiin ja myynti-ilmoitusten automaattiseen generointiin. Sovellus mahdollistaa myynti-ilmoitusten generoinnin, visuaalisen muokkaamisen ja kuvien latauksen.
 
+## Sovelluksen käyttöliittymä
+
+Tässä muutamia kuvia sovelluksen eri näkymistä ja toiminnallisuuksista:
+
+### Etusivu ja kuvan lataus
+![Etusivu](/docs/images/home.png)
+*Sovelluksen etusivu, jossa kuvan lataus ja analyysin asetukset*
+
+### Myynti-ilmoituksen asetukset
+![Myynti-ilmoitus](/docs/images/settings.png)
+*Aseta haluamasi esitieto asetukset*
+
+### Default näkymä
+![Default näkymä](/docs/images/edit-1.png)
+*Vaihda näkymää perinteisen ja Instagram näkymän välillä ja muokkaa myynti-ilmoituksen kenttiä haluammallasi tavalla*
+
+### Instagram näkymä
+![Instagram näkymä](/docs/images/edit-2.png)
+*Voit vaihtaa työkalupalkista näkymää halutessasi myös ja ladata myynti-ilmoituksen*
+
 ## Ominaisuudet
 
 - Kuvien lataus ja esikatselu
