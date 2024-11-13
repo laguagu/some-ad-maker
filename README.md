@@ -2,7 +2,7 @@
 
 ## Projektin kuvaus
 
-Tämä sovellus on tekoälypohjainen työkalu myynti-ilmoitusten luomiseen. Se hyödyntää OpenAI:n GPT-4 mallia kuvien analysointiin ja myynti-ilmoitusten automaattiseen generointiin. Sovellus mahdollistaa kuvien lataamisen, taustan poiston, myynti-ilmoitusten luomisen ja visuaalisen muokkaamisen drag-and-drop -toiminnallisuudella.
+Tämä sovellus on tekoälypohjainen työkalu myynti-ilmoitusten luomiseen. Se hyödyntää OpenAI:n GPT-4 mallia kuvien analysointiin ja myynti-ilmoitusten automaattiseen generointiin. Sovellus mahdollistaa myynti-ilmoitusten generoinnin, visuaalisen muokkaamisen ja kuvien latauksen.
 
 ## Ominaisuudet
 
