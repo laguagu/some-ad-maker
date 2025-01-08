@@ -44,3 +44,5 @@ fastapi/venv
 /data/*
 data/
 data/analysis.json
+
+docs/pushToRahti.txt
